@@ -1,0 +1,1261 @@
+:																ONIC CONFIGURATION																		:
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+:	What is Ionic ?																												:
+
+=>	=>	Ionic is an HTML5 mobile app development framework targeted at building hybrid mobile apps. Hybrid apps are essentially small websites running in a browser shell in an app that have access to the native platform layer. Hybrid apps have many benefits over pure native apps, specifically in terms of platform support, speed of development, and access to 3rd party code.
+
+Think of Ionic as the front-end UI framework that handles all of the look and feel and UI interactions your app needs in order to be compelling. Kind of like “Bootstrap for Native,” but with support for a broad range of common native mobile components, slick animations, and beautiful design.
+
+Unlike a responsive framework, Ionic comes with very native-styled mobile UI elements and layouts that you’d get with a native SDK on iOS or Android but didn’t really exist before on the web. Ionic also gives you some opinionated but powerful ways to build mobile applications that eclipse existing HTML5 development frameworks.
+
+Since Ionic is an HTML5 framework, it needs a native wrapper like Cordova or PhoneGap in order to run as a native app. We strongly recommend using Cordova proper for your apps, and the Ionic tools will use Cordova underneath.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+:	How to integrate ionic application ?																						:
+
+=>	Follow this following steps to develop ionic application : 
+
+	1) Install Node JS by using following this Commands :
+	
+		npm install
+		
+		npm				<= Confirmation for Node Installation.
+		
+	2) Install Ionic by using following this Commands :
+	
+		npm install -g cordova ionic
+		
+		ionic -v		<= Confirmation for Ionic and Cordova Installation.
+		
+	3)	Now Create a Basic Ionic Application following this Commands :
+	
+		ionic start applicationName tabs		<= Tabs Views Project
+		
+		ionic start applicationName blank		<= Blank Project
+		
+	4) Now go to your project folder :
+	
+		cd applicationName
+		
+	5) Now start your application :
+	
+		ionic serve -l
+		
+	6) Now Open your browser and Run your project using following URL :
+	
+		http://localhost:8100/
+		
+:	List of Project Templates 																								:
+-------------------------------------------------------------------------------------------------------------------------------
+	tabs ............... ionic-angular A starting project with a simple tabbed interface
+	blank .............. ionic-angular A blank starter project
+	sidemenu ........... ionic-angular A starting project with a side menu with navigation in the content area
+	super .............. ionic-angular A starting project complete with pre-built pages, providers and best practices for Ionic development.
+	conference ......... ionic-angular A project that demonstrates a realworld application
+	tutorial ........... ionic-angular A tutorial based project that goes along with the Ionic documentation
+	aws ................ ionic-angular AWS Mobile Hub Starter
+	tabs ............... ionic1 A starting project for Ionic using a simple tabbed interface
+	blank .............. ionic1 A blank starter project for Ionic
+	sidemenu ........... ionic1 A starting project for Ionic using a side menu with navigation in the content area
+	maps ............... ionic1 An Ionic starter project using Google Maps and a side menu
+-------------------------------------------------------------------------------------------------------------------------------
+		
+:	How to Add platform for Android APK ?																					: 
+
+=>	ionic cordova platform add android
+
+:	How to Buils Android apk for Build mode ?																				: 
+
+=>	ionic cordova run android		<= For Install and Run App in android device
+
+:	How to remove android platform ? 																				:
+
+=>	ionic cordova platform remove android
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+:	How to install "@angular/cli"																							:
+
+=>	npm install -g @angular/cli
+
+:	How to Clean npm																										:
+
+=> 	npm cache clean
+
+:	How to add back button header ?																							:
+
+=>	Add following This Code :
+------------------------------------------------------------------------------------
+	<ion-header>
+		<ion-navbar>
+			<ion-title>Hello There !</ion-title>
+		</ion-navbar>
+	</ion-header>
+------------------------------------------------------------------------------------
+
+:	How to add Content in Ionic ?																							:
+
+=>	Add following This Code :
+------------------------------------------------------------------------------------
+	<ion-content padding>
+		This is a Custom page consisting of awesome content.
+	<ion-content>
+------------------------------------------------------------------------------------
+
+:	How to add Button in Ionic ?																							:
+
+=>	Add following This Code :
+------------------------------------------------------------------------------------
+	<button ion-button color="primary" (click)="popThis()">Go Back</button>
+	
+	'full' OR 'block' <= use to full Button Like :
+	
+	 <button ion-button full >Click Me</button>
+	 <button ion-button block >Click Me</button>
+	
+------------------------------------------------------------------------------------
+
+:	How to send in Current Activity	?																						:
+
+=>	Add following This Code :
+------------------------------------------------------------------------------------
+	constructor(public navCtrl: NavController, public navParams: NavParams){
+	}
+	
+	popThis(){
+		this.navCtrl.pop();
+	}
+------------------------------------------------------------------------------------
+
+:	How set Ionic Tabs																										:
+
+=>	Add following This Code :
+
+In .html
+------------------------------------------------------------------------------------
+<ion-tabs>
+  <ion-tab [root]="tab1Root" tabTitle="Home" tabIcon="home"></ion-tab>
+  <ion-tab [root]="tab2Root" tabTitle="About" tabIcon="information-circle"></ion-tab>
+  <ion-tab [root]="tab3Root" tabTitle="Contact" tabIcon="contacts"></ion-tab>
+</ion-tabs>
+------------------------------------------------------------------------------------
+
+In .ts
+------------------------------------------------------------------------------------
+import { AboutPage } from '../about/about';
+import { ContactPage } from '../contact/contact';
+import { HomePage } from '../home/home';
+
+	tab1Root = HomePage;
+	tab2Root = AboutPage;
+	tab3Root = ContactPage;
+------------------------------------------------------------------------------------
+
+In app.ts
+------------------------------------------------------------------------------------
+	rootPage:any = TabsPage;
+
+	  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) 
+	  {
+		platform.ready().then(() => {      
+		  statusBar.styleDefault();
+		  splashScreen.hide();
+		});
+	  }  
+------------------------------------------------------------------------------------
+
+*	tabTitle="Contact"					<= Set Content of any Tab.
+*	<ion-tabs selectedIndex="2">		<= Set Default Selected Tab.
+
+:	How to Create a Page in ionic ?																							:
+
+=>	Add following This Code :
+------------------------------------------------------------------------------------
+	ionic g page pageName
+------------------------------------------------------------------------------------
+
+After that you must add in app.module.ts file
+
+Create Other : 
+------------------------------------------------------------------------------------
+Syntex :	ionic generate [<type>] [<name>]
+
+			ionic generate 
+			ionic generate component
+			ionic generate directive
+			ionic generate page
+			ionic generate pipe
+			ionic generate provider
+			ionic generate tabs
+			ionic generate component foo
+			ionic generate page Login
+			ionic generate page Detail --no-module
+			ionic generate page About --constants
+			ionic generate pipe MyFilterPipe
+------------------------------------------------------------------------------------
+:	How to used Angular Date Plugin ?																						:
+
+=>	Angular Plugin for date : [Convert int to days]
+
+	npm install --save angular2-moment
+
+:	How to used Angular Hyperlink Plugin ?																					:
+
+=>	Angular Link Plugin : [Automatic find link and do hyper link]
+
+	npm install --save angular-linky
+
+=================================================================================================================================================================
+		
+:	(1) How to Create Ionic Alert ?																								:
+
+=>	Follow this Steps to Get Ionic Alert Box :
+
+---------------------------------------------------------------------------------------------------------------------------------
+		import { AlertController } from 'ionic-angular';
+		
+		constructor(private alertCtrl: AlertController) {}
+		
+		presentAlert() {
+		  let alert = this.alertCtrl.create({
+			title: 'Low battery',
+			subTitle: '10% of battery remaining',
+			buttons: ['Dismiss']
+		  });
+		  alert.present();
+		}
+		
+		presentConfirm() {
+		  let alert = this.alertCtrl.create({
+			title: 'Confirm purchase',
+			message: 'Do you want to buy this book?',
+			buttons: [
+			  {
+				text: 'Cancel',
+				role: 'cancel',
+				handler: () => {
+				  console.log('Cancel clicked');
+				}
+			  },
+			  {
+				text: 'Buy',
+				handler: () => {
+				  console.log('Buy clicked');
+				}
+			  }
+			]
+		  });
+		  alert.present();
+		}
+		
+---------------------------------------------------------------------------------------------------------------------------------
+
+:	(2) How to Get Unique Device ID and Device Id from a mobile ?													:
+
+=>	Follow this Steps to Get Unique Device ID :
+
+	1)	Install the Cordova and Ionic Native plugins:
+	
+	------------------------------------------------------------------------------------------
+		ionic cordova plugin add cordova-plugin-uniquedeviceid
+		
+		npm install --save @ionic-native/unique-device-id
+		
+		ionic cordova plugin add cordova-plugin-device
+		
+		npm install --save @ionic-native/device
+	------------------------------------------------------------------------------------------
+	
+	2)	Sample Code :	
+---------------------------------------------------------------------------------------------------------------------------------
+=>	app.module.ts
+----------------------------------------------------------------------------------------------------------------------------------
+	import { UniqueDeviceID } from '@ionic-native/unique-device-id';	
+	import { Device } from '@ionic-native/device';
+	
+	providers: [  UniqueDeviceID, Device ]
+----------------------------------------------------------------------------------------------------------------------------------
+=>	home.html
+----------------------------------------------------------------------------------------------------------------------------------
+	<ion-content padding>
+	  <button ion-button full (click)="getDeviceId()">Get Device ID</button>
+	  <button ion-button full (click)="getUniqueDeviceId()">Get Device ID</button>
+	</ion-content>
+----------------------------------------------------------------------------------------------------------------------------------
+=>	home.ts 
+---------------------------------------------------------------------------------------------------------------------------------
+	import { UniqueDeviceID } from '@ionic-native/unique-device-id';	
+	import { NavController, AlertController  } from 'ionic-angular';
+	
+	constructor(public navCtrl: NavController, private uniqueDeviceID: UniqueDeviceID, private device: Device, private alertCtrl: AlertController) {
+
+	}
+  
+	getUniqueDeviceId(){
+      this.uniqueDeviceID.get()
+      .then((uuid: any) => {
+            let alert = this.alertCtrl.create({
+              title: ': Your Unique Device ID :',
+              subTitle: uuid,
+              buttons: ['OK']
+            });
+          alert.present();
+         // console.log(uuid));
+        })
+      .catch((error: any) => console.log(error));
+  }
+
+  getDeviceId(){    
+      let alert = this.alertCtrl.create({
+        title: ': Your Device ID :',
+        subTitle: this.device.uuid,
+        buttons: ['OK']
+      });
+      alert.present();
+      //console.log(this.device.uuid);
+  }
+----------------------------------------------------------------------------------------------------------------------------------
+
+:	(3) How to Set Screen Orientation using ionic native ?															:
+
+=>									
+	1)	Install the Cordova and Ionic Native plugins :	
+	------------------------------------------------------------------------------------------
+		ionic cordova plugin add cordova-plugin-screen-orientation
+		
+		npm install --save @ionic-native/screen-orientation
+	------------------------------------------------------------------------------------------
+	
+	2)	Now Update by using following Code :
+----------------------------------------------------------------------------------------------------------------------------------
+=>	app.module.ts
+----------------------------------------------------------------------------------------------------------------------------------
+	import { ScreenOrientation } from '@ionic-native/screen-orientation';
+	
+	providers: [  ScreenOrientation ]
+----------------------------------------------------------------------------------------------------------------------------------
+=>	home.html
+----------------------------------------------------------------------------------------------------------------------------------
+	<ion-content padding>
+	  <h4>: Screen Orientation :</h4><br>
+	  <button ion-button full (click)="getCurrentScreenOrientation()">Get Current Screen Orientation</button><br> <br>
+	  
+	  <button ion-button full (click)="setLandscape()">Set Landscape</button><br> <br>
+	  <button ion-button full (click)="setPortrait()">Set Portrait</button><br> <br>
+
+	  <button ion-button full (click)="setPortraitPrimary()">Set Portrait Primary</button><br> <br>
+	  <button ion-button full (click)="setPortraitSecondary()">Set Portrait Secondary</button><br> <br>
+
+	  <button ion-button full (click)="setLandscapeSecondary()">Set Landscape Secondary</button><br> <br>
+	</ion-content>
+----------------------------------------------------------------------------------------------------------------------------------
+=>	home.ts
+----------------------------------------------------------------------------------------------------------------------------------
+	import { NavController, AlertController } from 'ionic-angular';
+	import { ScreenOrientation } from '@ionic-native/screen-orientation';
+	
+	constructor(private alertCtrl: AlertController, private screenOrientation: ScreenOrientation)
+	
+	getCurrentScreenOrientation() {
+		let alert = this.alertCtrl.create({
+		title: ': Current Screen Orientation :',
+		subTitle: this.screenOrientation.type,
+		buttons: ['OK']
+		});
+		alert.present();
+	  }
+
+	  setLandscape(){
+		this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.LANDSCAPE);
+	  }
+
+	  setPortrait(){
+		this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+	  }
+
+	  setPortraitPrimary(){
+		this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY);
+	  }
+
+	  setPortraitSecondary(){
+		this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT_SECONDARY);
+	  }
+
+	  setLandscapeSecondary(){
+		this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.LANDSCAPE_SECONDARY);
+	  }	 
+----------------------------------------------------------------------------------------------------------------------------------
+
+:	(4) How to Configure GeoLocation ?																			:
+
+=>	1) Install the Cordova and Ionic Native plugins :
+	------------------------------------------------------------------------------------------------------------------
+		ionic cordova plugin add cordova-plugin-geolocation --variable GEOLOCATION_USAGE_DESCRIPTION="To locate you"
+		
+		npm install --save @ionic-native/geolocation
+	------------------------------------------------------------------------------------------------------------------
+	2)	Now Update by using following Code :
+----------------------------------------------------------------------------------------------------------------------------------
+=>	app.module.ts
+----------------------------------------------------------------------------------------------------------------------------------
+	import { Geolocation } from '@ionic-native/geolocation';
+	
+	providers: [  Geolocation ]
+----------------------------------------------------------------------------------------------------------------------------------
+=>	home.html
+----------------------------------------------------------------------------------------------------------------------------------
+	<ion-content padding>
+		<button ion-button full (click)="getCurrentPosition()">Get Current Location</button><br> <br>
+		<button ion-button full (click)="watchGeoLocation()">Watch Geo Location [Automatic Show]</button><br> <br>
+	</ion-content>
+----------------------------------------------------------------------------------------------------------------------------------
+=>	home.ts
+----------------------------------------------------------------------------------------------------------------------------------
+	
+	import { NavController, AlertController } from 'ionic-angular';
+	import { Geolocation } from '@ionic-native/geolocation';
+	
+	constructor(private geolocation: Geolocation, private alertCtrl: AlertController) {
+	}
+	
+	getCurrentPosition(){
+		this.geolocation.getCurrentPosition().then((resp) => {
+		  let alert = this.alertCtrl.create({
+			title: ': Current Geo Location :',
+			subTitle: "Latitude : "+ resp.coords.latitude +"\nLongitude : "+resp.coords.longitude,
+			buttons: ['OK']
+			});
+			alert.present();
+		 }).catch((error) => {
+		   console.log('Error getting location', error);
+		 });
+	  }
+
+	watchGeoLocation(){
+		let watch = this.geolocation.watchPosition();
+		watch.subscribe((data) => {
+		// data can be a set of coordinates, or an error (if an error occurred).   
+		let alert = this.alertCtrl.create({
+		  title: ': Watch Geo Location :',
+		  subTitle: "Latitude : "+ data.coords.latitude +"\nLongitude : "+data.coords.longitude,
+		  buttons: ['OK']
+		  });
+		  alert.present();
+		});		
+	}	
+----------------------------------------------------------------------------------------------------------------------------------
+:	(5) How to Configure Background Geolocation ?	:	[Incomplete]
+
+=>	
+	1) Install the Cordova and Ionic Native plugins :
+-----------------------------------------------------------------------------------------------------------
+	ionic cordova plugin add cordova-plugin-mauron85-background-geolocation
+	
+	npm install --save @ionic-native/background-geolocation
+-----------------------------------------------------------------------------------------------------------
+
+
+: (6) How to integrate Ionic Chart Application 	?																				:
+
+1)	ionic start IonicCharts tabs
+
+2)	cd  IonicCharts
+
+3)	ionic serve --lab
+
+4)	npm install ng2-charts --save
+
+5)	npm install chart.js --save
+
+6)	
+
+REFERENCE :
+
+		https://www.djamware.com/post/598953f880aca768e4d2b12b/creating-beautiful-charts-easily-using-ionic-3-and-angular-4
+		
+---------------------------------------------------------------------------------------------------------------------------------
+
+:	How To Call a Mobile number ?																								:
+
+=>	1) Install the Cordova and Ionic Native plugins :
+-----------------------------------------------------------------------------------------------------------
+	ionic cordova plugin add call-number
+	
+	npm install --save @ionic-native/call-number
+-----------------------------------------------------------------------------------------------------------
+	
+	2) Add in Module 	
+-----------------------------------------------------------------------------------------------------------
+	import { CallNumber } from '@ionic-native/call-number';
+	
+	providers: [
+    CallNumber
+  ]
+-----------------------------------------------------------------------------------------------------------
+
+	3) Add in index.ts file
+-----------------------------------------------------------------------------------------------------------
+	import { CallNumber } from '@ionic-native/call-number';
+	
+		userData = {
+		"userName": "",
+		"password": "",
+		"mobile": ""
+	  };
+
+	  constructor(public navCtrl: NavController, private callNumber: CallNumber) {
+	  }
+
+	  public callMe(){    
+		this.callNumber.callNumber(this.userData.mobile, true)
+	  .then(() => console.log('Launched dialer!'))
+	  .catch(() => console.log('Error launching dialer'));
+	  }
+-----------------------------------------------------------------------------------------------------------
+
+	4) Add in index.html file
+-----------------------------------------------------------------------------------------------------------
+	<ion-content padding>
+		<ion-item>
+			<ion-label floating >Mobile No : </ion-label>
+			<ion-input type="text" value="" [(ngModel)]="userData.mobile"></ion-input>
+		  </ion-item>
+		  <button ion-button full (click)="callMe()" > Call Me </button>
+	</ion-content>
+-----------------------------------------------------------------------------------------------------------
+
+=>	In home.ts
+-----------------------------------------------------------------------------------------------------------
+	constructor(public navCtrl: NavController, private localDatabaseProvider : LocalDatabaseProvider) {
+	  }
+
+	  CreateUser(){
+		this.localDatabaseProvider.CreateUser(9563359659, "Rajib", "Garai" ).then( (data) => {
+		  console.log(data);
+		}, (error) => {
+		  console.log(error);
+		})
+	  }
+
+	  GetAllUser(){
+		this.localDatabaseProvider.GetAllUsers().then((data) => {
+		  console.log(data);
+		}, (error) => {
+		  console.log(error);
+		})
+	  }
+-----------------------------------------------------------------------------------------------------------
+	
+
+
+:	Sqlite Configuration in ionic 3 and angular 4 ?																				:
+----------------------------------------------------------------------------------------------------------------------------------
+
+=>	
+	2) Install the Cordova and Ionic Native plugins :
+		
+		ionic cordova plugin add cordova-sqlite-storage
+		npm install --save @ionic-native/sqlite
+		
+	3) Add in app.model.ts
+	
+		import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+	
+	3) Create Provider :
+	
+		ionic g provider local-database
+		
+	4) Add in local-database :
+		
+--------------------------------------------------------------------------------------------------
+	import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+	
+	  private db: SQLiteObject;
+	  private isOpen: boolean;
+
+	  constructor(public http: HttpClient,
+				  public storage: SQLite) 
+	  {
+		if (!this.isOpen) {
+		  this.storage = new SQLite();
+		  this.storage.create({ name: "data.db", location: "default" }).then((db: SQLiteObject) => {
+			this.db = db;
+			db.executeSql("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, identification INTEGER, name TEXT, lastname text)", []);
+			this.isOpen = true;
+		  }).catch((error) => {
+			console.log(error);
+		  })
+		}
+	  }
+
+	  CreateUser(identification: number, name:string, lastname:string){
+		return new Promise ((resolve, reject) => {
+		  let sql = "INSERT INTO users (identification, name, lastname) VALUES (?, ?, ?)";
+		  this.db.executeSql(sql, [identification, name, lastname]).then((data) =>{
+			resolve(data);
+		  }, (error) => {
+			reject(error);
+		  });
+		});
+	  }
+
+	  GetAllUsers(){
+		return new Promise ((resolve, reject) => {
+		  this.db.executeSql("SELECT * FROM users", []).then((data) => {
+			let arrayUsers = [];
+			if (data.rows.length > 0) {
+			  for (var i = 0; i < data.rows.length; i++) {
+				arrayUsers.push({
+				  id: data.rows.item(i).id,
+				  identification: data.rows.item(i).identification,
+				  name: data.rows.item(i).name,
+				  lastname: data.rows.item(i).lastname
+				});            
+			  }          
+			}
+			resolve(arrayUsers);
+		  }, (error) => {
+			reject(error);
+		  })
+		})
+	  }
+	  
+	  
+:	CONFIGURATION OF SQLITE 	:
+
+=>	Update app.component.ts File :
+----------------------------------------------------------------------------------------------------------------------------------
+	constructor(
+    private localDatabaseProvider: LocalDatabaseProvider    
+  ) {
+    platform.ready().then(() => {
+      localDatabaseProvider.setUploadDataProviderRef(uploadDataProvider);
+      uploadDataProvider.setLocalDatabaseProviderRef(localDatabaseProvider);
+	  
+      localDatabaseProvider.init();
+	 }
+----------------------------------------------------------------------------------------------------------------------------------
+Now Create init() method in LocalDatabaseProvider
+----------------------------------------------------------------------------------------------------------------------------------
+	init(): Promise<any> 
+	{
+		return new Promise(resolve => {
+    
+      this.sqlite.create({name: 'paa_db.db',location: 'default'})
+        .then((db: SQLiteObject) =>{
+
+      this.db=db;
+
+      //User Table       =>temp_col1=city_slno
+      db.executeSql('create table IF NOT EXISTS tbl_user (id integer primary key AUTOINCREMENT, user_slno varchar(255), agency_slno varchar(255),  temp_col1 varchar(255), temp_col2 varchar(255))', {})
+      .then(() => console.log('user table Executed SQL'))
+      .catch(e => alert(e));
+	  
+	  
+		...............................................................
+
+		  resolve();        
+		})
+		.catch(error=>{
+		  alert('Error While Creating DB');
+		  alert(error);
+		  resolve();
+		})
+
+			});
+	}
+----------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------
+Add LocalDatabaseProvider in app.module.ts
+--------------------------------------------------------------------------------------------------
+
+
+
+:	REFERENCE :
+
+	https://github.com/yibsonalexis/IONIC-3---SQLite
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+:	(7) How to Integrate Push Notifications with Firebase Cloud Messaging and Cordova ?											:
+
+=>	Follow following Steps to setup push notification :
+
+	1)	ionic cordova plugin add cordova-plugin-fcm --save
+	
+	2)	Now Check Plugin version in :
+	
+		plugins => cordova-plugin-fcm => src => android => FCMPlugin.gradle =>
+
+			classpath 'com.google.gms:google-services:3.0.0'
+			
+	3)	Now add platform 
+	
+			ionic cordova platform add android --save
+			
+----------------------------------------------------------------------------------------------------------------------------------
+:	(8) How to configure Image Upload ?																							:
+----------------------------------------------------------------------------------------------------------------------------------			
+	
+			
+		
+----------------------------------------------------------------------------------------------------------------------------------
+
+:	(9) How to Configure Social media Login [Google, Facebook, Linkedin, Github, Twitter] using Firebase ?						:
+----------------------------------------------------------------------------------------------------------------------------------
+
+=>	A) Login you Google account : 
+
+	B) Go to => https://console.firebase.google.com
+	
+	C) Click on New Project => Give Project Name and Select Country => Click on 'Create Project'
+	
+	D) Select "Authentication" => Select "SIGN-IN METHOD" => Select "Facebook/Gmail/Twitter" => Like : "Facebook"
+	
+	E) Create Facebook App :
+	
+		1) Display Name : appName
+		   Contact Email : mobileapp@mayabious.com
+		   
+		2) Next => Select "Facebook Login" => Next
+		
+		3) Now Click on "Settings" => "Basic"
+		
+		4) Enter "App Domains" copy from "Firebase" <= "Authorized domains" Like : "sociallogin-2018.firebaseapp.com"
+		
+		5) Now Click on "Add Platform" => Select "WWW" => Enter Site URL Copy from "Firebase" <= Copy Clipboard "OAuth Redirect URL" 
+		
+			Like : "http://sociallogin-2018.firebaseapp.com/"
+			
+		6) Now Again Click on "Add Platform" => Select "Android" => Enter "Google Play Package Name" => Copy from base project package name from "config.xml" file
+		
+			Like : "io.ionic.sociallogin"
+			
+		7) Now Click Save Changes
+		
+	F) Now install list of Plugins :
+	
+		Plugin to pass application build info (app name, ID, etc) to the OAuth widget.
+		
+		=>	cordova plugin add cordova-plugin-buildinfo --save
+		
+		Plugin to handle Universal Links (Android app link redirects)
+		
+		=>	cordova plugin add cordova-universal-links-plugin --save
+		
+		Plugin to handle opening secure browser views on iOS/Android mobile devices
+		
+		=>	cordova plugin add cordova-plugin-browsertab --save
+		
+		Plugin to handle opening a browser view in older versions of iOS and Android
+		
+		=> cordova plugin add cordova-plugin-inappbrowser --save
+		
+		Plugin to handle deep linking through Custom Scheme for iOS
+		Substitute com.firebase.cordova with the iOS bundle ID of your app.
+		
+		=> cordova plugin add cordova-plugin-customurlscheme --variable \
+		  URL_SCHEME=com.firebase.cordova --save
+		  
+	: REFERENCE :
+	
+		https://firebase.google.com/docs/auth/web/cordova
+		
+	G) Now install Firebase Module : 
+	
+		=> npm install firebase --save
+		
+	F) Now install polyfill plugin for firebase :
+	
+		=> npm install promise-polyfill --save-exact
+		
+	G) 
+	
+	ionic cordova plugin add cordova-plugin-facebook4 --variable APP_ID="177411459512239" --variable APP_NAME="SocialLogin"
+	
+
+	Test Accounts :
+	
+		Facebook : mobileapp@mayabious
+		Gmail : **@gmail.com
+		Github : ***@gmail.com
+		Twitter : mayabiousstudio@gmail.com
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+:	(10) How to Configure Social media Login [Google, Facebook, Linkedin, Github, Twitter] using Ionic Native ?					:
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------
+:				GOOGLE LOGIN							:
+-----------------------------------------------------------
+
+A) Open and Sign In Google Developer Section : Like => https://console.developers.google.com/apis/credentials
+
+	Google Credentials :
+	
+		Email : mobileapp@mayabious.com
+		Password : bioshock#8
+
+	B) Create a New Google App ID :
+	
+		1) Select Credentials option on left side
+		
+		2) Select Api key form 'Create Credentials' drop down.
+		
+		3) Now copy your generated API key and used it below : 		
+		
+----------------------------------------------------------------------------------------------------------------------------------
+		ionic cordova plugin add cordova-plugin-googleplus --variable REVERSED_CLIENT_ID=AIzaSyAuGmBtysG3QYFSjqGpi4hlGrSwDihLZks
+		
+		npm install --save @ionic-native/google-plus
+----------------------------------------------------------------------------------------------------------------------------------
+
+		4) Now Update files using following these code : 
+		
+		1) Update app.module.ts
+		------------------------------------------------------------------------------------------------------------------		
+			import { Facebook } from '@ionic-native/facebook';
+			
+			providers: [
+				GooglePlus ]
+		------------------------------------------------------------------------------------------------------------------
+		2) Home.ts
+		------------------------------------------------------------------------------------------------------------------			
+			import { GooglePlus } from '@ionic-native/google-plus';
+			
+			googleLoggedIn = false;
+			userData: any;
+		
+			constructor(public navCtrl: NavController, private googlePlus: GooglePlus) {
+			}
+			
+			googleLogin(){
+			  this.googleLogedIn = true;
+			  this.googlePlus.login({      
+				  //this.userData = {gEmail: email, gFirstName: first_name, gLastName: first_name, username: name};
+			  })
+			  .then(res => console.log(res))
+			  .catch(err => console.error(err));
+			}	
+		------------------------------------------------------------------------------------------------------------------
+		3) Home.html
+		------------------------------------------------------------------------------------------------------------------
+			<ion-content padding>
+				<button ion-button full (click)="googleLogin()">Google Login</button>
+			</ion-content>
+		------------------------------------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------
+:				FACEBOOK LOGIN 							:
+-----------------------------------------------------------
+A) Open and Sign In Facebook Developer Section : Like => https://developers.facebook.com/
+
+	Facebook Account Credentials :
+	
+		Email		:	mobileapp@mayabious.com
+		Password 	:	mayapass#8
+
+	B) Create a New Facebook App :
+		
+		1) Display Name : appName
+		   Contact Email : mobileapp@mayabious.com
+		   
+		2) Next => Select "Facebook Login" => Select "Web" => Set URL : "http://localhost:8080/" => Save => Next => Next
+		
+		3) After that click on => Settings => Basic => Click on Add Platform => Select Android => Enter "Google Play Package Name" <= App Package Name => Save
+		
+	C) Open Ionic Project and go to console => Type following commands :
+
+			npm install --save @ionic-native/facebook
+			
+			ionic cordova plugin add cordova-plugin-facebook4 --variable APP_ID="55*******" --variable APP_NAME="********"
+			
+	D) Modify Your Project :
+	
+		1) Update app.module.ts
+		------------------------------------------------------------------------------------------------------------------		
+			import { Facebook } from '@ionic-native/facebook';
+			
+			providers: [
+				Facebook]
+		------------------------------------------------------------------------------------------------------------------
+		2) Home.ts
+		------------------------------------------------------------------------------------------------------------------			
+			import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+			
+			facebookLoggedIn = false;
+			userData: any;
+		
+			constructor(public navCtrl: NavController, private facebook: Facebook) {
+			}
+			
+			facebookLogin(){
+				this.facebookLoggedIn = true;
+
+				this.facebook.login(['email', 'public_profile']).then((response: FacebookLoginResponse)=>{
+				  this.facebook.api('me?fields=id,name,email,first_name,picture.width(720).height(720).as(picture_large)', []).then(profile => {
+					this.userData = {email: profile['email'], first_name: profile['first_name'], picture: profile['picture_large']['data']['url'], username: profile['name']}
+				  });
+				});
+			}			
+		------------------------------------------------------------------------------------------------------------------
+		3) Home.html
+		------------------------------------------------------------------------------------------------------------------
+			<button ion-button full (click)="facebookLogin()" *ngIf="!facebookLoggedIn">
+			  <ion-icon name="logo-facebook"></ion-icon>
+				&nbsp;&nbsp;&nbsp; Facebook Login
+			</button><br>
+
+			<ion-card *ngIf="facebookLoggedIn && userData">
+				<img [src]="userData.picture"/>
+				<ion-card-content>
+				  <ion-card-title>
+					  {{ userData.username }}
+				  </ion-card-title>
+				  <p>Email: {{ userData.email }}</p>
+				  <p>First Name: {{ userData.first_name }}</p>
+				</ion-card-content>
+			  </ion-card>
+		------------------------------------------------------------------------------------------------------------------
+		
+	E) Now Run your app in any Android Device.
+	
+:	REFERENCE	:
+	
+	https://ionicframework.com/docs/native/facebook/
+	
+-----------------------------------------------------------
+:				TWITTER LOGIN							:
+-----------------------------------------------------------
+
+	1) Go to and Sign in Fabric => https://fabric.io
+
+	2) Then open https://fabric.io/kits/android/crashlytics/install. You don't need to do the onboarding process.
+	
+	3) Find the meta-data code block in AndroidManifest.xml
+
+	4) Find your API Key pre filled in the code. Like :
+
+	------------------------------------------------------------------------------------------------------------------
+		<meta-data
+          android:name="io.fabric.ApiKey"
+          android:value="551bfe449e0afa1b875e8820c549370bd1c581ce"
+      />
+	------------------------------------------------------------------------------------------------------------------
+	
+	5) Now Sign in Twitter Account and go to => https://apps.twitter.com/app
+	
+	6) Click on "Create New App" to Create Twitter app.
+	
+	7) Set :
+				Application Details :
+				Callback URL : http://www.mayabious.com
+				Website : http://www.socialmedia.com/
+				
+	8) Now Run this Commends With Keys :
+
+	------------------------------------------------------------------------------------------------------------------
+		cordova plugin add https://github.com/chroa/twitter-connect-plugin --variable FABRIC_KEY=<Fabric API Key> --variable TWITTER_KEY=<Twitter Consumer Key> --variable TWITTER_SECRET=<Twitter Consumer Secret>
+		
+		Example: 
+			
+			cordova plugin add https://github.com/chroa/twitter-connect-plugin --variable FABRIC_KEY="551bfe449e0afa1b875e8820c549370bd1c581ce" --variable TWITTER_KEY="OrnaYEOF6jogZJLF9LLkzBVwM" --variable TWITTER_SECRET="YfhlopH4Wd13seB804bs77oDhfV0uKYuDHsOy2mnjmExcBkcbE"
+		
+	------------------------------------------------------------------------------------------------------------------
+	
+	9) Now install Plugin : 
+	
+		npm install --save @ionic-native/twitter-connect
+		
+	10) Add Model
+	
+	1) Update app.module.ts
+		------------------------------------------------------------------------------------------------------------------		
+			import { TwitterConnect } from '@ionic-native/twitter-connect';
+			
+			providers: [
+				TwitterConnect]
+		------------------------------------------------------------------------------------------------------------------
+	2) Home.ts
+		------------------------------------------------------------------------------------------------------------------			
+			import { TwitterConnect } from '@ionic-native/twitter-connect';
+			
+			twitterLogedIn = false;
+			userData: any;
+		
+			constructor(public navCtrl: NavController, private twitter: TwitterConnect) {
+			}
+			
+			twitterLogin(){
+				this.twitterLogedIn = true;
+				this.twitter.login().then(response => {
+				  console.log(response);
+				  this.userData = {tUserName: response.userName, tUserId: response.userId} ;
+				}), this.onError;
+			  }
+
+			  twitterLogout(){
+				this.twitter.logout().then(onLogoutSuccess => {
+				  this.twitterLogedIn = false;     
+				}, this.onError);
+			  }	
+		------------------------------------------------------------------------------------------------------------------
+		3) Home.html
+		------------------------------------------------------------------------------------------------------------------
+			<button ion-button full (click)="twitterLogin()" *ngIf="!twitterLogedIn">
+				<ion-icon name="logo-twitter"></ion-icon>
+				&nbsp;&nbsp;&nbsp; Twitter Login
+			  </button><br> 
+			
+			  <ion-card *ngIf="twitterLogedIn">
+				<!-- <img src="img/nin-live.png"/> -->
+				<ion-card-content>
+				  <ion-card-title>
+					{{ userData.tUserName }}            
+					</ion-card-title>
+				  <p>
+					  {{ userData.tUserId }}
+				  </p>
+				</ion-card-content>
+			  </ion-card>
+
+			  <button ion-button full (click)="twitterLogout()" *ngIf="twitterLogedIn">
+				<ion-icon name="logo-twitter"></ion-icon>
+				  &nbsp;&nbsp;&nbsp; Twitter Logout
+			  </button><br>
+		------------------------------------------------------------------------------------------------------------------
+		
+	E) Now Run your app in any Android Device.
+	
+:	REFERENCE	:
+	
+	https://ionicframework.com/docs/native/twitter-connect/	
+	
+-----------------------------------------------------------
+:				LINKEDIN LOGIN							:
+-----------------------------------------------------------
+
+cordova plugin add cordova-plugin-linkedin --variable APP_ID=YOUR_APP_ID
+
+???
+
+-----------------------------------------------------------
+:				GITHUB LOGIN							:
+-----------------------------------------------------------
+
+???
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+: (11)	How to Configure Local Notification for Ionic 3 ?:
+----------------------------------------------------------------------------------------------------------------------------------
+
+=>	A) Install following Plugins :
+
+		ionic cordova plugin add cordova-plugin-local-notification
+		npm install --save @ionic-native/local-notifications
+		
+	B) 	Sample Code 
+
+	app.module.ts
+--------------------------------------------------------------------------------------------------------------------------
+	import { LocalNotifications } from '@ionic-native/local-notifications';
+
+	 providers: [    
+		LocalNotifications
+	  ]
+--------------------------------------------------------------------------------------------------------------------------
+		home.html
+--------------------------------------------------------------------------------------------------------------------------
+	<ion-content padding><br><br>
+	  <button ion-button full (click)="simplePushNotification()">Simple Local Push Notification</button><br>
+	  
+	  <button ion-button full (click)="pushNotificationWithData()">Local Push Notification with Data</button><br>
+	  
+	  <button ion-button full (click)="cancelPushNotification()">Cancel Local Push Notification</button><br>
+	  
+	</ion-content> 
+--------------------------------------------------------------------------------------------------------------------------
+		home.ts
+--------------------------------------------------------------------------------------------------------------------------
+		import { Component, state } from '@angular/core';
+		import { NavController, Platform } from 'ionic-angular';
+
+		import { LocalNotifications } from '@ionic-native/local-notifications';
+
+		@Component({
+		  selector: 'page-home',
+		  templateUrl: 'home.html'
+		})
+		export class HomePage {
+
+		  constructor(public navCtrl: NavController,
+					  private platform: Platform,
+					  private localNotifications: LocalNotifications) {
+
+			this.platform.ready().then(() => {
+			  this.localNotifications.on("click", (noti, state) => {
+			  alert("Notification Status : "+status);
+			  alert("Get Data : "+ JSON.stringify(noti.data));
+			  });
+			});
+
+		  }
+
+		  public simplePushNotification()
+		  {
+			this.platform.ready().then(() => {
+			  this.localNotifications.schedule({
+				title: "Local Push Notification",
+				text: 'This is a Single Local Notification',
+				at: new Date(new Date().getTime() + 3600)
+			  });
+			});
+		  }
+
+		  public pushNotificationWithData()
+		  {
+			this.platform.ready().then(() => {
+			  this.localNotifications.schedule({
+				id: 1,
+				title: "Local Push Notification",
+				text: 'This is a Single Local Notification',
+				at: new Date(new Date().getTime() + 10000),
+				data: {"id": 1, name:"Mr. Notification"}
+			  });
+			});
+		  }
+		  
+		   public cancelPushNotification()
+		  {
+			this.platform.ready().then(() => {
+			  
+			  this.localNotifications.clear(1);
+
+			});
+		  }
+
+		}
+--------------------------------------------------------------------------------------------------------------------------
+
+REFERENCE LINK :
+
+	https://ionicframework.com/docs/native/local-notifications/
+		
+	https://www.youtube.com/watch?v=_5S06oZzgbc
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+: Find Examples :
+
+----------------------------------------------------------------------------------------------------------------------------------
+var questions = [
+      {id: 1, question: "Do you feel a connection to a higher source and have a sense of comfort knowing that you are part of something greater than yourself?", category: "Spiritual", subs: []},
+      {id: 2, question: "Do you feel you are free of unhealthy behavior that impacts your overall well-being?", category: "Habits", subs: []},
+      {id: 3, question: "Do you feel you have healthy and fulfilling relationships?", category: "Relationships", subs: []},
+];
+
+function getDimensionsByFilter(id){
+  return questions.filter(x => x.id === id);
+}
+
+function getDimensionsByFind(id){
+  return questions.find(x => x.id === id);
+}
+
+var test = getDimensionsByFilter(10);
+console.log(test);
+
+test = getDimensionsByFind(10);
+console.log(test);	
+
+  
+----------------------------------------------------------------------------------------------------------------------------------
+      
+:	How to RELEASE APP Build for Production Version ? 																			:
+
+=>	Create a File : 
+
+	1) build.json and Change keystore and alias
+	-------------------------------------------------------------------------------------------------------------------
+		{
+			"android": {
+				"release":{
+					"keystore" : "airport-key.keystore",
+					"storePassword" : "psp12345",
+					"alias": "airport-key",
+					"passsword": "psp12345",
+					"keystoreType" : ""
+				}
+			}
+		}
+	-------------------------------------------------------------------------------------------------------------------
+	
+	2) Now Generate Key :
+	
+		keytool -genkey -v -keystore airport-key.keystore -alias airport-key -keyalg RSA -keysize 2048 -validity 10000
+		
+	3) Now Enter password : Like :
+	
+		psp12345
+		psp12345
+	
+	4) Now build android apk :	
+		
+		ionic cordova run android --prod --release							<= Run with devices
+		# or
+		ionic cordova build android --prod --release						<= Only Release Not Run in Devices
+		
+	jarsigner -sigalg SHA1withRSA -digestalg SHA1 -keystore airport-key.keystore android-release-signed.apk airport-key
+	
+	5) Set following info in =>	
+			
+			platform/android/build.gradle
+	
+	-------------------------------------------------------------------------------------------------------------------
+		keyAlias = "airport-key.keystore"
+		keyPassword = "psp12345" 
+		storeFile = 'airport-key.keystore'
+		storePassword = "psp12345"
+	-------------------------------------------------------------------------------------------------------------------
+
+:	REFERENCE 	:
+
+	https://ionicframework.com/docs/v1/guide/publishing.html
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+:	Visual Studio Shortcut 																										:
+----------------------------------------------------------------------------------------------------------------------------------
+
+Shift + alter + F			=>	Coder Formated
+
+Ctrl + ~ 					=>	Open Console
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+:	ERROR 	:																													
+
+1) Get Project from another system and dex problem
+
+delete .gradle file
+remove platform			<= ionic cordova platform rm android
+install platform		<= ionic cordova platform add android
+
+run 
+
+npm clean 
+npm rebuild
+
+

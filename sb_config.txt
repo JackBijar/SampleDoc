@@ -1,0 +1,359 @@
+:													SPRING BOOT CONFIGURATION [ KK JavaTutorials ]							 				:
+---------------------------------------------------------------------------------------------------------------------------------------------
+https://github.com/JackBijar/SampleDoc.git
+
+:	What are the Disadvantages of Sprong Boot ?																:
+
+=>	1) Deployment to WebSphere/WebLogic/Other App Servers :
+
+		Available : Tomcat and Jetty
+		
+	2) 
+
+:	Compare between @Repository, @Service, @Controller and @Component Annotation in Spring Boot.			:
+
+=>
+	<beans>
+		<context:component-scan use-default-filters = "false" base-package="com.springboot.testapp" />
+	</beans>
+
+@Repository, @Service, and @Controller are specializations of @Component for more specific use cases. Example :
+
+@Repository =>	Persistence	layer, It is a marker for Data Access Object or DAO. It is the automatic translation of exceptions.
+@Service 	=>	Service layer
+@Controller	=>	Presentation layer
+
+:	How to create Table from Embaddable Entity Class														:
+
+=>	Address is an Embaddable Class :
+
+-----------------------------------------------------------------------------------------------
+	@Embeddable
+	public class Address {
+		@NotNull
+		@Size(max = 100)
+		private String addressLine1;
+		.
+		.
+		.
+	}
+
+	@ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "user_addresses", joinColumns = @JoinColumn(name = "user_id"))
+    @AttributeOverrides({
+            @AttributeOverride(name = "addressLine1", column = @Column(name = "house_number")),
+            @AttributeOverride(name = "addressLine2", column = @Column(name = "street"))
+    })
+    private Set<Address> addresses = new HashSet<>();
+-----------------------------------------------------------------------------------------------
+NOT available any phoneNumber Entity Class, But you create 'user_phone_numbers' table :
+-----------------------------------------------------------------------------------------------
+	@ElementCollection
+    @CollectionTable(name = "user_phone_numbers", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "phone_number")
+    private Set<String> phoneNumbers = new HashSet<>();
+-----------------------------------------------------------------------------------------------
+@ElementCollection	=> Used to create a Table from Embaddable class or without Entity class.
+@CollectionTable	=> Define Collection name.
+
+:	@SpringBootApplication Class Some Info								:
+
+=>	When we call 
+
+		import org.springframework.boot.SpringApplication;
+		
+		SpringApplication.run(ApplicationClassName.class, args);
+	
+	** It return ApplicationContext. Like :
+	
+		ConfigurableApplicationContext applicationContext = SpringApplication.run(ApplicationClassName.class, args);
+
+	** You can Create any Bean Class Like :
+	
+		EmployeeService employeeService = applicationContext.getBean("employeeService", EmployeeService.class);
+		
+	
+:	@Repository and @Service Bean Class name							:
+
+=> By default Bean name is class name with first latter is small Like :
+
+@Service
+class EmployeeService
+{
+
+}
+
+Bean will be created by default :
+
+@Autowired
+EmployeeService employeeService;
+
+** If You Changed Then used :
+
+@Service(name="empService")
+class EmployeeService
+{
+
+}
+
+Then it will be define like :
+
+@Autowired
+EmployeeService empService;
+
+
+:	What is CommandLineRunner ?									:
+
+=>	CommandLineRunner is a simple spring boot interface with a run method. 
+	The run method of all beans implementing the CommandLineRunner interface will be called automatically by the spring boot system after the initial boot.
+
+:	How to get Spring boot database datasource	?								:
+
+=>	Get DataSource means Database Configuration  :
+
+	@Autowired
+	private DataSource dataSource;
+	
+	System.out.println("DataSource : "+dataSource);
+
+:	Spring Boot SQL Import Operation ?								:
+
+=>	If 'import.sql' file exist in 'src/main/resources' folder then automatic import all data in configured database tables.
+
+	If 'schema.sql' file exist in 'src/main/resources' folder then automatic fire ddl query in configured database tables.
+	
+	Next time Run => If Record is already exist in database then it will be not inserted.
+	
+:	Spring Boot DataSource/Database Configuration in application.property file 		:
+
+=>
+-----------------------------------------------------------------------------------------
+# Mandatory Property :
+spring.datasource.url = jdbc:mysql://localhost:3306/sb_flyway_db?useSSL=false
+spring.datasource.username = root
+spring.datasource.password = root
+
+# Optional Property :
+spring.datasource.driver-class-name = com.mysql.jdbc.Driver							<= If Not declare it check whick Jar is available in class path
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect	<= Its means you tellin to the hibernate which type of database you used
+
+spring.jpa.hibernate.ddl-auto = validate											<= It Just Check all Tables are available or not, doesn't change anythings.
+spring.jpa.show-sql = true															<= Show SQL In Console. By default it is false
+spring.jpa.properties.hibernate.format_sql = true									<= Show SQL in formated fashion In Console.
+spring.datasource.dbcp2.validation-query = SELECT 1
+
+# By Default Tomcat Connection Pool 												<= After Spring Boot version 2.0 it used HikariCP as Default Connection Pool
+spring.datasource.tomcat.max-wait=20000
+spring.datasource.tomcat.max-active=50
+spring.datasource.tomcat.max-idle=20
+spring.datasource.tomcat.min-idle=15
+
+
+-----------------------------------------------------------------------------------------
+
+
+:	Spring Data Repositories									:
+
+=> When you are working with spring data technologies, it is important to understand the repositoties concept.
+	Spring data provides the abstract repositories, that are implemented at run-time by the spring container and perform the CRUD operation.
+	As a developer we have to just provide the abstract methods in the interface, This reduces the amount of boilerplate code required to write data access layers.
+
+:	Three Base interfaces in Spring Data Repositories									:
+
+=>	1) Repositoriy
+
+	2) CrudRepository <= It extends Repository interface => CrudRepository<CLASS, PRIMARYKEY>
+	
+	This Interface have list of methods in CrudRepository:
+	
+		Entity save(Entity entity)
+		Iterable<Entity> save(Iterable<Entity> entities)
+		Entity findOne(ID id)
+		boolean exists(ID id)
+		Iterable<Entity> findAll()
+		Iterable<Entity> findAll(Iterable<ID> ids)
+		long count()
+		void delete(ID id)
+		void delete(Entity entity)
+		void delete(Iterable<Entity> entities)
+		void deleteAll()
+	
+	3) JpaRepository	<= JpaRepository<CLASS, PRIMARYKEY>
+	
+		JpaRepository repository have all CrudRepository's methods becouse it extends PagingAndSortingRepository. And PagingAndSortingRepository extends CrudRepository.
+	
+		Others available methods are :
+		
+			List<Entity> findAll()
+			List<Entity> findAll(Short short)	=> Sort data.
+			void flush()						=> Flushes all pending changes to the database.
+			saveAndFlush(Entity entity)
+			void deleteInBatch(Iterable entities)
+			void deleteAllInBatch()
+			Entity getOne(ID id)
+			
+			
+	
+	4) PagingAndSortingRepository
+	
+	
+	Extends : JpaRepository => PagingAndSortingRepository => CrudRepository => Repositoriy
+	
+	
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:										:
+
+=>
+
+:	List of Spring Boot Databases								:
+
+=>	
+
+	JPA				=> Java Persistence API including spring-data-jpa, spring-orm, Hibernate
+
+	JOOQ			=> Persistence support using Java Object Oriented Query. 
+						JOOQ generates Java code from your database and lets you build type safe SQL queries through its fluent API.
+	
+	MyBatis			=> Persistence support using MyBatis. Similar to Hibernate
+	
+	JDBC			=> JDBC Databases
+	
+	H2				=> Support Embedded Database
+	
+	HSQLDB			=> Support Embedded Database
+	
+	Apache Derby	=> Support Embedded Database
+	
+	MySQL			=> MySQL JDBC driver
+	
+	PostgreSQL		=> MySQL JDBC driver
+	
+	SQL Server		=> Microsoft SQL JDBC driver
+	
+	FlyWay			=> FlyWay Database Migrations libary
+	
+	Liqubase		=> Liqubase Database Migrations libary
+	
+
+:	What is Embedded Database ?									:
+
+=> Embedded Database is a in-memory database, which is store data in JVM memory. If the Server is Kill then all the data will be deleted automatically.	
+
+	Database Configuration is not required for Using Embedded Database.	These databases are used for Testing purpose. Like : H2, HSQLDB and Apache Derby etc.
+
+:	Spring Boot Annotations								:
+
+=>
+
+	@SpringBootApplication			=>	It define in Spring Boot strapping class. @SpringBootApplication is Combined of 
+	
+											@SpringBootApplication = @EnableAutoConfiguration + @ComponentScan + @Configuration
+											
+											@EnableAutoConfiguration =>	
+											
+											@ComponentScan			=>
+											
+											@Configuration			=> 
+	
+	@RestController					=>	Define a class as a Controller
+	
+	@RequestMapping					=> 	Set API Path				=> @RequestMapping(value="/api/employee")
+	
+	@GetMapping						=>	Get All Entity Information	=> @GetMapping(value="/employee/allEmployees")
+	
+	@PostMapping					=>	Save Entity Information		=> @PostMapping(value="/create")
+	
+	@DeleteMapping					=>	Delete Entity Information	=> @DeleteMapping(value="/employee/{empId}")
+	
+	@PutMapping						=>	Update Entity Information 	=> @PutMapping(value="/employee/{empId}/{newEmail:.+}")
+																		public void updateEmployee(@PathVariable("empId") Integer ticketId, @PathVariable("newEmail") String newEmail)
+	
+	@RequestBody					=> It is used to Bind JSON Object to Java Object 	=> public Ticket createTicket(@RequestBody Ticket ticket)
+	
+	@ResponseBody 					=> It is used to Bind Java Object to JSON Object 	=> @ResponseBody public Ticket createTicket(@RequestBody Ticket ticket)
+
+	@PathVariable					=> It is used to received from Path URL			=> public void deleteTicket(@PathVariable("ticketId") Integer ticketId)
+	
+	@Service						=> Define a interface as a Servers class
+	
+	@Repository						=> Define a interface as a Repository class
+	
+	@Component						=> Define a Class as a Servers/Repository/Controller class.
+	
+	@Autowired						=> Create a Baean Class.
+	
+	
+	
+	

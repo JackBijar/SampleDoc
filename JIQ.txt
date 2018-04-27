@@ -1,0 +1,63 @@
+:																		Jenkins 																			:
+
+CI =>	Continuous Integration is a software development practice where team members integrate their work frequently.
+
+:  What are the benefits of CI ?																																
+
+=>	1) Immediate bug detection
+	2) No integration step in the lifecycle
+	3) A deployable system at any given point
+	4) Record of evolution of the project 
+	
+:  What can Jenkins do ?																																			
+
+=>	1) Generate test reports
+	2) Integrate with many different Version Control Systems
+	3) Push to various artifact repositories
+	4) Deploys directly to production or test environments
+	5) Notify stakeholders of build status
+	
+:  What is Build Tiggers ?																																		
+
+=> 	Build Tigger is used to set building time of your project automaticaly. Otherwise you can build manually.
+	Build Option as follows : 
+							1) Build after other project are build
+							2) Build Periodically
+							3) Pool SCM
+							
+=>	Port Change =>	jenkins.xml
+
+=>	In Build Triggers => Select Pool SCM =>In Schedule => Write */5 * * * * =>
+
+=>	In Post-build Actions => Select Deploy war/ear to a container
+
+=>	Email notification Plugin : SMTP Server	: smtp.gmail.com AND SMTP Port	: 456 AND Email + Password
+
+=>	If you have only a few jobs to run on the same platform, having only a Jenkins master to build these jobs is OK. ***
+	
+
+Plugins :
+
+	Maven Plugin
+	RabbitMQ plugin
+	SonarQube Plugin
+	Capitomcat plugin <=	deploy the WAR file to multiple remote Tomcat servers
+	TestNG Plugin
+	HTML Publisher Plugin
+	Disk usage	Plugin		<= show Disk usage status of respective projects. Disk usage is calculated each 60 minutes using this plugin.
+	Monitoring plugin		<=	
+	Green Balls Plugin 
+	Jemeter Plugin			<= reports from JMeter and JUnit
+	SafeRestart Plugin		<= 
+	JDK Parameter Plugin	<= Manage different versions of java.
+	Multiple SCMs 			<= Default SCM section provides only one source control tool/URL option. Use multiple source control tools (GIT / SVN)
+	Build Pipeline Plugin	<= 
+	Build-timeout Plugin	<=	
+	
+===============================================================================================================================================================
+:																				Spring Boot 																:
+
+
+
+
+

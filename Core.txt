@@ -1,0 +1,30 @@
+:																:
+
+TreeSet :
+
+Key points to note about TreeSet :
+
+	TreeSet cannot contain duplicate elements.
+	TreeSet cannot contain null value.
+	TreeSet internally uses a TreeMap to store elements.
+	TreeSet class is not thread-safe.
+	
+:	Hashtable vs HashMap										:
+	
+=>	Hashtable and HashMap both implements Map<K,V> interface and works on the Principle of Hashing.
+
+	Synchronization/Thread Safe : Hashtable is synchronized and threadsafe, where as HashMap is non synchronized and not thread safe.
+
+	Null/NonNull : Hashtable permits any number of null values and one null key.
+	
+	Performance : Hashmap is much faster and uses less memory than Hashtable.
+	
+	Iterations: Maps allows you to iterate and retrieve keys, values, and both key-value pairs as well, Where Hashtable don’t have all this capability.
+	
+:	When to use HashMap and Hashtable ?			:	
+	
+	Hashtable used for Single Threaded Application.
+
+	HashMap used for Multi Threaded Application
+	
+	

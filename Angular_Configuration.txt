@@ -1,0 +1,1291 @@
+:																		ANGULAR 4																			:
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+:	What is Angular JS ?															:
+
+=>	Component = Template + Class + metadata
+
+	Template => View [HTML]
+	
+	Class =>  Data and Methods in TypeScript Code [Logic of View]
+	
+	Metadata => Information [Decorator]
+
+:	Why choose angular 5 ?															:
+
+=>	
+	1) Framework to build client side applications.
+	
+	2) Great for SPAs
+	
+	3) Modular approach
+	
+	4) Re-usable code
+	
+	5) Development quicker and easier
+	
+	6) Unit testable
+	
+	7) Google + Microsoft	
+	
+:	How to create a Angular Js Project ?											:
+
+=>	Install Node Js and Check version after install :
+
+	node -v 									<= Check Node Version
+
+	npm -v										<= Check npm Version
+
+	npm install -g @angular/cli					<= Now Install Angular CLI
+	
+	npm update -g @angular/cli					<= Now Update Angular CLI
+	
+	ng new project-name							<= Create New Project
+	
+	cd project-name
+	
+	npm update									<= To Update Node Module respect to Project
+	
+	ng serve --open								<= To Run this Project in => http://localhost:4200/
+	
+	ng serve --host 127.0.0.1 –port 8080		<= To Run in different Port => http://127.0.0.1:8080/
+	
+:	Configure Routing file for 															:
+	
+	ng g module app-routing
+	
+	ng new project-name	--routing flag
+
+:	Add Component, Directive, Pipe,  Class etc :
+
+=>	
+	Component 	=>	ng g component my-new-component
+	
+	Directive 	=>	ng g directive my-new-directive
+	
+	Pipe 		=>	ng g pipe my-new-pipe
+	
+	Service 	=>	ng g service my-new-service
+	
+	Class 		=>	ng g class my-new-class
+	
+	Guard 		=>	ng g guard my-new-guard
+	
+	Interface 	=>	ng g interface my-new-interface
+	
+	Enum 		=>	ng g enum my-new-enum
+	
+	Module 		=>	ng g module my-module	
+	
+		
+:	What are the Architecture of Angular 5 ?										:
+
+=> 
+	Angular App => One or more Modules
+	
+	Module => One or more Components and Services
+	
+	Components => HTML + Class
+	
+	Services => Business Logic
+	
+	Modules interact ultimately render the view in the browser.
+	
+	
+: 	Angular 5 Program Execuation Flow ?												:
+
+=>	
+	In src Folder =>
+	
+		main.ts =>	AppModule [app/app.module.ts] => AppComponent [app/app.component.ts] => [app.component.html + app.component.css]
+		
+		
+:	How to create CLASS and INTERFACE in Angular 4 ?											:
+
+=> 
+	ng generate class [class_name] 					<=	Generate a Class	
+	
+	ng generate interface [interface_name] 			<=	Generate a Interface
+		
+:	How to create COMPONENT [Page]	in Angular Js ?											:
+
+=> 
+	Syntex 	:	ng g component componentName
+	
+	OR		:	ng g c componentName
+	
+	Example :	ng g component hearder
+	
+:	How to create DIRECTIVE in Angular Js ?											:
+
+=>	
+	Syntex 	:	ng g directive directiveName
+	
+	Example :	ng g directive blueColor
+	
+:	What is Component ?																:
+
+=>	Component = selector: '' + templateUrl: '' + styleUrls: []
+
+	Example :
+	------------------------------------------------------------------------
+		@Component({
+		  selector: 'app-root',
+		  templateUrl: './app.component.html',
+		  styleUrls: ['./app.component.css']
+		})
+		export class AppComponent {
+		  title = 'Rajib';
+		}
+		
+	Used :
+	
+		<app-root></app-root>
+	-----------------------------------------------------------------------------
+	
+	: Selector Used as a Class Name : 
+	-----------------------------------------------------------------------------
+		NORMAL : selector: 'app-root'
+		
+		If 'selector' name start with '.' then you used as class name. Like :
+
+		selector: '.app-root'
+	
+		<div class="app-root"></div>
+	----------------------------------------------------------------------------
+	
+	: Selector Used as a tage Name :
+	----------------------------------------------------------------------------
+		If 'selector' name start with '[]' then you used as class name. Like :
+		
+		selector: '[app-root]'
+		
+		<div app-root></div>
+	----------------------------------------------------------------------------
+	
+	: Inline Template Code :
+	----------------------------------------------------------------------------
+	NORMAL : 
+	
+	templateUrl: './app.component.html',
+	
+	template: '<div> Single Line in Template Code </div>',
+	
+	template: `<div> 
+					<p>Multiple Line in Template Code</p> 
+				</div>`,
+	----------------------------------------------------------------------------
+	
+	: Custom CSS Code :
+	----------------------------------------------------------------------------
+	NORMAL :	styleUrls: ['./app.component.css']
+	
+	styles: [`
+		div {
+			color: red;
+		}
+	`]
+	
+	<div> Hello Mr.</div>
+	----------------------------------------------------------------------------
+
+:	What is Interpolation in Angular 5 ?											:
+
+=>	{{}} => Is known as Interpolation.
+
+----------------------------------------------------------------------------
+	@Component({
+		  selector: 'app-root',
+		  templateUrl: './app.component.html',
+		  styleUrls: ['./app.component.css']
+		})
+		export class AppComponent {
+		  title = 'Rajib';
+		  siteUrl = windows.location.href;
+		  
+		  public getUser(){
+			return "Rajib";
+		  }
+		}
+		
+	Used In HTML :
+	
+	CAN DO :
+		<div> {{title}} </div>					<= Rajib
+		<h2> {{siteUrl}} </h2>					<= http://localhost:4200
+		<h2>{{2+2}}</h2>						<= 4
+		<h2>{{"Welcome "+title}}</h2>			<= Welcome Rajib
+		<h2> {{title.length}} </h2>				<= 5
+		<h2> {{title.toUpperCase()}} </h2>		<= RAJIB
+		<h2> {{getUser()}} </h2>				<= Rajib
+		
+	CAN'T DO :
+		<h2>{{a= 2+2}}</h2>
+		<h2>{{windows.location.href}}</h2>
+--------------------------------------------------------------------------------------
+
+:	HTML Attribute vs Property ?													:
+
+=>	Attributes and Properties and not the same.
+
+	Attributes - HTML
+	
+	Properties - DOM (Document Object Model)
+	
+	Attribute initialize DOM properties and then they are done. 
+	Attribute values can't change once they are initialized.
+	
+	Property values however can change.
+	
+:	Angular 5 Property Binding														:
+
+=>	Property Binding using '[]' =>
+
+	LIKE : <input [disabled]="isDisabled" id="{{myId}}" type="text">
+	
+	OR
+
+	'bind-property-name' => 
+	
+	LIKE : <input bind-disabled="isDisabled" id="{{myId}}" type="text">
+	
+	test.component.ts
+---------------------------------------------------------------------------------------
+	@Component({
+	  selector: 'app-root',
+	  templateUrl: './app.component.html',
+	  styleUrls: ['./app.component.css']
+	})
+	export class AppComponent {
+	  public name = 'Rajib Garai';
+	  public mobile = '9563359659';
+	  public isDisabled = false;
+	}
+---------------------------------------------------------------------------------------
+	test.component.html
+---------------------------------------------------------------------------------------
+	Email : <input type="text" id="email" name="email" value="rajib@gmail.com">	<= 	Attributes Binding
+	
+	Name : <input type="text" id="name" name="name" value="{{name}}">			<= 	Data Binding
+
+	Mobile : <input type="text" id="mobile" name="mobile" [value]="mobile">		<=  Property Binding
+	
+** Normal value="rajib@gmail.com" and value="{{name}}" contain only String values Others data type are not working,
+
+	So we used  Property Binding. Example :
+	
+	public isDisabled = false;
+	
+	Disabled Check : <input disabled type="text" id="name" name="name" value="{{name}}"><br>					<= Input Box Disable
+	
+	Disabled Check : <input disabled="false" type="text" id="name" name="name" value="{{name}}"><br>			<= Input Box Disable
+	
+	Disabled Check : <input disabled="{{isDisabled}}" type="text" id="name" name="name" value="{{name}}"><br>	<= Input Box Disable
+	
+	Disabled Check : <input [disabled]="isDisabled" type="text" id="name" name="name" value="{{name}}"><br>		<= Input Box Active *
+	
+	Disabled Check : <input bind-disabled="isDisabled" type="text" id="name" name="name" value="{{name}}"><br>		<= Input Box Active *
+	
+---------------------------------------------------------------------------------------
+
+:	Angular 5 Class Binding 	[CSS Class]													:
+
+=> 	Class binding is the Highest proirity from inline CSS class.
+
+	@Component({
+	  selector: 'app-root',
+	  templateUrl: './app.component.html',
+	  styles: ['
+		.text-success {
+			color: green;
+		}
+		.text-danger {
+			color: red;
+		}
+		.text-special {
+			font-style: italic;
+		}
+	  ']
+	})
+	
+	<h2 class="text-success"> Some Text Message </h2>		<= Not using Class binding
+	
+	<h2 [class]="text-success"> Some Text Message </h2>		<= Use class Binding
+	
+	<h2 class="text-special" [class]="text-success"> Some Text Message </h2>		<= In this case class 'text-special' is not working. Worked only class 'text-success'
+	
+	Conditionaly Apply :
+	
+	public hasError = true;
+	
+	<h2 [class.text-danger]="hasError"> Some Text Message </h2>		<= It worked If hasError is TRUE.
+	
+	Example :
+	------------------------------------------------------------
+		public hasError = false;
+		public isSpecial = true;
+		
+		public messageClass = {
+			"text-success": !this.hasError,
+			"text-danger": this.hasError,
+			"text-special": this.isSpecial
+		}
+		
+		<h2 [ngClass]="messageClass"> Some Text Message </h2>	
+	-------------------------------------------------------------
+	
+:	Style Binding :
+
+	1) <h2 [style.color]="'orange'"> Some Text Message </h2>	
+	
+	2) public hasError = false;
+	
+	<h2 [style.color]="hasError ? 'red' : 'green' "> Some Text Message </h2>
+	
+	3) public colorNameGreen = "green";
+	
+	<h2 [style.color]="colorNameGreen"> Some Text Message </h2>
+	
+	4) public titleStyle = {
+		color: "blue",
+		fontStyle: "italic"
+	}
+	
+	<h2 [ngStyle]="titleStyle"> Some Text Message </h2>	
+	
+:	 Event Binding	:
+
+=>	<button (click)="getEventMethod($event)"> Greet </button>
+
+	getEventMethod(event)
+	{
+		console.log(event);
+	}
+
+:	Template Reference Variables	:
+
+1)	<input #myInput type="text">
+	<button (click)="logMessage(myInput.vale)">Get Value</button>
+	
+	logMessage(inputValue)
+	{
+		console.log(inputValue);
+	}
+	
+:	Two Way Binding	:
+
+	import { FormsModule } from '@angular/forms';
+	
+	{{name}}
+	
+	<input [(ngModel)]="name" type="text">
+	
+	public name = "";
+	
+	We should used [] for properity binding, which the data flow from Class to Template. And
+	We should used () for event binding, which the data flow from Template to Class.
+
+:	ngIf Directive	:
+
+	1) <h2 *ngIf="true"> Some Message </h2>
+
+	2) If Condition
+	
+		public displayName = true;
+	
+		<h2 *ngIf="displayName"> Some Message </h2>
+		
+	3)	If else Condition
+
+		public displayName = true;
+	
+		<h2 *ngIf="displayName; else elseBlock"> Some Message </h2>
+		
+		<ng-template #elseBlock>
+			<h2> Name is hidden </h2>
+		</ng-template>
+		
+	4) If else If Condition
+	
+		public displayName = true;
+		
+		<div *ngIf="displayName; then thenBlock; else elseBlock"></div>
+		
+		<ng-template #thenBlock>
+			<h2> I am in Then Block </h2>
+		</ng-template>
+		
+		<ng-template #elseBlock>
+			<h2> I am in Else Block </h2>
+		</ng-template>
+	
+:	ngSwitch Directive	:
+
+	public color = "red";
+	
+	<div [ngSwitch]="color">
+		<div *ngSwitchCase="'red'">You Pick Red Color</div>
+		<div *ngSwitchCase="'blow'">You Pick Blue Color</div>
+		<div *ngSwitchCase="'green'">You Pick Green Color</div>
+		<div *ngSwitchDefault>You Pick Default Color</div>
+	</div>
+
+:	ngFor Directive		:
+
+	1) public colors = ["Red", "Blue", "Green", "Yellow"];
+
+		<div *ngFor="let color of colors">
+			<h2>{{color}}</h2>
+		</div>
+	
+	2)	Index Start from 0
+	
+		<div *ngFor="let color of colors; index as i">
+			<h2>{{i}} {{color}}</h2>
+		</div>
+		
+	3) first => It return boolean value true for first element and others false 
+		
+		<div *ngFor="let color of colors; first as f">
+			<h2>{{f}} {{color}}</h2>
+		</div>
+
+	4) last => It return boolean value true for last element and others false 
+		
+		<div *ngFor="let color of colors; last as l">
+			<h2>{{l}} {{color}}</h2>
+		</div>
+
+	5) event returns of event index values true as well as odd values false. OR vise versa
+		
+		<div *ngFor="let color of colors; event as e">
+			<h2>{{e}} {{color}}</h2>
+		</div>
+		
+:	Component Interaction	:
+
+1)	Send Data From Parent Component to Child Component :
+	
+	In app.component.ts 
+	
+		public name = "Rajib";						<= Declare Data
+		
+	In app.component.html
+
+		<app-test [parentData]="name"></app-test>	<= Binding Data
+		
+	In test.component.ts
+	
+		import { Input } from '@angular/core';
+	
+		@Input() public parentData;
+		
+			OR
+			
+		@Input('parentData') public name;	
+		
+		
+	In test.component.html
+	
+		<h2>{{"Hello " + parentData}}</h2>
+
+		OR
+		
+		<h2>{{"Hello " + name}}</h2>
+		
+2)	Now Send data from Child Component to Parent Component :
+
+	In test.component.ts
+	
+		import { Output, EventEmitter } from '@angular/core';
+		
+		@Output public childEvent = new EventEmitter();
+		
+		public fireEvent() {
+		
+			this.childEvent.emit("Data Send from Child component");
+		}
+
+	In test.component.html
+	
+		<button (click)="fireEvent()">Send Event</button>
+
+	In app.component.html
+	
+		<h2> {{message}} </h2>
+		
+		<app-test (childEvent)="message=$event"></app-test>
+		
+	In app.component.ts 
+
+		public message = "";
+		
+		
+:	Pipes	:
+
+	public name = "Codeevoluation";
+	public msg = "My name is Rajib";
+	
+	public person = {
+		"firstName": "Rajib",
+		"lastName": "Garai"
+	}
+
+	<h2>{{ name }}</h2>
+	<h2>{{ name | lowercase }}</h2>		<= codeevoluation
+	<h2>{{ name | uppercase }}</h2>		<= CODEEVOLUATION
+	<h2>{{ msg | titlecase }}</h2>		<= My Name Is Rajib
+	<h2>{{ name | slice:4 }}</h2>		<= evoluation
+	<h2>{{ name | slice:4:5 }}</h2>		<= ev
+	<h2>{{ person | json }}</h2>		<= { "firstName": "Rajib", "lastName": "Garai" }
+	
+	<h2>{{5.678 | number: '1.2-3'}}</h2>	<= 5.678
+	<h2>{{5.678 | number: '3.4-5'}}</h2>	<= 005.6780
+	<h2>{{5.678 | number: '3.1-2'}}</h2>	<= 005.68
+	
+	<h2>{{ 0.25 | percent }}</h2>			<= 25%
+	
+	<h2>{{ 0.25 | currency }}</h2>					<= $0.25 [Default currency Dollar]
+	<h2>{{ 0.25 | currency: 'GBP' }}</h2>			<= £0.25 [Pound Symbol]
+	<h2>{{ 0.25 | currency: 'GBP': 'code' }}</h2>	<= GBP0.25 [Pound Code]
+	
+	
+	public data = new Date();
+	
+	<h2>{{ date }}</h2>						<= Sun Dec 03 2018 21:45:52 GMT+0530 (India Standard Time)
+	
+	<h2>{{ date | date:'sort' }}</h2>		<= 12/3/18, 9:50PM
+	<h2>{{ date | date:'sortDate' }}</h2>	<= 12/3/18
+	<h2>{{ date | date:'sortTime' }}</h2>	<= 9:50PM
+	
+	<h2>{{ date | date:'medium' }}</h2>		<= Show Medium format of date
+	<h2>{{ date | date:'long' }}</h2>		<= Show Long format of date
+	
+:	Dependency Injection in Angular 5	:
+
+=>	Dependency Injection or DI is a coding pattern in which a class receives its dependencies from external sources rather than creating them itself.
+
+Example : With out Dependency Injection :
+----------------------------------------------------------------
+class Engine{
+	constructor() {}
+}	
+
+class Tire{
+	constructor() {}
+}
+
+class Car {
+	engine;
+	tire;
+	constructor() {
+		this.engine = new Engine();
+		this.tire = new Tire();
+	}
+}
+
+=> In case Some change Engine class to create constructor like :
+
+Engine engine = new Engine(someParameters);
+
+=> Then Car Class also change that means Car class depends on Engine and Tire
+
+----------------------------------------------------------------
+Example : With Dependency Injection :
+----------------------------------------------------------------
+class Car {
+	constructor(engine, tire) {
+		this.engine = this.engine;
+		this.tire = this.tire;
+	}
+}
+
+=> So we use like :
+
+Engine engine = new Engine(someParameters);
+Tire tire = new Tire();
+
+Car car = new Car(engine, tire);
+----------------------------------------------------------------
+
+There is a problem, before we create a Car clas you must need to create Engine and Tire class es objects/dependency.
+
+Soluation :
+
+First Create a Service with injector and we register all Dependencies in Service.
+
+Example : DI as a Framework Contd :
+
+A) Define the EmployeeService class.
+B) Register with Injector. i.e add in app.module.ts file [Provider]
+C) Declare as dependency in EmpList and EmpDetail.
+
+:	Services in Angular 5	:
+	
+Principles :
+
+	Don't Repeat Yourself (DRY)
+	Single Responsibility Principle
+	
+Service :
+
+	A class with a specific purpose
+	
+	1) Share data from multiple component.
+
+	2) Implement application logic [Like calculate age from Date of birth] that used multiple times.
+	
+	3) Naming Convention - .service.ts
+	
+	4) @Injectable() decarator is used for declare a service class.
+	
+:	HTTP and Observables		: [20]
+
+	A sequence of items that arrive asyncronously over time.
+	
+	HTTP call - Single item
+	
+	Single item - HTTP response
+	
+	HTTP, Observables and Rxjs :
+
+	1. HTTP Get request from EmpService
+	
+	2. Receive the observable and cast it into an employee array
+	
+	3. Subscribe to the observable from Emplist and EmpDetail 
+	
+	4. Assign the employee array to a local variable
+	
+	RxJS :
+	
+		- Reactive Extensions for Javascript
+		- External libray to work Observables
+		
+:	Fetch Data Using HTTP	: [21+22]
+
+Example :
+
+employee.service.ts
+----------------------------------------------------------------------------
+	import {HttpClient, HttpErrorResponse } from '@angular/common';
+	import { IEmployee } from './employee';
+	import { Observable } from 'rxjs/Observable';
+	import 'rxjs/add/operator/catch';
+	import 'rxjs/add/observable/throw';
+
+
+	constructor(private http: HttpClient){}
+
+	public getEmployee(): Observable<IEmployee[]>{
+		return this.http.get<IEmployee[]>("http://www.google.com/abc=76")
+						.catch(this.errorHandler);
+	}
+
+	errorHandler(error: HttpErrorResponse){
+		return Observable.throw(error.message || "Server Error");
+	}
+
+----------------------------------------------------------------------------
+employee-list.component.ts
+----------------------------------------------------------------------------
+	public employees = [];
+	public errorMsg;
+
+	this.employeeService.getEmployees()
+		.subscribe(data => this.employees = data
+					error => this.errorMsg = error);
+----------------------------------------------------------------------------
+
+:	Routing and Navigation	: [23]
+
+Routing App :
+
+	1) Generate a Project with routing option
+
+	2) Generate departmentList and employeeList components
+
+	3) Configure the routes
+
+	4) Add buttons and use directives to navigate
+	
+Example :
+
+1)
+	ng new routing-app --routing
+	
+	ng g c employee-list -it -is
+	
+	ng g c department-list -it -is
+	
+
+	Automatically create app-routing.module.ts file for Routing :
+2)
+	Update app-routing.module.ts class
+	----------------------------------------------------------------------------------------
+		const routes: Routes = [
+			{ path: 'departments', component: DepartmentListComponent },
+			{ path: 'employee', component: EmployeeListComponent }
+		]
+		
+		@NgModule({
+			imports: [RouterModule.forRoot(routes)],
+			exports: [RouterModule]
+		})
+		export class AppRoutingModule {}
+		
+		export const routingComponents = [DepartmentListComponent, EmployeeListComponent]
+		
+	----------------------------------------------------------------------------------------
+3)
+	Update app.module.ts, Remove DepartmentListComponent, EmployeeListComponent from declarations. and replace by routingComponents
+	----------------------------------------------------------------------------------------
+		declarations: [
+			AppComponent,
+			routingComponents
+		]
+	----------------------------------------------------------------------------------------
+	Any time you create component and use for routing then you must declare in routingComponents.
+
+4)
+	Open app.component.ts and check it to show routing view
+	----------------------------------------------------------------------------------------
+		<nav>
+			<a routerLink="/departments" routerLinkActive="active">Departments</a>
+			<a routerLink="/employees" routerLinkActive="active">Employees</a>
+		</nav>	
+		
+		<router-outlet></router-outlet>
+	-----------------------------------------------------------------------------------------
+	
+	routerLinkActive <= Here define css properity optional
+	
+:	Wildcard Route and Redirecting Routes	:
+
+A) This Wildcard Route alowayes specifies in last of others route.
+
+1)
+	ng g c page-not-found -it -is
+	
+2)	add in app-routing.module.ts
+
+-----------------------------------------------------------------------------------------	
+	const routes: Routes = [
+			{ path: 'departments', component: DepartmentListComponent },
+			{ path: 'employee', component: EmployeeListComponent },
+			{ path: "**", component: PageNotFoundComponent }
+		]
+	
+	export const routingComponents = [DepartmentListComponent, EmployeeListComponent, PageNotFoundComponent]
+-----------------------------------------------------------------------------------------	
+Redirecting Routes : Default Routing :
+
+If anything is not specified in Url then go to DepartmentListComponent
+
+const routes: Routes = [
+			{ path: '', redirectTo: '/departments', pathMatch: 'full' },
+			{ path: 'departments', component: DepartmentListComponent },
+			{ path: 'employee', component: EmployeeListComponent },
+			{ path: "**", component: PageNotFoundComponent }
+		]
+	
+:	ParamMap Observable	: [25]
+
+=>	
+
+:	Route Parameters	: [26]
+
+Example : Click on Department and Show Department Details :
+
+	1) Create a ng g c department-details -it -is
+
+	2) Update in app-routing.module.ts module by using this code :
+	
+	const routes: Routes = [
+			{ path: '', redirectTo: '/departments', pathMatch: 'full' },
+			{ path: 'departments', component: DepartmentListComponent },
+			{ path: 'employee', component: EmployeeListComponent },
+			{ path: 'departments/:id', component: DepartmentDetailsComponent },
+			{ path: "**", component: PageNotFoundComponent }
+		]	
+	
+	3) And update 
+
+		export const routingComponents = [DepartmentListComponent, EmployeeListComponent, DepartmentDetailsComponent, PageNotFoundComponent]
+
+	4) Now Update department-list.component.ts
+	
+		<ul>
+			<li (click)="onSelect(department)" *ngFor="let department of departments">
+				<span class="badge">{{department.id}}</span> {{department.name}}
+		</ul>
+
+	5) Now define onSelect()
+	
+	import { Router } from '@angular/router';	
+	
+	constructor(private router: Router)
+	{}
+	public onSelect(department)
+	{
+		this.router(navigate['/department', department.id]);
+	}
+
+	6) Now go to DepartmentDetailsComponent and update by following code :
+	
+		import { ActivatedRoute } from '@angular/router';
+		
+		constructor(private route: ActivatedRoute){}
+		
+		public departmentId;
+		
+		ngOnInit(){
+			let id = parseInt(this.route.snapshot.paramMap.get('id'));
+			this.departmentId = id;
+		}
+		
+	7) Now change in view 
+	
+		<h2>Selected Department Id = {{departmentId}}</h2>
+		
+:	Optional Route Parameters : [27]
+
+Example : Click back button to DepartmentListComponent
+
+	1) 	In DepartmentDetailsComponent.ts in design Part
+	
+		<button (click)="goToDepartment()"> Back </button>
+		
+		function goToDepartment()
+		{
+			let selectedId = this.departmentId ? this.departmentId : null;
+			this.router.navigate(['/departments', {id: selectedId}]);
+		}
+		
+	2) Update in DepartmentListComponent :
+	
+	import { Route, ActivatedRoute, ParamMap } from '@angular/router';
+
+	constructor(private route: Route, private activatedRoute: ActivatedRoute){}
+	
+	ngOnInit(){
+		this.rout.parammap.subscribe((params: ParamMap) => {
+			let id = parseInt(params.get('id'));
+			this.departmentId = id;
+		});	
+	}
+	
+	
+	????
+	
+:	Relative Navigation :
+
+	
+:	Child Routes	:
+
+Example : Add to sub  link in DepartmentDetailsComponent 'Overview' and 'Contact'
+
+1)
+const routes: Routes = [
+			{ path: '', redirectTo: '/departments', pathMatch: 'full' },
+			{ path: 'departments', component: DepartmentListComponent },
+			{ path: 'employee', component: EmployeeListComponent },
+			{ path: 'departments/:id', component: DepartmentDetailsComponent,
+				children: [
+					{ path: 'overview', component: DepartmentOverviewComponent},
+					{path: 'contact', component: DepartmentContactComponent}
+				]},
+			{ path: "**", component: PageNotFoundComponent }
+		]	
+
+		export const routingComponents = [DepartmentListComponent, EmployeeListComponent, DepartmentDetailsComponent, DepartmentOverviewComponent, DepartmentContactComponent, PageNotFoundComponent]
+
+2)		
+Now change in DepartmentDetailsComponent
+
+	Add two button in DepartmentDetailsComponent
+	
+	<p>
+		<button (click)="showOverview()">Overview</button>
+		<button (click)="showContact()">Contact</button>
+	</p>
+
+	
+	public showOverview(){
+		this.router.navigate(['overview'], {relativeTo: this.route});
+	}
+	
+	public showContact(){
+		this.router.navigate(['contact'], {relativeTo: this.route});
+	}
+	
+	
+	
+	
+:	REMAINING : 25, 27
+
+
+: REFERENCE :
+
+	https://www.youtube.com/watch?v=0eWrpsCLMJQ&list=PLC3y8-rFHvwhBRAgFinJR8KHIrCdTkZcZ&index=1
+
+	
+:	How to define Template in Angular 4 ?											:
+
+=>
+	home.ts
+--------------------------------------------------------------------------------------
+	@Component({
+	  selector: 'joke',
+	  template: `
+	  <h1>What did the cheese say when it looked in the mirror?</h1>
+	  <p>Hall oumi (hello me)</p>
+	  `,
+	  styleUrls: ['./app.component.css']
+	})
+--------------------------------------------------------------------------------------
+
+	home.html
+--------------------------------------------------------------------------------------
+	<body>
+	  <joke></joke>
+	</body>
+--------------------------------------------------------------------------------------
+
+:	How to declare a Class in Angular 4 ?											:
+
+=>	'JokeComponent' class has two properties, setup and punchline, both of them can only hold strings.
+
+--------------------------------------------------------------------------------------
+	class JokeComponent {
+	  setup: string;
+	  punchline: string;
+	}
+--------------------------------------------------------------------------------------
+
+:	How to declare an Object in Angular 4 ?											:
+
+=>	'joke' is an object created using the JokeComponent class.
+--------------------------------------------------------------------------------------
+	let joke = new JokeComponent();
+--------------------------------------------------------------------------------------
+
+:	How to used Pipe Title Case ?													:
+
+=> 	To Convert the words in Camelcase.
+
+Example :
+
+	<h2>{{ 'Angular 4 titlecase' | titlecase }}</h2>
+	
+:	How to Generate a Module ?														:
+
+=> 
+	ng generate module user --routing
+	
+:	How to Generate a Service ?														:
+
+=>	
+	ng generate service user/user
+	
+OR	ng g s service-name	
+	
+:	How to Generate sub-components ?												:
+
+=> 
+	ng generate component /user/user-list
+	
+:	How to create Coustomize ToastrModule ?											:
+
+=>	
+	1)	Install following plugins :
+		--------------------------------------------------------------------------------------
+			npm install ngx-toastr --save
+			npm install @angular/animations --save
+		--------------------------------------------------------------------------------------
+	2)	If you are using angular-cli you can add it to your angular-cli.json
+		--------------------------------------------------------------------------------------
+			"styles": [
+			  "styles.scss",
+			  "../node_modules/ngx-toastr/toastr.css"
+			]
+		--------------------------------------------------------------------------------------	
+		
+	3)	In App.Module : 
+		--------------------------------------------------------------------------------------
+			import { ToastrModule } from 'ngx-toastr';
+			import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+		
+			imports: [
+				ToastrModule.forRoot(),
+				BrowserAnimationsModule
+			]
+		--------------------------------------------------------------------------------------
+	4)	In Component :
+		--------------------------------------------------------------------------------------
+			import { ToastrService } from 'ngx-toastr';
+		
+			constructor(private toastr: ToastrService) {}
+			
+			 showSuccess() {
+				this.toastr.success('Msg Hello world!', 'Title Toastr fun!');
+			  }
+		--------------------------------------------------------------------------------------
+	5)	Customize :		
+		--------------------------------------------------------------------------------------
+			ToastrModule.forRoot({
+			timeOut: 10000,
+			positionClass: 'toast-bottom-right',
+			preventDuplicates: true,
+		  }),
+		--------------------------------------------------------------------------------------
+		
+		
+--------------------------------------------------------------------------------------
+
+:	How to Used Materialize css ?														:
+
+=>	1)	Install following Plugin :
+
+	npm install materialize-css
+	
+	bower install materialize
+
+	npm i -g bower to update
+	
+	2)	Add This file link in .angular-cli.json file :
+	
+	--------------------------------------------------------------------------------------		
+		"styles": [
+			"styles.css",
+			"../node_modules/ngx-toastr/toastr.css",
+			"../node_modules/materialize-css/dist/css/materialize.css"
+		  ],
+		  "scripts": [
+			"../node_modules/materialize-css/dist/js/materialize.js",
+			"../node_modules/jquery/dist/jquery.js",
+		   "../node_modules/hammerjs/hammer.js"
+		  ],
+	--------------------------------------------------------------------------------------
+	
+	3) Add In Module in app.module.ts
+
+:	REFERENCE LINK	:
+
+=>	http://materializecss.com/getting-started.html
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+:	Configure a Priject Angular 5 with Bootstrap 4 :																										
+
+=>	Follow this following steps to configure Angular 5 and Bootstrap 4 :
+
+	1)	ng new project-name										<= Create a New Project
+	
+	2)	"@angular/cli": "1.5.5" to "@angular/cli": "^1.5.5"		<= Change Version in package.json
+	
+	3)	npm update @angular/cli									<= Update Angular CLI Version
+	
+		OR
+		
+		npm install -g @angular/cli@latest
+	
+	4)	ng serve -- Open										<= Start Your application
+	
+	5)	npm install --save bootstrap@next						<= Install Bootstrap latest version
+	
+	6)	@import "~bootstrap/dist/css/bootstrap.css"				<=	Now Add this code in style.css
+	
+	7)	Go to http://www.boostrap.com web site => Select 'Examples' =>	Choose any Tamplate.
+	
+	8)	ng g component app-navbar 								<= Now Create a New Component
+	
+	9)	Go to https://ng-bootstrap.github.io/ web site => select 'Component' => Add to js file for bootstrap
+	
+		OR
+		
+		npm install --save @ng-bootstrap/ng-bootstrap
+	
+	10) Now update app.module.ts file by using this code :
+	
+	-----------------------------------------------------------------------------
+		import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+		
+		imports: [
+			NgbModule.forRoot()
+		 ]
+	-----------------------------------------------------------------------------
+
+	11) Now Used bootstrap 4 style code.
+	
+	12)	ng build --prod 										<= Build as a production version.
+	
+	13)	
+	
+:	REFERENCE	:
+
+	https://codingthesmartway.com/
+	
+	http://getbootstrap.com/docs/4.0/examples/
+	
+	https://ng-bootstrap.github.io
+	
+	https://github.com/dockleryxk/ng-simple-slideshow
+
+
+--------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+:	How to Integrate Angular 4 with Spring Boot Application	?						:
+
+=>	Configure Spring Boot with Angular 4 Application :
+
+	1)	Create a Spring Boot Application.
+	
+	2)	Now execute following commands to create a Angular Project in Spring Project root folder
+	
+	3)	Followings changes in gradle.build file :
+	------------------------------------------------------------------------------------------------
+		buildscript {
+			ext {
+				springBootVersion = '1.5.9.RELEASE'
+			}
+			repositories {
+				mavenCentral()
+				jcenter()
+				maven {
+					url "https://plugins.gradle.org/m2/"
+				}
+			}
+			dependencies {
+				classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+				classpath("com.moowork.gradle:gradle-node-plugin:1.1.1")
+			}
+		}
+
+		apply plugin: 'java'
+		apply plugin: 'eclipse'
+		apply plugin: 'org.springframework.boot'
+
+		apply plugin:"com.moowork.node"
+
+		group = 'com.spring.angularapp'
+		version = '1.0'
+		sourceCompatibility = 1.8
+
+		repositories {
+			mavenCentral()
+		}
+
+
+		dependencies {
+			compile('org.springframework.boot:spring-boot-starter-web')
+			testCompile('org.springframework.boot:spring-boot-starter-test')
+		}
+
+		node {
+		  version = "7.5.0"
+		  download = true
+		  nodeModulesDir = file("frontend")
+		}
+		task buildClientDev(type: NpmTask, dependsOn: 'npmInstall') {
+		  group = 'build'
+		  description = 'Compile client side folder for development'
+		  args = ['run','buildDev']
+		}
+		task buildClient(type:NpmTask, dependsOn:'npmInstall') {
+		  group = 'build'
+		  description = "Compile client side folder for production"
+		  args = ['run','build']
+		}
+		task buildClientWatch(type: NpmTask, dependsOn: 'npmInstall') {
+		  group = 'application'
+		  description = "Build and watches the client side assets for rebuilding"
+		  args = ['run','buildWatch']
+		}
+
+		bootRun.dependsOn(buildClientDev)
+		jar.dependsOn(buildClient)
+	------------------------------------------------------------------------------------------------
+
+	4)	update package.json in Angular Project.
+	------------------------------------------------------------------------------------------------
+		"scripts": 
+		{
+			"ng": "ng",
+			"start": "ng serve",
+			"buildDev": "ng build",
+			"buildWatch": "ng build --watch=true",
+			"build": "ng build --prod",
+			"test": "ng test",
+			"lint": "ng lint",
+			"e2e": "ng e2e"
+		  },
+	------------------------------------------------------------------------------------------------
+	
+	5)	Now Make a change in angular-cli.json file to route output files after build to our resources/static folder.
+	
+		"outDir": "../src/main/resources/static"
+		
+	6)	Now Open Terminal in and Go to angular project directory then execute following commands :
+	
+		ng build							/*--- For Development Release ---*/
+		ng build –prod						/*--- For Production Release ---*/	
+	
+	7)	Now Run your Spring Application.
+	
+	
+:	REFERENCES	:
+
+	http://www.umeshmorsu.com/2017/04/28/spring-boot-and-angular-cli-example/
+	
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+:	Plugin List 	:
+
+-----------------------------------------------------------------------------------------------------
+
+npm update -g @angular/cli				<= Update Angular CLI Version.
+
+npm update -g							<= To Update Node Module Globaly
+
+
+
+-----------------------------------------------------------------------------------------------------
+
+:				ERROR				:
+-----------------------------------------------------------------------------------------------------
+
+1) Error: Cannot find module '@angular-devkit/core'
+
+SOLUATION =>	
+
+		1) npm update @angular/cli						<= Update Angular CLI
+		
+		2) "@angular/cli": "1.6.0", => "@angular/cli": "^1.6.0",	<= Update Package.json	
+		
+		3) Delete node_modules folder
+		
+		4) npm install											<= Install Node Module
+		
+2) ERROR : 
+		
+	
+
+	
+	
+: REFERENCE :
+
+=> Follow from Tutorial => https://www.lynda.com/
+
+	
+	
