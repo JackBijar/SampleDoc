@@ -190,8 +190,7 @@ spring.datasource.tomcat.min-idle=15
 			saveAndFlush(Entity entity)
 			void deleteInBatch(Iterable entities)
 			void deleteAllInBatch()
-			Entity getOne(ID id)
-			
+			Entity getOne(ID id)			
 			
 	
 	4) PagingAndSortingRepository
@@ -199,39 +198,103 @@ spring.datasource.tomcat.min-idle=15
 	
 	Extends : JpaRepository => PagingAndSortingRepository => CrudRepository => Repositoriy
 	
+**	Using any Repository Interface for Database operation, First it create a Proxy class and Implements specific Repository Interface.
+
+	Then Access by using Annotation.
 	
+:	@NameQuery									:
 
-:										:
+=> @NameQuery Follow Object Oriented SQL Query.
 
-=>
 
-:										:
+:	@NamedNativeQueries									:
 
-=>
+=> @NamedNativeQueries Not Follow Object Oriented SQL Query, Just write down Native SQL Query.
 
-:										:
+:	@Query									:
 
-=>
+=>	@Query Follow Object Oriented SQL Query with Native SQL Query. If write native query then specify 'nativeQuery=true'
 
-:										:
+	public interface UserRepository extends JpaRepository<User, Long> {
 
-=>
+  @Query("select u from User u where u.firstname = :firstname or u.lastname = :lastname")
+  User findByLastnameOrFirstname(@Param("lastname") String lastname,
+                                 @Param("firstname") String firstname);
+}
 
-:										:
+:	@Transactional and @Modifying									:
 
-=>
+=>	@Transactional and @Modifying is used for Database DDL Operation Like : Update, Delete and Insert Operations.
 
-:										:
+:	Spring Boot Actuator									:
 
-=>
+=>	Production Ready features to help you monitor and manage your application.+
 
-:										:
+	HTTP End Points : info, helth, actuator, auditevents, autocofig, beans, configprops, dump, evn, trace
+	
+	If Specify 
+	
+		management.security.enabled=false 
+		
+	in application.property file to access all HTTP end point.
 
-=>
+	management.port=9999	That means all Actuator HTTP End Point response get from Port no 9999. But Server start another port like 8080
+	
+		
+:	How to Customize Spring Boot Actuator End Points ?									:
 
-:										:
+=>	Customize Env Default End Point : http://localhost:8080/env
 
-=>
+	Specify in application.property file :
+	
+		endpoints.env.id=myenv
+		endpoints.env.sensitive=false
+		endpoints.env.enabled=true
+
+	Now Access using this URL : http://localhost:8080/myenv
+	
+	Actuator Security level enable by using add spring boot security dependency:
+	
+		compile('org.springframework.boot:spring-boot-stater-security')	
+		
+	Enable Security Credentials in application.property file :
+	
+		security.basic.enable=true
+		security.user.name=admin
+		security.user.password=root
+	
+:	Logging Configuration in Spring Boot									:
+
+=>	
+
+:	Spring boot Embedded servers Tomcat, Jetty	and Undertow							:
+
+=>	Choose any Once Server :
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactid>spring-boot-starter-tomcat</artifactid>
+				</exception>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jeety</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-undertow</artifactId>
+		</dependency>
+		
+	</dependencies>
 
 :										:
 
