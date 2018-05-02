@@ -1,0 +1,373 @@
+
+:	Basic Spring boot Security Configuration															:
+
+=>	Create a SecurityConfig Class and Extends WebSecurityConfigurerAdapter. Then Override configure() method. 
+
+	@EnableWebSecurity => Used this annotation.
+	
+	http.csrf.disable().authorizeRequests().antMatchers("/api/tickets/**")
+	.hasAnyRole("admin", "user").and().formLogin();
+	
+*	HttpSecurity as an argument : Like :
+	
+--------------------------------------------------------------------------------------------------------------
+	@EnableWebSecurity
+	public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			
+			http.csrf().disable().authorizeRequests().antMatchers("/api/tickets/**")
+			.hasAnyRole("admin","user").and().authorizeRequests().antMatchers("/api/admin/**")
+			.hasAnyRole("admin").and().formLogin();
+		}
+		
+		@Autowired
+		public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
+			auth.inMemoryAuthentication().withUser("sean").password("pass@123").roles("user").and()
+			.withUser("martin").password("pass@123").roles("user","admin");
+		}
+	}
+--------------------------------------------------------------------------------------------------------------
+
+Create another @Service class UserDetailsServiceImpl and Implement UserDetailsService interface and Override loadUserByUsername() method that return UserDetails Object.
+
+Create another @Component class and Extends BasicAuthenticationEntryPoint and Override method commence()
+
+:	How to specify Method level security in Spring Boot ?																									:
+
+=>	Used following annotation to Configue Method Level Security :
+
+	@EnableWebSecurity	
+	@EnableGlobalMethodSecurity(securedEnabled=true)
+	public class TopicSecurityConfig extends WebSecurityConfigurerAdapter
+	{
+	
+	}
+	
+	In Service Interface :
+	
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
+	public abstract List<Topic> getAllTopics();
+	
+	@Secured({"ROLE_ADMIN"})
+	public abstract addTopic(Topic topic);
+
+:	Spring boot Consume secure Rest API using RestTemplate																		:
+
+=>	https://www.youtube.com/watch?v=ijcce18bzng&index=64&list=PLzS3AYzXBoj8UcLsBN3UXd7Nf1T4ZyJa0
+
+:	Which class is used for Password encription in spring boot ?																									:
+
+=>	Basically BCryptPasswordEncoder is used to Password Encription.
+
+	BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+:	How to configuration SSL [Secure Sockets Layer] in Spring boot application ?																								:
+
+=>	1)	First Create a SSL Cirtificate for Testing mode using PuttyGen Software, 
+
+		If You Used SSL for Production version then you must purchase SSL cirtificate.
+
+	2)	Create a Spring Boot Web Application.
+
+	3)	Now Copy and Paste SSL Cirtificate in Class path src/main/resources directory.
+	
+	4)	Override SSL default configuration in application.property file :	
+	-------------------------------------------------------------------------------
+		server.port=8443
+		server.ssl.key-store=classpath:keystore.jks
+		server.ssl.key-store-password=secret
+		server.ssl.key-password=another-secret
+	-------------------------------------------------------------------------------	
+	
+	5) Now Run Your Application.
+	
+	6) Automatic Redirect Http to Https follow this tutorial
+	
+	=> https://www.youtube.com/watch?v=1l8V6FrDG-A&index=67&list=PLzS3AYzXBoj8UcLsBN3UXd7Nf1T4ZyJa0 
+	
+:	Alternative of spring.jpa.hibernate.ddl-auto in Spring Data JPA/Hibernate																									:
+
+=>	You can used Hibernate DDL Configue by these following way :
+
+	1) spring.jpa.hibernate.ddl-auto=create/create-drop/none/update/
+	
+	OR
+	
+	2) spring.jpa.generate-ddl=true/false
+	
+	OR
+	
+	3) Create schema.sql and data.sql in Class Path src/main/resources directory 
+	
+		spring.datasource.initialize=true
+		spring.datasource.schema=classpath:schema.sql
+		spring.datasource.data=classpath:data.sql
+
+:	What is FlyWay ?																															:
+
+=>	Flyway is a open source database migration tool, that enables developers to apply version control practices to the database that supports a Java application. Developed by Boxfuse.
+	
+	It strongly favors simplicity and convention over configuration. 
+	It is based around 7 basic commands: Migrate, Clean, Info, Validate, Undo, Baseline and Repair.	
+	With it, we can tightly integrate plain SQL scripts in the lifecycle of an application, guaranteeing that its database will always be compatible without manual intervention.
+	
+
+:	How to Configure FlyWay Database Migration tool with Spring Boot Application ?																									:
+
+=>	1) Add following Dependency in your class path :
+
+		compile('org.flywaydb:flyway-core')
+	
+	2) Add following basic database Configuration in your application.properties file :	
+	-----------------------------------------------------------------------------------------------
+		spring.datasource.url = jdbc:mysql://localhost:3306/sb_flyway_db?useSSL=false
+		spring.datasource.username = root
+		spring.datasource.password = root
+		spring.datasource.dbcp2.validation-query=SELECT 1
+		spring.jpa.show-sql=true
+
+		spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+
+		spring.jpa.hibernate.ddl-auto = validate	
+	----------------------------------------------------------------------------------------------
+			
+	3) Create a Folder db/migration in src/main/resources folder
+	
+	4) Now Create Database sql Configuration file in migration folder. File name as follows :
+	
+		V1__description.sql
+		V2__desc_desc.sql
+		
+	5) File Contain Like : V1_init.sql
+	-----------------------------------------------------------------------------------------------
+		CREATE TABLE users (
+		  id bigint(20) NOT NULL AUTO_INCREMENT,
+		  username varchar(100) NOT NULL,
+		  first_name varchar(50) NOT NULL,
+		  last_name varchar(50) DEFAULT NULL,  
+		  PRIMARY KEY (id),
+		  UNIQUE KEY UK_username (username)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	-----------------------------------------------------------------------------------------------
+		V2__insert_default_data.sql
+	-----------------------------------------------------------------------------------------------
+		INSERT INTO users(username, first_name, last_name) VALUES('callicoder', 'Rajeev', 'Singh');
+		INSERT INTO users(username, first_name, last_name) VALUES('flywaytest', 'Flyway', 'Test');
+	-----------------------------------------------------------------------------------------------
+	
+	6) Your SQL File Configuration and Model Class configuration must be same otherwise it through an error.
+	
+	User Model Class :
+	-----------------------------------------------------------------------------------------------
+		@Entity
+		@Table(name = "users")
+		public class User implements Serializable
+		{
+			private static final long serialVersionUID = 392192967021607371L;
+
+			@Id
+			@GeneratedValue(strategy = GenerationType.IDENTITY)
+			private Long id;
+
+			@NotBlank
+			@Column(unique = true)
+			@Size(min = 1, max = 100)
+			private String username;
+
+			@NotBlank
+			@Size(max = 50)
+			private String firstName;
+
+			@Size(max = 50)
+			private String lastName; 
+			
+			//setter() getter()
+		}
+	-----------------------------------------------------------------------------------------------
+	
+	7)	Now Run Your Application and show following output in console :
+	
+		o.f.core.internal.command.DbValidate     : Successfully validated 2 migrations (execution time 00:00.069s)
+		o.f.core.internal.command.DbMigrate      : Current version of schema `sb_flyway_db`: 2
+		o.f.core.internal.command.DbMigrate      : Schema `sb_flyway_db` is up to date. No migration necessary.
+	
+**	spring.flyway.enabled=true
+	flyway.table=table_name
+		
+	You can setup seperate datasource for FlyWay migration tools.
+			
+	
+	:	Flyway	Commands :
+
+	This commands are used in Flyway Gradle Projects NOT** Spring :
+
+		flywayMigrate
+		flywayInfo
+		flywayValidate
+		flywayClean
+		flywayRepair
+		flywayBaseline
+		
+	Example : gradlew flywayMigrate
+
+	
+:	Spring Boot Batch Operation ?																								:
+
+=>	
+
+
+:	Flyway VS Liquibase in Spring Boot.																									:
+
+=>	1) If You have Single Databsae and Small Project then you should go for FlyWay.
+	
+		But You have Multiple databases and Distributed application then you should go for Liquibase.
+		
+	2) Liquibase is more feasible then flyway.
+
+	3) 	Liquibase support various file structure Like : XML Format, YAML Format, SQL Format, JSON Format etc.
+	
+		But flyway support only SQL. And That is database dependent.
+		
+:	How to configure Liquibase in Spring Boot Application ?																									:
+
+=>	Use Maven Plugin :
+
+	<groupId>org.liquibase</groupId>
+	<artifactId>liquibase-maven-plugin</artifactId>
+	
+	To Automaticaly Create/update db.changelog-master.xml file 
+	Create a liquibase.property file
+	
+	Commands : liquibasegenerateChangeLog
+
+:	JDBC and MySQL with Spring Boot application																									:
+
+=>	78-80
+
+
+:	Spring Boot application with HikariCP																									:
+
+=>	In web base application get a chance multiple request at a time and every request is handle by a seperated Thread.
+	And Every request requried a seperated database connection, Thats why You requried a connection pool to handle more than one connections. 
+	Connection pool handle the multiple connection request and application run smoothly.
+	It reused connection.
+
+	1) Use this following dependency :
+
+	compile group: 'com.zaxxer', name: 'HikariCP', version: '2.7.2'
+
+	2) Override Some properties in application.property file :
+	
+		
+	
+:																										:
+
+=>	
+
+
+:																										:
+
+=>	
+
+
+:																										:
+
+=>	
+
+
+:																										:
+
+=>	
+
+
+:																										:
+
+=>	
+
+
+:																										:
+
+=>	
+
+
+:																										:
+
+=>	
+
+
+:																										:
+
+=>	
+
+
+:																										:
+
+=>	
+
+
+:																										:
+
+=>	
+
+
+@EnableWebSecurity			=>	Used To Configure Custom Spring Boot Web Security.
+
+@EnableGlobalMethodSecurity	=> 	This annotation provide method level security.
+
+@Override					=>	Used To Override any Parent Class Method.
+
+@Transactional				=> 	Spring to make DAO method Transactional
+
+@Repository					=>	
+
+@PersistenceContext			=>
+
+@SupperssWarnings			=>
+
+
+
+
+
+
+https://github.com/JackBijar/SampleDoc.git
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+: HIBERNATE INFO :
+
+1)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="emp_id")
+	private Long empId;
+	
+	This Generation type cam be Integer and Long.
+	This is works on Like Autoincrement.
+
+	GenerationType <= Depends on Database. Like : GenerationType.IDENTITY => SQL Server, MySQL (AUTO_INCREMENT), DB2, HSQLDB
+	
+												  GenerationType.IDENTITY => Oracle, SQL Server, PostgreSQL, DB2, HSQLDB
+												  
+	You can also Define custome Primary key to implements an interface : IdentifierGenerator, Configurable
+	
+	HELP : https://vladmihalcea.com/how-to-implement-a-custom-string-based-sequence-identifier-generator-with-hibernate/
+	
+:	Serialization and Deserialization in Java				:
+
+=>	Serialization is a process of converting an object into a sequence of bytes 
+	which can be persisted to a disk or database or File or can be sent through streams. 
+	
+	The reverse process of creating object from sequence of bytes is called deserialization.
+	
+	A class must implement Serializable interface present in java.io package.
+	
+	HELP : https://www.studytonight.com/java/serialization-and-deserialization.php
+	
+	
+
+
+	
+
+
+	
