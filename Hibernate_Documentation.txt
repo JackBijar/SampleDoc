@@ -1,0 +1,2435 @@
+:																HIBERNATE DOCUMENTATION																		
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+:	What is Hibernate ?																																			
+
+=> Hibernate is an open source, lightweight, ORM (Object Relational Mapping) tool, which is used to development of java application to interact with the database.
+
+1) It was started in 2001 by Gavin King
+2) The stable release of Hibernate till July 16, 2014
+
+:	HIBERNATE BEST PRACTICES																																	
+
+=>	1)	Prefer using “session.get(classZ, ID) instead of “session.load(classZ, ID).Load always returns the proxy to avoid getting LazyInitializationException.
+	2)	Always set “lazy=true” for collection mappings and use “join fetch”  in HQL or “setFetchMode” in criteria to retrieve collections.
+	3)	Use surrogate/dummy id in data model instead of composite keys and override equals / HashCode method using the business key to identify uniqueness.
+	4)	As HibernateException is Runtime Exception never catch them at business layer and have them be propagated to UI Layer.There are several benefits doing this.
+	5)	Write Custom UserType  for type/code values with corresponding Java Enum class. Prefer using Criteria API to build the SQL query instead of HQL.
+	6)	Careful implementing toString() method for printing collections to avoid getting org.hibernate.LazyInitializationException
+	7)	Many-One mapping should preferably have lazy=“false” and One-Many “lazy=true”. Avoid N+1 Query problem using eager fetching or “batch” setting.
+	8)	Don’t retrieve to much data in one query and use paging, fetch strategy, and carefully using the join to get the data needed.
+	9)	Use 2nd (JVM level) caching for mostly read only data’s.
+	10)	Use query cache for read only data that is always queried the same way
+	11)	print only atributes which are mapped through ‘property’ element
+	12)	DO NOT print any collections  as all collections should be marked as ‘lazy=true’.
+	13)	object (many-to-one) should ONLY be printed if marked as ‘lazy=false” and fetch=’join’
+	14)	Avoid using <key-may-to-one> inside <composite-id> use <key-property> instead
+	15)	Avoid using hsql  as much as possible, prefer detached Criteria or Criteria Instead.   Very Very Important
+	16)	Do not ever perform bulk operations with Hibernate.
+
+:										
+
+=> The Hibernate architecture includes many objects :
+
+	persistent object, 
+	session factory, 
+	transaction factory, 
+	connection factory, 
+	session, 
+	transaction etc
+	
+	A) SessionFactory : The SessionFactory is a factory of session.
+	
+	The org.hibernate.SessionFactory interface provides factory method to get the object of Session.
+	
+	It holds second level cache (optional) of data.
+	
+	B) Session : The session object provides an interface between the application and data stored in the database.
+	
+	It is factory methods for Transaction, Query and Criteria.
+	
+	It holds a first-level cache (mandatory) of data.
+	
+	The org.hibernate.Session interface provides methods to insert, update and delete the object.
+	
+	C) Transaction : The transaction object specifies the atomic unit of work. 
+	It is optional. 
+	The org.hibernate.Transaction interface provides methods for transaction management.
+	
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+:	Query Syntex 																																				:
+
+
+=>	String hql = "FROM Employee";
+
+	Query query = session.createQuery(hql);
+	List results = query.list();
+	
+1)FROM Clause 			:	String hql = "FROM Employee";
+	
+							String hql = "FROM com.hibernatebook.criteria.Employee";
+		
+2)AS Clause				:	String hql = "FROM Employee AS E";
+
+							String hql = "FROM Employee E";
+
+3)SELECT Clause			:	String hql = "SELECT E.firstName FROM Employee E";
+
+4)WHERE Clause			:	String hql = "FROM Employee E WHERE E.id = 10";
+
+5)ORDER BY Clause		:	String hql = "FROM Employee E WHERE E.id > 10 ORDER BY E.salary DESC";
+
+							String hql = "FROM Employee E WHERE E.id > 10 ORDER BY E.firstName DESC, E.salary DESC ";
+						
+6)GROUP BY Clause		:	String hql = "SELECT SUM(E.salary), E.firtName FROM Employee E GROUP BY E.firstName";
+
+7)Using Named Paramters	:=>	String hql = "FROM Employee E WHERE E.id = :employee_id";
+							Query query = session.createQuery(hql);
+							query.setParameter("employee_id",10);
+							List results = query.list();
+							
+9)UPDATE Clause			:=>	String hql = "UPDATE Employee set salary = :salary WHERE id = :employee_id";
+							Query query = session.createQuery(hql);
+							query.setParameter("salary", 1000);
+							query.setParameter("employee_id", 10);
+							int result = query.executeUpdate();
+							System.out.println("Rows affected: " + result);
+							
+10)DELETE Clause		:=>	String hql = "DELETE FROM Employee WHERE id = :employee_id";
+							Query query = session.createQuery(hql);
+							query.setParameter("employee_id", 10);
+							int result = query.executeUpdate();
+							System.out.println("Rows affected: " + result);
+							
+11)INSERT Clause		:=>	String hql = "INSERT INTO Employee(firstName, lastName, salary) SELECT firstName, lastName, salary FROM old_employee";
+							Query query = session.createQuery(hql);
+							int result = query.executeUpdate();
+							System.out.println("Rows affected: " + result);
+							
+12)
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+:		DEMO 	:																																				
+
+// Basic 
+	/*session = sessionFactory.openSession();	
+	transaction = session.beginTransaction();
+	
+	criteria = session.createCriteria(AdminModel.class);
+	
+	query1 = Restrictions.eq("adminPass", adminPass);
+	query2 = Restrictions.eq("adminMobile", adminMobile);
+	
+	logicalExpression = Restrictions.and(query1, query2);
+	
+	criteria.add(logicalExpression);
+
+	resultList = criteria.list();	
+*/
+	
+	
+	
+	/*resultList = session.createCriteria(AdminModel.class)
+	.add(Restrictions.eq("adminPass", adminPass))
+	.add(Restrictions.eq("adminMobile", adminMobile))
+	.list();*/
+
+/*.add( Restrictions.like("name", "Fritz%")
+.add( Restrictions.between("weight", minWeight, maxWeight) )
+Restrictions.isNull("age")
+Restrictions.eq( "age", new Integer(0) ),
+Restrictions.or*/		
+	
+	
+	/*resultList = session.createCriteria(AdminModel.class).add(Restrictions.and(
+	Restrictions.eq("adminPass", adminPass),
+	Restrictions.eq("adminMobile", adminMobile)
+)).list();	*/
+	
+	
+	/*public List getMaxAdminId()
+	{		
+		hql = "select max(admin_id) from admin_info";
+		
+		try
+		{
+			session = sessionFactory.openSession();			
+			query = session.createQuery(hql); 			
+			resultList = query.list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();			
+		}
+		finally
+		{
+			session.close();
+		}
+		return resultList ;
+	}*/
+	
+	
+	/*
+	 public <T> Serializable saveAdminInfo(final T entity) 
+	 { 
+		 return sessionFactory.getCurrentSession().save(entity); 
+	 }
+	 
+	 @SuppressWarnings("unchecked")	
+	 public <T> List<T> fetchAll(class<T> entityClass)
+	 {        
+		 return sessionFactory.getCurrentSession().createQuery(" FROM "+entityClass.getName()).list();        
+	 }
+	 
+	 @SuppressWarnings("rawtypes")
+	 public <T> List fetchAll(String query) 
+	 {        
+       return sessionFactory.getCurrentSession().createSQLQuery(query).list();        
+	 }*/	
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+: 	Reference :																																					
+
+Given Methods : 
+
+	count()
+
+JPA/Repository Query : http://docs.spring.io/spring-data/jpa/docs/1.4.1.RELEASE/reference/html/jpa.repositories.html
+
+-----------------------------------------------------------------------------------------------------------------------------------
+:	NOTE	:
+
+* You can configure in XML base hibernate.cfg.xml and Read this file From HibernetUtil.java file
+
+1)	Storing Object's Data into database is known as parsistance.
+
+2)	Hibernate ddl auto (create, create-drop, validate, update)
+
+	Example :
+
+		spring.jpa.hibernate.ddl-auto = update
+		
+	Dialect :
+	
+	spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5Dialect
+
+3)	JDBC => To Connect Java application with Your Database
+
+4)	ORM => Java Object with Database table. 
+Object Relational mapping map to Java Object with Table/Relation.
+
+5)	ORM is a concept, It implement using Hibernate, JPA, Toplink, IBatis etc.
+
+	A) XML base configuration AND 
+	B) Java base configuration.
+
+6)	Requried JARs :
+
+	org.hibernate: hibernate-core
+	mysql: mysql-connector-java
+
+7)	hibernate-configuration :
+ 
+	hibernate.connection.driver_class=com.mysql.jdbc.Driver
+	hibernate.connection.url=jdbc:mysql://localhost:3306/dbname
+	hibernate.connection.username=root
+	hibernate.connection.password=root
+	hibernate.dialect=org.hibernate.dialect.MySQLDialect
+	hbm2ddl.auto=create
+	show_sql=true
+	
+8)	@Entity(name="table_name") vs @Table(name="table_name")	:
+
+	There are three steps to Create a table name :
+
+	1) Table name is the default name of Class Name. Example :
+
+	@Entity
+	class Student
+	{
+	}
+
+	2) Table name is the @Entity name. Example : 
+
+	@Entity(name="student_table")
+	class Student
+	{
+	}
+
+	3) Table name is the @Table name. Example :
+
+	@Entity
+	@Table(name="student_table")
+	class Student
+	{
+	}
+
+	=> Actualy @Table(name="table_name") is derived from @Entity(name="table_name")
+
+9)	Column Name :
+
+	@Column(name="student_name")
+	private String studentName;
+	
+	@Id 						=> Used for Primary Key with Auto Increment.
+	
+	@GeneratedValue				=> Used to Generate value Autometically.
+	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
+	Hibernate Entity Class 2 Annotation are mandatory :
+	
+	@Entity and
+	@Id
+	
+	
+10)	Column is Not Created :
+
+	Transient <= In case you Not interest to store data in Database.
+
+	@Transient		
+	private String studentName;
+
+11)	@Embeddable
+
+	@Embeddable is used in a class for used common property and it not create any table.
+
+	Embeddable classes exist only as the state of another entity.
+	
+	@Embeddable
+	class Address
+	{
+		private String city;
+		private String country;
+		private int pin;
+	}
+
+12)	Hibernate Relational Mapping :
+
+@OneToOne : Every Student have one laptop
+
+Tables :
+
+Laptop(id, name)
+Student(roll, name, marks, laptops)
+
+Classes :
+
+class Laptop{
+
+	private long id;
+	private String name;
+}
+
+class Student{
+	
+	private long roll;
+	private String name;
+	private int marks;
+	
+	@OneToMany
+	private Laptop laptop;
+}
+
+Now Student Table will Updated :
+
+Student(roll, name, marks, laptop_id)
+
+13)
+
+@OneToMany : One Student have Many Laptops
+
+Laptop(id, name)
+Student(roll, name, marks, laptops)
+
+class Laptop{
+
+	private long id;
+	private String name;
+}
+
+class Student{
+	
+	private long roll;
+	private String name;
+	private int marks;
+	
+	@OneToMany
+	private List<Laptop> laptops = new ArrayList<>();
+}
+
+Create a New Table automatically :
+
+Student_Laptop(Student_roll, Laptop_id)
+
+14)
+
+@ManyToOne : Multiple Laptops belong to Once Student
+
+	But If you declare @ManyToOne in Laptop Class then New Table is not create, Just add a column in Laptop Table. Like :
+
+	Updated Class :
+
+	class Student{
+		
+		private long roll;
+		private String name;
+		private int marks;
+		
+		@OneToMany(mappedBy="stud")
+		private List<Laptop> laptops = new ArrayList<>();
+	}
+
+	class Laptop{
+
+		private long id;
+		private String name;
+		
+		@ManyToOne
+		private Student stud;
+	}
+
+	Updated Table automatically :
+
+	Laptop(id, name, roll)
+
+	* @OneToMany(mappedBy="stud") => mappedBy is used to avoid to create new Table respect to stud reference.
+
+15)
+
+@ManyToMany	: One laptop is belongs to Many Students and Many Students used one laptop.
+
+class Student{
+		
+		private long roll;
+		private String name;
+		private int marks;
+		
+		@ManyToMany(mappedBy="stud")
+		private List<Laptop> laptops = new ArrayList<>();
+	}
+
+	class Laptop{
+
+		private long id;
+		private String name;
+		
+		@ManyToMany
+		private Student stud;
+	}
+
+It Create new Table for this relation :
+
+student_laptop(id, roll)
+
+16) Fetch EAGER LAZY :
+
+Bydefault Fetch type is LAZY.
+
+LAZY : One Studen have Multiple Laptos i.e @OneToMany Relationship :
+
+	class Student{
+		
+		private long roll;
+		private String name;
+		
+		@OneToMany(mappedBy="stud")
+		private List<Laptop> laptops = new ArrayList<>();
+	}
+
+	class Laptop{
+
+		private long id;
+		private String name;
+		
+		@ManyToOne
+		private Student stud;
+	}	
+	
+ When we fetch Student details first execute Only Student details Not Given laptop details. Like : 
+
+	Student s1 = session.get(Student.class, 1);	<= Not Returns Laptop details
+	
+	System.out.print(s1.getName());	
+	
+	Collection<Laptop> laps = s1.getLaps();		<= Now Second time hit in to database and get laptop infomation.
+	
+EAGER : In this case get all result at a time. Declare as :
+
+	class Student{
+		
+		private long roll;
+		private String name;
+		
+		@OneToMany(mappedBy="stud", fetch=FetchType.EAGER)
+		private List<Laptop> laptops = new ArrayList<>();
+	}
+	
+17) Caching :
+
+Hibernate Provide first level cache bydefault.
+
+Second Level cache : eh cache, os cache, swarm [This is Externat/Third party libary]
+
+Configure in  pom.xml, hibernate-config.xml, cacheable an entity
+
+18)  Caching Level 1
+
+
+
+
+
+21) HQL :
+
+SQL	=> select * from student;
+HQL	=> from Student;
+
+SQl => ResultSet rs = st.executeQuery(sql);
+
+		while(rs.next())
+		{
+
+		}
+
+HQL =>
+
+	List<Student> st = query.list();
+	
+	for(Student s: st)
+		System.out.println(s);
+		
+Some HQL Querie Examples :
+-----------------------------------------------------------------------------------------------------------------------------
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	private Session session = null;	
+	private Query query = null;
+	
+	public Employee saveEmployee(Employee employee) 
+	{	
+		try 
+		{
+			session = sessionFactory.openSession();
+			
+			session.beginTransaction();
+			
+			Long id =(Long) session.save(employee);
+			
+			session.getTransaction().commit();
+			
+			employee.setEmpId(id);
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+				
+		return employee;
+	}		
+-----------------------------------------------------------------------------------------------------------------------------
+
+	employee = (Employee) session.get(Employee.class, empId);							<= GET EMPLOYEE BY ID
+	-------------------------------------------------------------------------------------------------------------------------
+	
+	query = session.createQuery("from Employee");										<= GET ALL EMPLOYEES
+	empList = query.list();
+	-------------------------------------------------------------------------------------------------------------------------
+	
+	query = session.createQuery("from Employee where salary > "+salary);				<= GET EMPLOYEES BY SALARY
+	empList = query.list();
+	-------------------------------------------------------------------------------------------------------------------------
+	
+	query = session.createQuery("from Employee where mobile = "+mobile);				<= GET EMPLOYEE BY MOBILE NO
+	employee = (Employee) query.uniqueResult();
+	-------------------------------------------------------------------------------------------------------------------------
+	
+	query = session.createQuery("select empId, salary from Employee where mobile = "+mobile); <= GET SOME SPEFIC EMPLOYEE INFO BY MOBILE NO
+			
+	Object[] objs = (Object[]) query.uniqueResult();
+	
+	for(Object obj: objs) {
+		System.out.println(obj.toString());
+	}	
+	-------------------------------------------------------------------------------------------------------------------------
+	
+	query = session.createQuery("select empName, salary from Employee"); 			<= GET SOME SPEFIC INFO ABOUT ALL EMPLOYEE 
+			
+	List<Object[]> objList = (List<Object[]>) query.list();
+	
+	for(Object[] obj: objList) {
+		System.out.println("Name : "+obj[0]+" -> Salary : "+obj[1]);
+	}
+	-------------------------------------------------------------------------------------------------------------------------
+	
+	query = session.createQuery("select sum(salary) from Employee e where e.salary > "+salary);
+	
+	Long totalSalary = (Long) query.uniqueResult();
+	
+	System.out.println("Total Salary : "+totalSalary);
+	-------------------------------------------------------------------------------------------------------------------------
+	
+	
+	-------------------------------------------------------------------------------------------------------------------------
+	-------------------------------------------------------------------------------------------------------------------------
+	-------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+
+:	SOME EXAMPLE OF SQL QUERIES :		[Hibernate Native Query]
+-----------------------------------------------------------------------------------------------------------------------------
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	private Session session = null;	
+	private SQLQuery sqlQuery= null;	
+	
+	public void testSqlQuery()
+	{
+		try 
+		{
+			session = sessionFactory.openSession();	
+			
+			sqlQuery = session.createSQLQuery("select * from employee where salary > 25000");
+			sqlQuery.addEntity(Employee.class);
+			
+			List<Employee> employeeList = sqlQuery.list();
+						
+			for(Employee emp : employeeList)
+			{
+				System.out.println(emp);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			session.close();
+		}
+	}
+-----------------------------------------------------------------------------------------------------------------------------
+	
+	sqlQuery = session.createSQLQuery("select emp_name, salary from employee where salary > 25000");
+			sqlQuery.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			
+			List list = sqlQuery.list();
+			
+			for(Object obj : list)
+			{
+				Map map = (Map)obj;
+				System.out.println("Name : "+map.get("emp_name")+" => Salary : "+map.get("salary"));
+			}	
+-----------------------------------------------------------------------------------------------------------------------------
+
+:	Persistence Life Cycle	:
+-------------------------------------------------------------------------------------------------------------------------
+	
+	New STATE/START => Transient State => Persistent State => Detacted => 
+	
+	=> Garbage Collection
+	
+	
+Example
+-------------------------------------------------------------------------------------------------------------------------
+	public void persistenceLifeCycle() 
+	{		
+		try 
+		{			
+			/*-------------------------------------------IN START STATE---------*/
+			
+			session = sessionFactory.openSession();			
+			session.beginTransaction();
+			
+			/*-------------------------------------------IN TRANSIENT STATE---------*/
+			
+				employee = new Employee();				//----[Becouse this data is not save, In case system fail then data is loss and handle by Grabage collector]
+				employee.setEmpName("Mr. Admin");
+				employee.setMobile("01010");
+				employee.setEmail("admin@admin.com");
+				employee.setSalary(55000.00);
+				
+			/*-------------------------------------------NOW IN PERSISTENCE STATE---------*/
+				
+				session.save(employee);
+				
+			/*-------------------------------------------SAVE DATA IN DATA BASE, IF CHANGE, IT ALOWES UPDATE IN DATABASE---------*/					
+				
+				employee.setMobile("010101010");
+			
+			/*-------------------------------------------YOU ALSO USED session.detach() and session.remove() METODS---------*/
+				
+			session.getTransaction().commit();	
+			
+			/*-------------------------------------------NOW IN DETACH STATE---------*/
+				???
+			
+			/*-------------------------------------------NOW IN REMOVE STATE---------*/
+				???
+			
+		} 
+		catch (HibernateException e) 
+		{			
+			e.printStackTrace();
+		}
+	}
+-------------------------------------------------------------------------------------------------------------------------
+
+Output :
+-------------------------------------------------------------------------------------------------------------------------
+
+Hibernate: insert into employee (email, emp_name, mobile, salary) values (?, ?, ?, ?)
+Hibernate: update employee set email=?, emp_name=?, mobile=?, salary=? where emp_id=?
+
+-------------------------------------------------------------------------------------------------------------------------
+
+:	Different between get() method and load() method ?	:
+
+=>	
+	session.get()	-> Every time hit database, does not metter requested data is used or not.
+	
+	employee = (Employee) session.get(Employee.class, empId);		<= If employee object is used or not, it doesn't matter.
+
+																	<= If Object is Not found it return NULL.
+	
+	session.load()	-> If request data is used then load method hit the database. Actualy load() give you the Proxy/blank object.
+	
+	employee = session.load(Employee.class, empId);					<= If employee object is used then hit the database.
+	
+																	<= If Object is NOT found it return " EntityNotFoundException "
+
+----------------------------------------------------------------------------------------------------------------------------
+
+
+:	How to run Spring Application with out Controller ? :
+
+=> You can Implement CommandLineRunner interface in @SpringBootApplication Class. Like :
+
+@SpringBootApplication
+public class SpringBootMyProjectApplication implements CommandLineRunner {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringBootMyProjectApplication.class, args);
+	}
+	
+	@Override
+	public void run(String... args) throws Exception {
+		// Your code
+	}
+	
+}
+
+==========================================================================================================================================================
+:													DOCUMENTATION FROM 'KK JavaTutorials'																:
+
+:	When used 'session.beginTransaction();' ?:
+
+=> 
+	session.beginTransaction(); 
+	session.getTransaction().commit();
+	
+	is used for INSERT, UPDATE and DELETE Operation.
+
+	In Case of SELECT Operaion session.beginTransaction(); is NOT Used.
+	
+:	session.persist(Entity_Object); :
+
+=>	session.persist(Entity_Object);							<= Used for Save Entity
+
+:	What is the different between persist() vs save() method and saveOrUpdate() ?:
+
+=>	session.persist(Entity_Object); =>
+
+	persist() method is used to save an entity/object into database and return a void.  
+	
+	It will throw an exception if an entity already exists in the database.
+
+	Integer empId = (Integer) session.save(Entity_Object); =>
+	
+	save() method is used to save an entity/object into database and return generated primary key.
+	It will throw an exception if an entity already exists in the database.
+
+	saveOrUpdate() method is used to save if an entity/object is not exist or update exist an entity/object into database and return a void. And as well as update the Object.
+	
+:	Declare Column :
+
+=> @Column(name="emp_name", length=100, nullable=false) 	<= Declare as Not null with size 100
+	private String empName;
+	
+	@Column(name="email", unique=true)						<= Get Default Column size 255
+	private String email;
+	
+:	Primery Key Declaration :
+
+=>	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="emp_id")
+	private Integer empId;
+
+:	@DynamicUpdate :
+
+=>	The default value of dynamic-update is false
+	It specifies that UPDATE SQL should be generated at runtime and can contain only those columns whose values have changed.
+	
+	It dynamically update only whose columns values will be changed.
+
+
+:	What is Hibernate Dirty Checking Mechanism ?	:
+
+=>	In Case of Starting Transaction i.e. In Transaction Boundary like :
+
+		session.beginTransaction();
+		.
+		.
+		.
+		.
+		session.getTransaction().commit();	
+		
+	Under Transaction boundary any changes of an object it responsable to change as well as in database. That concept is known as Hibernate Dirty Checking.
+	
+
+:	Why to use hibernate dialect ?	:
+
+=>	
+
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+
+	=> dialect means The varient of Databases.
+	=> Hibernate is a database dependent
+	=> It can work different databases and different database specific query.
+	=> By dialect hibernate know you used which type of databases you used and generat thats type of query.
+	
+	=> 
+	
+
+:	hibernate hbm2ddl properties :
+
+=>	hibernate.hbm2ddl.auto it can be many values :
+
+	create 			=> Create new Schema and Loss previous once
+	
+	update			=> Update Schema with the given values and No data loss.
+	
+	validate		=> Validate the Schema. It makes no change in the database. If notfound then it send a exception. 
+	It is used for production release. Actually hibernate.hbm2ddl.auto is not set for production mode.
+	
+	create-drop		=> Create the schema with destroying data previously present. It also drop the database Schema when the Session Factory is closed.
+	
+	
+:	Hibernate Entities Life cycle	:
+
+=>	
+
+
+:	Hibernate GenerationType Primary Key Generation Strategy:
+
+=>	The JPA specification support 4 different primary key generation strategies :
+
+	1. GenerationType.AUTO
+	2. GenerationType.IDENTITY
+	3. GenerationType.SEQUENCE
+	4. GenerationType.TABLE
+	
+*** 1) GenerationType.AUTO	: 
+
+Hibernate 5 create autometicaly created a table 'hibernate_sequence' table for primary key.
+
+But Hibernate 4 does not create Auto generated default table.
+
+This Table name Cutomize by using :
+ 
+@Id
+@Column(name="employee_id")
+@GeneratedValue(strategy=GenerationType.AUTO, generator="empid_generator")
+@SequenceGenerator(name="empid_generator", initialValue=1, allocationSize=1, sequenceName="empid_seq")
+private Integer employeeId;
+
+2) GenerationType.IDENTITY :
+
+In case of IDENTITY => Hibernate 4 and Hibernate 5 doesn't created any 'hibernate_sequence' table.
+
+3) GenerationType.SEQUENCE :
+
+In case of SEQUENCE => Hibernate 4 and Hibernate 5 create 'hibernate_sequence' table.
+
+4) GenerationType.TABLE :
+
+In case of TABLE => Hibernate 4 and Hibernate 5 create 'hibernate_sequence' table. Like :
+
+@Id
+@Column(name="employee_id")
+@GeneratedValue(strategy=GenerationType.AUTO, generator="empid_generator")
+@TableGenerator(name="empid_generator", initialValue=1, allocationSize=1, sequenceName="empid_seq")
+private Integer employeeId;
+
+
+:	AttributeOverrides and Embedded Objects in Hibernate	:
+
+=>	One Class properities used many times.
+
+IN ADDRESS CLASS :
+------------------------------------------------------------------------------------------------------------------------
+	@Embeddable
+	public class Address 
+	{
+		@Column(name="addr_street", length=100)
+		private String street;
+		
+		@Column(name="addr_city", length=50)
+		private String city;
+		
+		@Column(name="addr_country", length=50)
+		private String country;
+		
+		@Column(name="addr_pin", length=15)
+		private Integer pin;
+
+		/*----setter() and getter()-----*/
+	}
+------------------------------------------------------------------------------------------------------------------------	
+IN EMPLOYEE CLASS :
+------------------------------------------------------------------------------------------------------------------------
+@Entity
+@Table(name="employee")
+class Employee
+{
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="emp_id")
+	private Long empId;
+	
+	@Column(name="emp_name", length=100, nullable=false)
+	private String empName;
+	
+	@Embedded	
+	private Address address;					// Get Default Columns Name
+	
+	/*----------------------------NOT USED AT THIS TIME [FOR NO OF ADDRESS]-----------------------*/
+	
+	@Embedded
+	@AttributeOverrides(value = {			
+			@AttributeOverride(column = @Column(name="home_street", length=150), name = "street"),
+			@AttributeOverride(column = @Column(name="home_city", length=50), name = "city"),
+			@AttributeOverride(column = @Column(name="home_country", length=50), name = "country"),
+			@AttributeOverride(column = @Column(name="home_pin", length=20), name = "pin")
+	})
+	private Address homeAddress;
+	
+	@Embedded
+	@AttributeOverrides(value = {			
+			@AttributeOverride(column = @Column(name="office_street", length=150), name = "street"),
+			@AttributeOverride(column = @Column(name="office_city", length=50), name = "city"),
+			@AttributeOverride(column = @Column(name="office_country", length=50), name = "country"),
+			@AttributeOverride(column = @Column(name="office_pin", length=20), name = "pin")
+	})
+	private Address officeAddress;	
+	
+------------------------------------------------------------------------------------------------------------------------
+		
+:	If Requeried to used a Class n'th no of times with different tables 	:
+
+@ElementCollection 	=> Create a table with foreign key and Contain multiple no of Objects.
+@JoinTable			=> Used for Modify default table name.
+@JoinColumn			=> Used for Modify default column name of new created table.
+
+=>	Example :
+
+EMPLOYEE CLASS
+------------------------------------------------------------------------------------------------------------------------
+class Employee
+{
+	@ElementCollection
+	@JoinTable(name="employee_address", joinColumns=@JoinColumn(name="employee_id"))
+	private Collection<Address> addresses = new HashSet<>();		
+}
+------------------------------------------------------------------------------------------------------------------------
+IN ACCOUNT CLASS :
+------------------------------------------------------------------------------------------------------------------------
+@Embeddable
+public class Address 
+{
+	@Column(name="addr_street", length=100)
+	private String street;
+	
+	@Column(name="addr_city", length=50)
+	private String city;
+	
+	@Column(name="addr_country", length=50)
+	private String country;
+	
+	@Column(name="addr_pin", length=15)
+	private Integer pin;
+
+	/*----setter() and getter()-----*/
+}
+------------------------------------------------------------------------------------------------------------------------
+
+:	Configuring Collections and Adding Primary Keys	in @ElementCollection :
+
+=> NOT WORKING **
+------------------------------------------------------------------------------------------------------------------------
+IN EMPLOYEE CLASS :
+------------------------------------------------------------------------------------------------------------------------
+class Employee
+{
+	@ElementCollection
+	@JoinTable(name="employee_accounts", joinColumns=@JoinColumn(name="employee_id"))
+	@GenericGenerator(name = "sequence-gen", strategy = "sequence")
+	@CollectionId(columns = {@Column(name="account_id")}, generator = "sequence-gen", type = @Type(type = "int"))
+	private Collection<Account> accounts = new HashSet<>();		
+}
+------------------------------------------------------------------------------------------------------------------------
+
+:	Specify Lazy and Eager loading in hibernate @ElementCollection :
+
+=> By default FetchType.LAZY
+------------------------------------------------------------------------------------------------------------------------
+IN EMPLOYEE CLASS :
+------------------------------------------------------------------------------------------------------------------------
+class Employee
+{
+	@ElementCollection(fetch=FetchType.EAGER)
+	@JoinTable(name="employee_accounts", joinColumns=@JoinColumn(name="employee_id"))	
+	private Collection<Account> accounts = new HashSet<>();		
+}
+------------------------------------------------------------------------------------------------------------------------
+
+:	@OneToOne Mapping :
+
+=>	
+
+------------------------------------------------------------------------------------------------------------------------
+IN EMPLOYEE CLASS :
+------------------------------------------------------------------------------------------------------------------------
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="dept_id")
+	private Department department;	
+
+------------------------------------------------------------------------------------------------------------------------
+IN DEPARTMENT CLASS :
+------------------------------------------------------------------------------------------------------------------------
+	@Entity
+	@Table(name="department")
+	public class Department implements Serializable
+	{
+		private static final long serialVersionUID = 1357688687440567029L;
+
+		@Id
+		@GeneratedValue(strategy = GenerationType.IDENTITY)
+		@Column(name="dept_id")
+		private Long deptId;
+		
+		@Column(name="dept_name", length = 100, nullable = false)
+		private String deptName;
+		
+		@Column(name="dept_location", length = 200)
+		private String deptLocation;
+		
+		@Column(name="dept_start_date")
+		private Date deptStartDate;
+	}
+-----------------------------------------------------------------------------------------------------------------------
+If you used 
+
+@OneToOne(cascade=CascadeType.PERSIST)
+
+Then you used => session.persist(employee);	=> To save All info employee with Department Otherwise :
+
+You Can use => session.save(employee); session.save(department) => Separatly.
+
+cascade=CascadeType.PERSIST 	=> means Store Parent information as well as Child infomation.
+
+:	One To Many Mapping in hibernate		:
+
+=> 
+
+@ManyToOne(cascade=CascadeType.ALL)
+@JoinTable(name="employee_works", joinColumns=@JoinColumn(name="employee_id"), inverseJoinColumn=@JoinColumn(name="works_id"))
+private List<Works> workList = new ArrayList<>();
+
+Insert in Employee Controller Like :
+
+employee.getWorkList().add(works1);
+employee.getWorkList().add(works2);
+
+Create Three Table : employee, works, employee_works(employee_id, works_id)
+
+:	With out Third table using @OneToMany Relationship	:
+
+=>  Foreign key Concept With out Third table
+
+In Employee :
+
+@OneToMany(cascade=CascadeType.ALL, mappedBy="employee")
+private List<Works> workList = new ArrayList<>();
+
+In Works :
+
+@ManyToOne
+@JoinColumn(name="employee_id")
+private Employee employee;
+
+mappedBy="employee"	=> Don't create the Joining Table, we alreday define Foreign key of employee_id of the works table. i.e maintain the relationship. 
+
+Print Employee Details :
+
+employee.getWorkList().forEach(System.out:println);
+
+Hibernet By default Load LAZY Loading Now use EAGER :
+
+@OneToMany(cascade=CascadeType.ALL, mappedBy="employee", fetch=FetchType.EAGER)
+private List<Works> workList = new ArrayList<>();
+
+:	:
+
+?????
+
+37------42
+
+:	HQL SELECT QUERIES	:
+
+private static void getEmployeeById(SessionFactory sf) {
+		int empId=2;
+		try(Session session = sf.openSession() ) {
+			String HQL = "FROM Employee WHERE employeeId=?";
+			Query<Employee> query = session.createQuery(HQL, Employee.class);
+			query.setParameter(0, empId);
+			
+			Employee employee = query.uniqueResult();
+			System.out.println(employee);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+	}
+
+:	Hibernate Query Language(HQL) basic Select Query PART_2		:
+
+private static void getAllEmployeesIdAndName(SessionFactory sf) {
+
+		try(Session session = sf.openSession() ) {
+			String HQL = "SELECT employeeId,employeeName FROM Employee";
+			Query query = session.createQuery(HQL);
+			List<Object[]> list = query.list();
+			for (Object[] objects : list) {
+				Integer employeeId =(Integer)objects[0];
+				String employeeName =(String)objects[1];
+				System.out.println(employeeId+"\t"+employeeName);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void getAllEmployeesName(SessionFactory sf) {
+
+		try(Session session = sf.openSession() ) {
+			String HQL = "SELECT employeeName FROM Employee";
+			
+			Query query = session.createQuery(HQL);
+			query.list().forEach(System.out::println);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void getEmployeeByIdAndEmail(SessionFactory sf) {
+
+		try(Session session = sf.openSession() ) {
+			int empId=2;
+			String email="martin.b2017@gmail.com";
+			String HQL = "FROM Employee WHERE employeeId=:empId AND email=:email";
+			Query<Employee> query = session.createQuery(HQL, Employee.class);
+			query.setParameter("email", email);
+			query.setParameter("empId", empId);
+			
+			Employee employee = query.uniqueResult();
+			System.out.println(employee);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void getEmployeeById(SessionFactory sf) {
+		int empId=2;
+		try(Session session = sf.openSession() ) {
+			String HQL = "FROM Employee WHERE employeeId=?";
+			Query<Employee> query = session.createQuery(HQL, Employee.class);
+			query.setParameter(0, empId);
+			
+			Employee employee = query.uniqueResult();
+			System.out.println(employee);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+	}
+
+	private static void getAllEmployees(SessionFactory sf) {
+		try(Session session = sf.openSession() ) {
+			
+			String HQL = "FROM Employee";
+			//String HQL ="FROM com.infotech.entities.Employee";
+			Query query = session.createQuery(HQL, Employee.class);
+			List<Employee> list = query.list();
+			list.forEach(System.out::println);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+:	Hibernate Query Language(HQL) INSERT Query Example :
+
+
+
+private static void insertEmployeeRecords(SessionFactory sf) {
+
+		try(Session session = sf.openSession() ) {
+			
+			String HQL = "INSERT INTO Employee(employeeName,doj,salary,bonus,email,designation)"+
+			"SELECT employeeName,doj,salary,bonus,email,designation FROM BackupEmployee";
+			
+			Query query = session.createQuery(HQL);
+			session.beginTransaction();
+			int executeUpdate = query.executeUpdate();
+			if(executeUpdate>0)
+				System.out.println(executeUpdate+" records are inserted successfully..");
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+	}
+	
+:	UPDATE AND DELETE QUERY USING HQL :
+
+=> 
+private static void deleteEmployeeById(SessionFactory sf) {
+		int empId=2;
+		try(Session session = sf.openSession() ) {
+			
+			String HQL = "DELETE FROM Employee WHERE employeeId=:empId";
+			
+			Query query = session.createQuery(HQL);
+			query.setParameter("empId", empId);
+			
+			session.beginTransaction();
+			int executeUpdate = query.executeUpdate();
+			session.getTransaction().commit();
+			if(executeUpdate>0)
+				System.out.println("Employee is deleted..");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+	}
+
+	private static void updateEmployeeEmailById(SessionFactory sf) {
+		int empId=2;
+		String newEmail="martin.b2007@gmail.com";
+		try(Session session = sf.openSession() ) {
+			
+			String HQL = "UPDATE Employee set email=:newEmail WHERE employeeId=:empId";
+			
+			Query query = session.createQuery(HQL);
+			query.setParameter("newEmail", newEmail);
+			query.setParameter("empId", empId);
+			
+			session.beginTransaction();
+			int executeUpdate = query.executeUpdate();
+			session.getTransaction().commit();
+			if(executeUpdate>0)
+				System.out.println("Employee email is updated..");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+:	JOIN QUERY USING HSQL OneToOneMapping	:
+
+=> Employee and Address in a OneToOne Mapping :
+
+private static void getEmployeeAndAdressByAddressId() {
+
+	    try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+	    	
+	    	String HQL="FROM Address addr LEFT OUTER JOIN FETCH addr.employee WHERE addr.addressId=:addrId";
+	    	Address address = session.createQuery(HQL, Address.class).setParameter("addrId", 1).uniqueResult();
+	    	System.out.println(address);
+	    	System.out.println(address.getEmployee());
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		}
+	
+	}
+
+	private static void getEmployeeAndAdressByEmployeeId() {
+	    try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+	    	String HQL="FROM Employee emp LEFT JOIN FETCH emp.address WHERE  emp.employeeId=:empId";
+	    	Query<Employee> query = session.createQuery(HQL, Employee.class);
+	    	query.setParameter("empId", 1);
+	    	Employee employee = query.uniqueResult();
+	    	System.out.println(employee);
+	    	Address address = employee.getAddress();
+	    	System.out.println(address);
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		}
+	}
+
+:	Retrieve only certain fields of an entity in HQL 	:
+
+=>
+
+private static void getEmployeeAndAdressByEmployeeId() {
+	    try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+	    	String HQL="SELECT emp.employeeName,emp.doj,emp.salary,addr.city,addr.pincode "
+	    			+ "FROM Employee emp LEFT JOIN  emp.address addr WHERE  emp.employeeId=:empId";
+	    	 Query<Object[]> query = session.createQuery(HQL);
+	    	 query.setParameter("empId", 1);
+	    	 List<Object[]> list = query.list();
+	    	for (Object[] objects : list) {
+				String employeeName =(String)objects[0];
+				Date doj=(Date)objects[1];
+				Double sal =(Double)objects[2];
+				String city=(String)objects[3];
+				Long pincode=(Long)objects[4];
+				
+				System.out.println(employeeName+"\t"+doj+"\t"+sal+"\t"+city+"\t"+pincode);
+				
+			}
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		}
+	}
+	
+:	HSQL JOIN QUERY USING oneToMany Mapping	:
+
+=>	Employee and Address in a OneToMany Relationship : 
+
+private static void getEmployeeAndAdressByEmployeeId2() {
+	    try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+	    	
+	    	String HQL ="SELECT emp.employeeName,emp.salary,addr.city,addr.pincode FROM Employee emp LEFT JOIN emp.addressList addr "
+	    			+ " WHERE emp.employeeId=:empId";
+	    	Query<Object[]> query = session.createQuery(HQL);
+	    	query.setParameter("empId", 1);
+	    	List<Object[]> list = query.list();
+	    	for (Object[] objects : list) {
+	    		String employeeName=(String)objects[0];
+	    		Double sal=(Double)objects[1];
+	    		String city=(String)objects[2];
+	    		Long pincode=(Long)objects[3];
+	    		System.out.println(employeeName+"\t"+sal+"\t"+city+"\t"+pincode);
+			}
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		}
+	}
+	private static void getEmployeeAndAdressByEmployeeId1() {
+	    try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+	    	
+	    	String HQL ="FROM Employee WHERE employeeId=:empId";
+	    	Query<Employee> query = session.createQuery(HQL, Employee.class);
+	    	query.setParameter("empId", 1);
+	    	Employee employee = query.uniqueResult();
+	    	System.out.println(employee);
+	    	if(employee != null){
+	    		employee.getAddressList().forEach(System.out::println);
+	    	}
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+:	HSQL with Multiple aggregate functions		:
+
+=>
+
+public static void main(String[] args) {
+		try(Session session=HibernateUtil.getSessionFactory().openSession()) {
+			
+			String HQL="SELECT COUNT(e),AVG(e.salary),MIN(e.salary),SUM(e.salary) FROM Employee e";
+			
+			Query<Object[]> query = session.createQuery(HQL, Object[].class);
+			List<Object[]> list = query.list();
+			for (Object[] objects : list) {
+				Long empCount=(Long)objects[0];
+				Double avgSal=(Double)objects[1];
+				Double minSal=(Double)objects[2];
+				Double sumOfSal=(Double)objects[3];
+				System.out.println("Total no. of Employees:"+empCount);
+				System.out.println("Avg salary:"+avgSal);
+				System.out.println("Min Salary:"+minSal);
+				System.out.println("Sum of Salary:"+sumOfSal);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	  }
+
+
+:	GROUP BY clause with HSQL	:
+
+=>	Employee AND Department tables in a ManyToOne Relationship :
+
+public static void main(String[] args) {
+		Session session = null;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			String HQL = "SELECT dept.departmentName,SUM(emp.salary) FROM Department dept"
+					+ " LEFT JOIN dept.employees emp GROUP BY dept";
+			
+			Query<Object[]> query = session.createQuery(HQL, Object[].class);
+			List<Object[]> list = query.list();
+			for (Object[] objects : list) {
+				String departmentName=(String)objects[0];
+				Double totalSalByDept = (Double)objects[1];
+				System.out.println("Department Name:"+departmentName);
+				System.out.println("Total Sal By Dept:"+totalSalByDept);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(session != null)
+				session.close();
+		}
+	}
+
+:	HAVING clause with	HSQL	:
+
+=> Employee AND Department tables in a ManyToOne Relationship :
+
+public static void main(String[] args) {
+		Session session = null;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			String HQL = "SELECT dept.departmentName,SUM(emp.salary) FROM Department dept"
+					+ " LEFT JOIN dept.employees emp GROUP BY dept"
+					+ " HAVING SUM(emp.salary)>200000";
+			
+			Query<Object[]> query = session.createQuery(HQL, Object[].class);
+			List<Object[]> list = query.list();
+			for (Object[] objects : list) {
+				String departmentName=(String)objects[0];
+				Double totalSalByDept = (Double)objects[1];
+				System.out.println("Department Name:"+departmentName);
+				System.out.println("Total Sal By Dept:"+totalSalByDept);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(session != null)
+				session.close();
+		}
+	}
+
+:	Hibernate Named Queries	:
+
+=> Write in Employee Model Class :
+
+@NamedQueries(value = { 
+		@NamedQuery(name = "getTotalSalarOfEmployeesByDept", query = "SELECT dept.departmentName,SUM(emp.salary) FROM Department dept"
+				+ " LEFT JOIN dept.employees emp GROUP BY dept"
+				+ " HAVING SUM(emp.salary)>200000"),
+		@NamedQuery(name = "Employee.byId", query = "FROM Employee WHERE employeeId=:empId") 
+		})
+
+---------------------------------------------------------------------------------------------
+Query<Employee> query = session.getNamedQuery("Employee.byId");
+			query.setParameter("empId", empId);
+			Employee employee = query.uniqueResult();
+			
+			
+Query<Object[]> query = session.getNamedQuery("getTotalSalarOfEmployeesByDept");
+			List<Object[]> list = query.list();
+---------------------------------------------------------------------------------------------
+
+:	Hibernate Named Native Queries		:
+
+=> Write in Employee Model Class :
+
+@NamedNativeQueries(value = { 
+		@NamedNativeQuery(name = "getTotalSalarOfEmployeesByDept", query = "select dept.dept_name as "
+				+ "dept_name, sum(emp.salary) as TotalSalary from department_table dept left outer join "
+				+ " employee_table emp  on dept.dept_id=emp.dept_id  group by  dept.dept_id "
+				+ "having  sum(emp.salary)>200000"),
+		@NamedNativeQuery(name = "Employee.byId", query = "SELECT *FROM employee_table WHERE employee_id=:empId",resultClass=Employee.class) 
+		})
+		
+---------------------------------------------------------------------------------------------
+Query<Employee> query = session.getNamedQuery("Employee.byId");
+			query.setParameter("empId", empId);
+			Employee employee = query.uniqueResult();
+			
+			
+Query<Object[]> query = session.getNamedQuery("getTotalSalarOfEmployeesByDept");
+			List<Object[]> list = query.list();
+---------------------------------------------------------------------------------------------
+
+:	Calling Stored Procedure in Hibernate 5		:
+
+=>	Person and Phone in a OneToMany Relationship :
+
+STORE PROCEDURE :
+---------------------------------------------------------------------------------------------
+CREATE PROCEDURE `sp_count_phones` (IN personId INT,OUT phoneCount INT)
+BEGIN
+SELECT COUNT(*) INTO phoneCount 
+        FROM Phone p  
+        WHERE p.person_id = personId; 
+END
+----------------------------------------------------------------------------------------------
+
+	public static void main(String[] args) {
+
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			StoredProcedureQuery procedureQuery = session.createStoredProcedureQuery("sp_count_phones");
+			procedureQuery.registerStoredProcedureParameter( "personId", Long.class, ParameterMode.IN);
+			procedureQuery.registerStoredProcedureParameter( "phoneCount", Long.class, ParameterMode.OUT);
+
+			procedureQuery.setParameter("personId", 2L);
+
+			procedureQuery.execute();
+			Long phoneCount = (Long) procedureQuery.getOutputParameterValue("phoneCount");
+			
+			System.out.println("Phone Count:"+phoneCount);
+		}
+	}
+----------------------------------------------------------------------------------------------
+
+
+:	@DynamicUpdate 		:
+
+=>	@DynamicUpdate is used to Update Only Changes Column Not All Columns.
+
+	This annotation used in Model Class.
+	
+	@Entity
+	@Table(name="person")
+	@DynamicUpdate
+	Public class Person
+	{	
+	}
+	
+	
+:	Default Inheritance strategy in Hibernate :
+
+=> Default Strategy actually Single Table Strategy :  @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+Create a Table Person
+-------------------------------------------------------------------------------------------------------------------
+@Entity
+@Table(name="person")
+public class Person
+{
+	@ID
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id")
+	private Long id;
+	
+	@Column(name="name")
+	private String name;
+	
+	@Column(name="gender")
+	private String gender;
+	
+	// Setter and Getter methods
+}
+-------------------------------------------------------------------------------------------------------------------
+=> Create a Table Employee table and Inherite Person table :
+-------------------------------------------------------------------------------------------------------------------
+@Entity
+@Table(name="employee")
+public class Employee extends Person
+{
+	@ID
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="emp_id")
+	private Long empId;
+	
+	@Column(name="salary")
+	private Long salary;
+	
+	@Column(name="department")
+	private String department;
+	
+	@Column(name="email")
+	private String email;
+	
+	// Setter and Getter methods
+}
+-------------------------------------------------------------------------------------------------------------------
+=> Create another Table Student table and Inherite Person table :
+
+@Entity
+@Table(name="student")
+public class Student extends Person
+{
+	
+	@ID
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="student_id")
+	private Long studentId;
+	
+	@Column(name="marks")
+	private Long marks;
+	
+	@Column(name="class")
+	private String class;
+	
+	@Column(name="roll")
+	private String roll;
+	
+	// Setter and Getter methods
+}
+-------------------------------------------------------------------------------------------------------------------
+save as => 	session.save(person);
+			session.save(employee);
+			session.save(student);
+-------------------------------------------------------------------------------------------------------------------			
+Create a Single table 'person' with all properties of all tables and Table is not a Normalize form.
+
+:	Joined inheritance strategy in hibernate	:
+
+=>	Using this strategy all table are in normalize form with foreign key : Update only Person Table :
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+@Entity
+@Table(name="person")
+@Inheritance(strategy=InheritanceType.JOINED)
+public class Person
+{
+	@ID
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id")
+	private Long id;
+	
+	@Column(name="name")
+	private String name;
+	
+	@Column(name="gender")
+	private String gender;
+	
+	// Setter and Getter methods
+}
+-------------------------------------------------------------------------------------------------------------------
+Others Employee and Student Class are Same;
+
+
+:	Reading data in case of Single Table inheritance strategy in hibernate	:
+
+=>	????
+
+-------------------------------------------------------------------------------------------------------------------
+FROM 81
+
+:	Difference between get and load in hibernate 	:
+
+=>	get() method used for retriving any data from table in case data is not available then it return null.
+
+	First check First level cache if not found then its alowys hit the database and return a real object. And object represent database row not proxy, If no row found it return Null.
+	
+	It follow Eagger Loading.
+
+	Person person = session.get(Person.class, personId);
+	
+	load() method used for retriving any data from table in case data is not available then it return an exception [ObjectNotFoundException].
+	
+	Person person = session.load(Person.class, personId);
+	
+	When call a load method in hibernate it alowys return a Proxy.
+	
+	It follow Leazy Loading.
+
+:	Read an Entity by natural-id in hibernate	:
+
+=>	Declare in Book Entity :
+--------------------------------------
+	@NaturalId
+	@Column(name="isbn")
+    private String isbn;
+--------------------------------------
+	private static void loadBookBySimpleNaturalId() {
+
+		try(Session session = HibernateUtil.getSessionFactory().openSession() ) {
+			String  naturalId = "900-9730228524";
+			
+			Book book = session.bySimpleNaturalId(Book.class).getReference(naturalId);
+			if(book != null){
+				System.out.println(book.getTitle()+"\t"+book.getAuthor().getName());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+	}
+	
+	By default @NaturalId is Immutable. You can also declare as Mutable :
+	
+	@NaturalId(mutable = true)
+	@Column(name="isbn")
+	private String isbn;
+	
+*	You can Update @NaturalId but You can't update Primark Key @Id
+
+* You can also find Entity using natural-id =>
+
+	Book book =  session.byNaturalId(Book.class).using("isbn", "9563-5212451").load();
+	
+	System.out.print(book);
+	
+	@NuturalId using single embedded attribute :	
+		https://github.com/kishanjavatrainer/EmbeddedNaturalIdMappingExample
+		
+***** Get value using @NaturalId :
+
+		Query Fired two times => First time Find Primary key using @NaturalId and then Second time Select data using Primary key.
+		Then Store in to session cache.
+	
+:	Evicting Entities in hibernate			:			
+
+=>	evict() method is used to clear any perticular single object from hibernate session cache.
+
+	session.evict(person);
+
+	clear() method is used to clear all objects from hibernate session cache.
+	
+	session.clear();
+	
+-----------------------------------------------------------------------
+public static void main(String[] args) {
+
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			long personId = 1L;
+			Person person = session.get(Person.class,personId);
+			System.out.println(person.getName());
+			
+			session.evict(person);
+			//session.clear();
+			System.out.println("------------------------------");
+			
+			person = session.get(Person.class,personId);
+			
+			System.out.println(person.getName());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+-----------------------------------------------------------------------
+
+:	JPA :							
+
+=> If use JPA then configure persistence.xml 
+
+	Like For Hibernate hibernate.cfg.xml
+
+	JPAUtil Class :
+	
+
+
+:	How to Store Binary Data and BLOB using Hibernate ?				:									
+
+=>	Binary Data => Image, audio, video, etc <= Binary Large Object [BLOB ]
+
+				=> Text, word file etc <= Character Large Object [CLOB]
+	
+In Person Table :
+-------------------------------------------	
+@Lob
+@Column(name="profile_pic")
+private Blob profilePic;
+-------------------------------------------
+
+public static void main(String[] args) {
+
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			long personId =  1L;
+			Person person = session.get(Person.class, personId);
+			System.out.println("Person details::::");
+			System.out.println(person.getId()+"\t"+person.getName());
+			System.out.println("List of book::::");
+			List<Book> books = person.getBooks();
+			for (Book book : books) {
+				System.out.println(book.getId()+"\t"+book.getTitle()+"\t"+book.getIsbn());
+			}
+			
+			Blob image = person.getProfilePic();
+			InputStream inputStream = image.getBinaryStream();
+			Files.copy(inputStream, Paths.get("outputProfilePics/"+person.getName()+".JPG"),StandardCopyOption.REPLACE_EXISTING);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+:	Mapping datetime in hibernate :
+
+=>	java.sql.Date <= Basically store Date as YYYY-MM-DD format
+
+	java.util.Date <= Basically store Date and Time
+	
+In Book Class :
+--------------------------------------------------------	
+import java.util.Date;
+
+	@Column(name="published_date")
+	private Date publishedDate;	
+	
+--------------------------------------------------------	
+Create Column (published_date) datatype => TimeStamp means Date and Time Both => YYYY-MM-DD HH:MM:SS
+
+	@Temporal(value= TemporalType.TIMESTAMP)	<= Default
+	@Column(name="published_date")
+	private Date publishedDate;	
+	
+	@Temporal(value= TemporalType.DATE)			<= You can also use Only Date YYYY-MM-DD
+	
+	@Temporal(value= TemporalType.TIME) 		<= You can also use Only Time HH:MM:SS
+	
+:	Mapping java-8 date/time in hibernate 	:
+
+=>	java.time New Package in java-8 and All Classes are immutable :
+
+	@Temporal(value= TemporalType.DATE)	<= If you used Java 8 java.time API then You are not used @Temporal otherwise it get exception.
+	
+	
+	@Column(name="published_date")
+	private LocalDate publishedDate;	
+	
+	LocalDate localDate = LocalDate.now()	<= Java 8 time package provide many Factory method like now()
+	
+	LocalTime and OffsetTime 			<= Provides to classes are used for set Time in java 8
+	
+	LocalDateTime, OffsetDateTime, ZoneDateTime		<= classes are used for TIMESTAMP
+	
+
+:	How to Set Default Time Zone in Hibernate	:
+
+=>	
+	try (Session session = HibernateUtil.getSessionFactory().withOptions().jdbcTimeZone(TimeZone.getTimeZone("UTC")).openSession())
+	{}
+	catch(Exception e){}
+
+:	@Immutable	Class and Collection in Hibernate :								
+
+=>	Used @Immutable in a Entity Class :
+
+	@Entity
+	@Table(name="person")
+	@Immutable
+	public class Person
+	{
+	}
+	
+	Then You can’t any changes of persistence object, it throws an exception.
+
+	Used @Immutable in a Collection List :
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@Immutable
+	private List<Book> books = new ArrayList<>();
+	
+	Then You can’t any changes of Collection list, it throws an exception.
+
+
+:	Schema Generation in Hibernate	:
+
+=>	Database Migratation Tools :
+
+	Flyway	=> Flyway is an open source database migration tool. It is based around 7 basic commands: Migrate, Clean, Info, Validate, Undo, Baseline and Repair
+
+	Liquibase => Liquibase is an open source database-independent library for tracking, managing and applying database schema changes. It allow easier tracking of database changes, especially in an agile software development environment.
+	
+*	Hibernate provides "hibernate.hbm2ddl.auto = create" tools to create database schema.
+
+	@Column(name="book_price", columnDefinition="Decimal(10,2)")
+	private Double bookPrice;	
+	
+	@Column(name="book_price", length=150)
+	private Double bookPrice;
+	
+	@Column(nullable = false)		<= Null value is Not allowed
+	private Double bookPrice;
+	
+	@Column(insertable = false)		<= Not allow to insert value in this column
+	private Double bookPrice;
+	
+	@Column(precision = 5 )			<= Used for Big Decimal. Total nos of digits before decimal
+	private Double bookPrice;
+	
+	@Column(scale = 2)				<= Used for Big Decimal. Total nos of digits after decimal
+	private Double bookPrice;
+	
+	@Column(unique = )				<= To specify Unique Constant
+	private Double bookPrice;
+	
+	@Column(table = )				<= To sepcify tergateg table
+	private Double bookPrice;
+	
+	@Column(updatable = true)		<= Autometicaly update this column in an insertion/updation happends
+	private Date bookPrice;
+
+
+:	@DynamicInsert	:
+
+=>	@DynamicInsert by default FALSE i.e when save any Entity all columns value will be created. Like :
+
+StockTransaction is a Model Class :
+-------------------------------------------------------------------------------------------------------
+	@Entity
+	@Table(name="stock_transaction")
+	@DynamicInsert
+	public class StockTransaction
+	{
+	}
+-------------------------------------------------------------------------------------------------------
+	StockTransaction stockTran = new StockTransaction();
+	//stockTran.setPriceOpen(new Float("1.2"));
+	//stockTran.setPriceClose(new Float("1.1"));
+	//stockTran.setPriceChange(new Float("10.0"));
+	stockTran.setVolume(2000000L);
+	stockTran.setDate(new Date());
+	stockTran.setStock(stock);
+
+	session.save(stockTran);
+-------------------------------------------------------------------------------------------------------
+Generated SQL : @DynamicInsert = false
+-------------------------------------------------------------------------------------------------------
+Hibernate: 
+    insert 
+    into
+        mkyong.stock_transaction
+        (DATE, PRICE_CHANGE, PRICE_CLOSE, PRICE_OPEN, STOCK_ID, VOLUME) 
+    values
+        (?, ?, ?, ?, ?, ?)
+-------------------------------------------------------------------------------------------------------
+Generated SQL : @DynamicInsert = true
+-------------------------------------------------------------------------------------------------------
+Hibernate: 
+    insert 
+    into
+        mkyong.stock_transaction
+        (DATE, STOCK_ID, VOLUME) 
+    values
+        (?, ?, ?)
+-------------------------------------------------------------------------------------------------------
+
+:	Set Default Column Value :											
+
+@Column(name="client_id")
+@ColumnDefault("-1")
+private Long clientId;
+
+@Column(name="name")
+@ColumnDefault("'N/A'")
+private String name;
+
+
+:	Column Unique Constraint In Hibernate	:
+
+=>
+Example :
+--------------------------------------------------------------------------------------------------------------
+@Entity
+@Table(name="book",uniqueConstraints=@UniqueConstraint(name="uk_book_title_author",
+columnNames={"title","author_id"}))
+public class Book {
+
+    @Id
+    @Column(name="id")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name="title")
+    private String title;
+
+    @NaturalId
+    @Column(name="isbn")
+    private String isbn;
+    
+    @Column(name="book_price",columnDefinition="Decimal(10,2)")
+    private Double bookPrice;
+
+    @ManyToOne
+    @JoinColumn(name="author_id")
+    private Author author;
+--------------------------------------------------------------------------------------------------------------
+
+:	Column Index In Hibernate	:
+
+=>
+
+Example :
+--------------------------------------------------------------------------------------------------------------
+@Entity
+@Table(name="author",indexes=@Index(name="idx_author_first_lastname",columnList = "first_name,last_name"))
+public class Author 
+{
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name="id")
+    private Long id;
+
+    @Column(name="first_name")
+    private String firstName;
+    
+    @Column(name="last_name")
+    private String lastName;
+
+    @OneToMany(mappedBy = "author",cascade=CascadeType.ALL)
+    private List<Book> books = new ArrayList<>(  );	
+}
+--------------------------------------------------------------------------------------------------------------
+
+:	Hibernate Connection Pool concept	:
+
+=>	Hibernate Tomcat JNDI DataSource Connection Pool
+
+	1) DataSource Connection Pool
+	2) C3P0
+	3) HikariCP
+	
+	
+
+:	How to configure Hikari Connection Pool ?	:
+
+=>	HikariCP is a lightweight and highly optimized Java connection pool.
+
+	Hikari Connection is better then C3P0 
+	
+	Connection Pooling is a technique of creating and managing a pool of connections which is already created and ready for use by any process which needs them.
+
+
+:	Hibernate Batch Processing	:
+
+=>	JDBC offers support for batching together SQL statements that can be represented as a single PreparedStatement. Which can save on network calls to the database.
+
+Hibernate can leverage JDBC batching. The following setting control this behaviour.
+
+	hibernate.jdbc.batch_size
+	hibernate.jdbc.batch_versioned_data
+	hibernate.jdbc.batch.builder
+	hibernate.order_updates
+	hibernate.order_inserts
+	
+NOTE :	Since version 5.2, Hibernate allows overriding the global JDBC batch size given by hibernate.jdbc.batch_size configuration property for a given Session.
+
+
+** If Model Class Primary Key Generation Type is IDENTITY and AUTO Then Batch Processing is NOT Supported.
+
+@Id
+@GeneratedValue(strategy=GenerationType.IDENTITY)
+@Column(name="emp_id")
+private Long empId;
+
+Used Any Others Like : TABLE, SEQUENCE
+
+
+Example :
+----------------------------------------------------------------------------------------------------------
+public static void main(String[] args) {
+		Transaction tx =  null;
+		int batchSize = 5;
+		try(Session session = HibernateUtil.getSessionFactory().openSession() ) 
+		{
+			tx = session.beginTransaction();
+			for ( int i = 1; i <= 100; i++ ) {
+				Person  person = new Person();
+				person.setFirstName("Gavin_"+i);
+				person.setLastName("King_"+i);
+				session.persist(person);
+				if ( i > 0 && i % batchSize == 0 ) 
+				{
+					System.out.println("flush and clear the session");
+		            //flush a batch of inserts and release memory
+		            session.flush();
+		            session.clear();
+		        }
+		    }
+			tx.commit();
+		} catch (Exception e) {
+			if(tx != null && tx.isActive())
+				tx.rollback();
+			throw e;
+		}
+	}
+----------------------------------------------------------------------------------------------------------
+:	Flush() 	:
+
+=> flush() method is used to save data from the session memory to Database without commit transaction.
+
+:	Scroll()		:
+
+=> scroll() method is used to Save/Update Huge nos of Million of records
+
+-----------------------------------------------------------------------------------------------------------
+public static void main(String[] args) {
+		Session session = null;
+		Transaction txn = null;
+		ScrollableResults scrollableResults = null;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+
+			txn = session.getTransaction();
+			txn.begin();
+
+			int batchSize = 5;
+			scrollableResults = session.createQuery("select p from Person p").setCacheMode(CacheMode.IGNORE)
+					.scroll(ScrollMode.FORWARD_ONLY);
+
+			int count = 0;
+			while (scrollableResults.next()) {
+				Person person = (Person) scrollableResults.get(0);
+				processPerson(person);
+				if (++count % batchSize == 0) {
+					// flush a batch of updates and release memory:
+					System.out.println("Session is Flushed...");
+					session.flush();
+					session.clear();
+				}
+			}
+
+			txn.commit();
+		} catch (RuntimeException e) {
+			if (txn != null && txn.isActive())
+				txn.rollback();
+			throw e;
+		} finally {
+			if (scrollableResults != null) {
+				scrollableResults.close();
+			}
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
+
+	private static void processPerson(Person person) {
+		person.setFirstName(person.getFirstName() + "_upadted");
+	}
+	
+----------------------------------------------------------------------------------------------------------------------
+
+:	StatelessSession in hibernate  :
+
+=>	A StatelessSession has no persistence context associated with it and does not provide many of the higher-level life cycle semantics.
+
+Some of the things not provided by a StatelessSession include :
+
+	A First-Level Cache
+	Interation with any second-level or query cache	
+	Transactional write behind or automatic dirty checking
+	
+Limitation of Stateless Session :
+
+	Operations performed using a stateless session never cascade to associated instances.
+	
+	Collection are ignoreed by a stateless session.
+	
+	Lazy Loading of associations is not supported.
+	
+	Operations performed via a stateless session bypass Hibernates event model and interceptors.
+	
+	Due to lack of first-level cache, Stateless session are vulnerable to data aliasing effects.
+	
+	A stateless session is a lower-level abstraction that is much closer to the underlying JDBC.
+	
+	
+** Basicaly When you Read some data from database then you can used StatelessSession.
+
+** If You hitting same query again and again Then AVOID StatelessSession.
+
+Example :
+----------------------------------------------------------------------------------------------------
+public static void main(String[] args) {
+		StatelessSession statelessSession = null;
+		Transaction txn = null;
+		ScrollableResults scrollableResults = null;
+		try {
+			SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+			statelessSession = sessionFactory.openStatelessSession();
+
+			txn = statelessSession.getTransaction();
+			txn.begin();
+
+			scrollableResults = statelessSession.createQuery("select p from Person p").scroll(ScrollMode.FORWARD_ONLY);
+
+			while (scrollableResults.next()) {
+				Person Person = (Person) scrollableResults.get(0);
+				processPerson(Person);
+				statelessSession.update(Person);
+			}
+
+			txn.commit();
+		} catch (RuntimeException e) {
+			if (txn != null && txn.getStatus() == TransactionStatus.ACTIVE)
+				txn.rollback();
+			throw e;
+		} finally {
+			if (scrollableResults != null) {
+				scrollableResults.close();
+			}
+			if (statelessSession != null) {
+				statelessSession.close();
+			}
+		}
+	}
+
+	private static void processPerson(Person person) {
+		person.setFirstName(person.getFirstName() + "_upadted");
+	}
+-----------------------------------------------------------------------------------------------------------------------------------
+
+:	Hibernate dirty checking	:
+
+=>	Hibernate monitors all persistent objects, If any persistent object modify then it autometicaly update into database this is called automatic dirty checking in hibernate.
+
+	It is happends between Transaction begain and Transaction commit.
+	
+:	What is Hibernate (N+1) Problem ?								:
+
+=> In @Fetch annoation mapping in hibernate, Select Some Entity, But alowyes select Sub Entities.
+
+Example : 
+
+	When Select All of Department info, in case of EAGGER Loading All the Employee List will be selected of every department.
+	
+	i.e If total 100 queries fired 1 query select for all departments and 99 queries fired for selecte employees list. This problem is known as Hibernate (N+1) Problem.
+
+
+: How to Solved n+1 Problem in Hibernate ?					:
+	
+=>	In Join query (n+1) problem remove using 'fetch' keyword, Example :
+
+			"SELECT e FROM Employee e LEFT JOIN FETCH e.projects WHERE e.userName = :username AND e.password = :password", Employee.class)
+								.setParameter("username", "rajib@gmail.com")
+								.setParameter("password", "12587")
+								.singleResult(); 
+
+			OR
+			
+			List<Department> departments = session.createQuery(" FROM Department d JOIN FETCH d.employees", Department.class).getResultList();
+			
+				
+:	@Fetch annoation mapping hibernate	:
+
+=>	There are many FETCH Types in Hibernate :
+
+	SELECT			<= Using SELECT hibernate have (n+1) problem.
+
+	SUBSELECT		<= In Case of SUBSELECT execute Only Two Query are fired.
+	
+	JOIN			<= In case of JOIN execute Only One Query.
+
+Example of 
+
+	@Fetch(value = FetchMode.SELECT)
+	@Fetch(value = FetchMode.SUBSELECT)
+-------------------------------------------------------------------------------------------------------------------
+	@Fetch(value = FetchMode.SELECT)
+	@ManyToMany(mappedBy="department", cascade=CascadeType.PERSIST)
+	private List<Department> departments = new ArrayList<Department>();
+	
+	List<Department> departments = session.createQuery("FROM Department", Department.class).getResult();
+	
+	System.out.println(departments.size());
+	
+	for(Department dept: departments) 
+	{
+		System.out.println(dept.getEmployees().size());
+	}
+------------------------------------------------------------------------------------------------------------------
+
+Example of 
+
+	@Fetch(value = FetchMode.JOIN)
+------------------------------------------------------------------------------------------------------------------
+	Department department = session.get(Department.class, 5);
+	if(department != null)
+	{
+		System.out.println(department.getId());
+		List<Employee> employees = department.getEmployees();
+		System.out.println(employees.size());
+	}	
+------------------------------------------------------------------------------------------------------------------
+
+:	@LazyCollection in hibernate	:
+
+=>	Work like EAGGER. If Value requried then fired query.
+	
+:	Hibernate Caching	:				
+
+=> Caching is mechanisum to stores query execution data in buffer memory from for reduce the database hit of same query execuation.
+
+
+Hibernate Multilevel Caching :
+
+	1) First-Level Cache :=> By Default active and Possible to disable it.  
+	** One Session Object cache is Not visible to Other Session Level cache. 
+	**	If Session is close then all session cache data will delete.
+
+	2) Second-Level Cache: => It is an optional. It configure per class/ per Collection basic and it is available for all sessions.
+	
+	3) Query-Level Cache :=> Perticular Query basic. It used take lot of time to query execution any query OR lot of result.
+	
+	* Enable Second-Level cache then You can enable Query-Level cache.
+	
+:	Remove Data from session cache	:
+
+=>	session.evict() Method is used to delete any perticular object from session cache.
+
+	session.evict(hpLaptop);
+
+	session.clear() Method is used to delete all object from session cache.
+
+	session.clear();
+	
+:	Hibernate second level cache	:
+
+=>	Ehcache is the Implementation of Jcache.
+
+	Configure Second-Level Cache 
+	
+	Add following Dependency :
+	
+		<!-- Hibernate Jcache -->
+			<dependency>
+			  <groupId>org.hibernate</groupId>
+			  <artifactId>hibernate-ehcache</artifactId>
+			  <version>5.2.12.Final</version>
+			</dependency>
+			
+		<!-- Ehcache 3.x -->
+			<dependency>
+			  <groupId>org.ehcache</groupId>
+			  <artifactId>ehcache</artifactId>
+			  <version>3.4.0</version>
+			</dependency>
+	
+	Configure in Model Class :
+	
+		import org.hibernate.annotations.Cache;
+		import org.hibernate.annotations.CacheConcurrencyStrategy;
+	
+		@Entity
+		@Table(name="employee")
+		@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+		public class Employee {
+
+			@Id
+			@GeneratedValue(strategy=GenerationType.IDENTITY)
+			@Column(name="id")
+			private Long id;
+
+			@Column(name="employee_name",length=60)
+			private String employeeName;
+			
+		}
+		
+:	:
+
+=>	
+
+	
+		
+
+		
+	
+	
+	
+	
+	
+	
+:	mappedBy=""	:
+
+=> mappedBy="" is used to specify owner ship of others relation.
+
+	If we not declare to create then create another new table.
+	
+As for Example :
+
+IN Employee :
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id")
+	private Long id;	
+	
+	@ManyToMany(mappedBy="employee", cascade=CascadeType.PERSIST)
+	private List<Project> projects = new ArrayList<Project>();
+	
+	
+IN Project :
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id")
+	private Long id;
+
+	@ManyToMany
+	@JoinTable(name="project_employee", joinColumns=@JoinColumn(name="project_id"), inverseJoinColumns=@JoinColumn(name="employee_id"))
+	private List<Employee> employee = new ArrayList<>();	
+
+	
+:	@Formula in Hibernate	:
+
+=>	This is a Derived Column and Not created in Table :
+
+	import org.hibernate.annotations.Formula;
+
+	@Formula(value = "credit_amt * rate_amt")
+    private Double interest;
+	
+	System.out.println("Interest amount:"+account.getInterest());
+	
+:	@Annotation			:
+
+=>
+
+@Entity					=>	
+@Table					=>
+@Id						=>
+@GeneratedValue			=>
+@Column					=>
+@NotBlank 				=>	annotation is used to validate that the annotated field is not null or empty.
+@Temporal				=>	converts the date and time values from Java Object to compatible database type and vice versa.
+@CreatedDate			=>	
+@LastModifiedDate		=>	
+@JsonIgnoreProperties	=> 
+
+
+
+
+
+
+
+
+
+:	Hibernate Batch Processing		:
+
+=>	Configure Hibernate batching using configure property in hibernate.cfg.xml file :
+
+	hibernate.jdbc.batch_size = 25
+	
+*	Batch size limit 10 to 50
+
+
+	
+
+
+
+
+
+
+
