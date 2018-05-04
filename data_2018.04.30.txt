@@ -262,9 +262,9 @@ Create another @Component class and Extends BasicAuthenticationEntryPoint and Ov
 	
 		
 	
-:																										:
+:		Cross Origin																								:
 
-=>	
+=>	Cross Origin Resource sharing
 
 
 :																										:

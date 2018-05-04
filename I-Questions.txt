@@ -1,0 +1,58 @@
+0) Tell me about Your Projects ?
+
+1) What do you know about servlet ?
+
+2) What is check Exception and Unchek Exception ? How can i handle it ?
+
+=>	
+Checked Exceptions : It checked at compile-time. It means if a method is throwing a checked exception then 
+
+It should handle the exception using try-catch block or it should declare the exception using throws keyword, 
+otherwise the program will give a compilation error.
+
+3) What do you know about Git ?
+
+4) What Do you Know about AWS ?
+
+5) What types of Services available in AWS ? What is Software as a Service ?
+
+=> There are 3 types of Services in AWS. Like :
+
+	IAAS	=> Infrastructure As A Service.
+	PAAS	=> Platform As A Service.
+	SAAS	=> Software As A Service.
+	
+	Software As A Service :
+	
+
+6) What is Bean Class ?
+
+7) How many Http methods in Spring MVC ? Describe it.
+
+8) Write down once examples of every Http Methods ?
+
+9) How to catch Json Response in Spring MVC Controller ? 	=> @RequestBody
+
+10) How to Return Http Response as a Json format ?			=> @ResponseBody
+
+11) What do you know about Docker ?
+
+12) What do you khow about Jenkins ?
+
+13) How to manage Git Version Controller ?
+
+14) What is Load balancing and How it Handle ?
+
+15) What is Hystrix and How its work ?
+
+16) What do you know about Throws keyword ?
+
+17) Who handle all the exception.
+
+=> All exceptions come from the "mother class" called java.lang.Throwable 
+	
+	and one of two subclasses called java.lang.Error and java.lang.Exception. Throwable, it is possible to handle all unexpected conditions.
+
+18) 'toString()' method under which class.
+
+19)
