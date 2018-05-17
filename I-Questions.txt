@@ -37,7 +37,7 @@ otherwise the program will give a compilation error.
 
 11) What do you know about Docker ?
 
-12) What do you khow about Jenkins ?
+12) What do you know about Jenkins ?
 
 13) How to manage Git Version Controller ?
 
@@ -45,7 +45,7 @@ otherwise the program will give a compilation error.
 
 15) What is Hystrix and How its work ?
 
-16) What do you know about Throws keyword ?
+16) What do you know about Throw and Throws keyword ?
 
 17) Who handle all the exception.
 
@@ -55,4 +55,73 @@ otherwise the program will give a compilation error.
 
 18) 'toString()' method under which class.
 
-19)
+19) What is Semaphore in Java ?
+
+20) Different HashTable vs Semaphore vs HashMap ?
+
+21) Different HashMap vs LinkedHashMap ?
+
+22) Which Collection is used to get Last used value ?
+
+23) How to Short a Collection ?
+
+24) How to Configure Hibernate in Spring ?
+
+25) Which File is used to configure Hibernate ?
+
+26) How to bind/recived Json data in Spring MVC ?	<= Using Jackon Lib
+
+27) Which Library is used to handle Json Data		<= Json, Geson
+
+28) What are the different between SOAP vs REST ?
+
+29) What is Autowired ? How to used @Autowired ? Why used it ? 
+
+30) What is the default Autowired Type ? How many types are available ?
+
+31) What is Rapper Class ?
+
+32) What is Integer Cache in Core Java ?
+
+33) How to enable default Second level cache in hibernate ?
+
+34) How to configure second level cache using third party library ?
+
+35) Different between First level and Second Level cache ?
+
+36) How to disable Second Level Cache ?
+
+37) What is SQL DML/DDL/DQL ? Default port of Mysql and SQL Server ?
+
+38) How to configure a Spring MCV Application ?
+
+39) Different Static Sychronize method and non Static Sychronize Methods ?
+
+40) What do you know about @Component, @Controller, @Service and @Repository ?
+
+41) What do you know about Spring Security ?
+
+42) What do you know about JWT ?
+
+43) What do you know about OAuth 2 ?
+
+44) What do you know about System.exit(0) ? If pass another value than what happend ?
+
+45) When we used Abstruct class and Interface ? Basic different ?
+
+46) When finally block is not execute ?
+
+47) What is the Default Beans Type ? How many types of Bean declaration ?
+
+48) How many types of Autowired ? What is the Default Autowired type ?
+
+49) Different between openSession() and begainSession() in Hibernate ?
+
+50) What are the Collection class in Java ?
+
+51) How to get data from ArrayList and HashMap ?
+
+52) How to print all map key and value ?
+
+53) 
+ 

@@ -1,0 +1,917 @@
+:															INTERVIEW QUESTIONS ON SPRING BOOT 											:
+------------------------------------------------------------------------------------------------------------------------------------------
+
+: (1) WHAT DO YOU KNOW ABOUT SPRING BOOT ? 																								:
+
+=>	Spring boot has been built on top of existing spring framework. Using spring boot we avoid all the boilerplate code and configurations that we had to do 	previously. Spring boot thus helps us use the existing Spring functionalities more robustly and with minimum efforts.
+
+	Spring Boot is not a framework, it is a way to ease to create stand-alone application with minimal or zero configurations. It is approach to develop spring based application with very less configuration. It provides defaults for code and annotation configuration to quick start new spring projects within no time.
+
+: (2) WHAT ARE THE ADVANTAGES OF USING SPRING BOOT ?																					:
+
+=>	Advantages of Spring boot are:
+
+	A)	It is very easy to develop Spring Based applications with Java or Groovy.
+	B)	It reduces lots of development time and increases productivity.
+	C)	It avoids writing lots of boilerplate Code, Annotations and XML Configuration.
+	D)	It is very easy to integrate Spring Boot Application with its Spring Ecosystem like Spring JDBC, Spring ORM, Spring Data, Spring Security etc.
+	E)	It follows “Opinionated Defaults Configuration” Approach to reduce Developer effort
+	F)	It provides Embedded HTTP servers like Tomcat, Jetty etc. to develop and test our web applications very easily.
+	G)	It provides CLI (Command Line Interface) tool to develop and test Spring Boot (Java or Groovy) Applications from command prompt very easily and quickly.
+	I)	It provides lots of plugins to develop and test Spring Boot Applications very easily using Build Tools like Maven and Gradle
+	J)	It provides lots of plugins to work with embedded and in-memory Databases very easily.
+
+: (3) WHAT ARE THE DISADVANTAGES OF USING SPRING BOOT ?																					:
+
+=>	It is very tough and time consuming process to convert existing or legacy Spring Framework projects into Spring Boot Applications. It is applicable only for brand new/Greenfield Spring Projects.
+
+: (4) WHICH BUILD TOOL HAVE YOU USED TO DEVELOP SPRING BOOT APPLICATION ?																:
+
+=>	Spring Boot application can be developed using 
+	
+		A) Maven 
+		B) Gradle
+
+: (5) WHAT EMBEDDED CONTAINERS DOES SPRING BOOT SUPPORT ?																				:
+
+=>	Spring Boot includes support for embedded Tomcat, Jetty, and Undertow servers.
+	By default the embedded server will listen for HTTP requests on port 8080.
+	
+: (6) WHAT IS THE DIFFERENCE BETWEEN AN EMBEDDED CONTAINER AND A WAR ? 																	:
+
+=> There is no force to go container less
+– Embedded container is just one feature of Spring Boot
+- Traditional WAR also benefits a lot from Spring Boot
+– Automatic Spring MVC setup, including DispatcherServlet
+– Sensible defaults based on the classpath content
+– Embedded container can be used during development
+
+: (7) WHAT DOES @EnableAutoConfiguration DO ?																							:
+
+=>	@EnableAutoConfiguration annotation on a Spring Java configuration class
+	– Causes Spring Boot to automatically create beans it thinks you need
+	– Usually based on classpath contents, can easily override
+--------------------------------------------------------------------------------------------------
+		@Configuration
+		@EnableAutoConfiguration
+		public class MyAppConfig {
+			public static void main(String[] args) {
+				SpringApplication.run(MyAppConfig.class, args);
+			}
+		}
+--------------------------------------------------------------------------------------------------
+	
+: (8) WHAT DO YOU KNOW ABOUT @SpringBootApplication ? 																					:
+
+=> @SpringBootApplication was available from Spring Boot 1.2
+It is very common to use @EnableAutoConfiguration, @Configuration, and @ComponentScan together*.
+--------------------------------------------------------------------------------------------------
+		@Configuration
+		@ComponentScan
+		@EnableAutoConfiguration
+		public class MyAppConfig {
+			...
+		}
+--------------------------------------------------------------------------------------------------
+	With @SpringBootApplication annotation
+--------------------------------------------------------------------------------------------------
+		@SpringBootApplication
+		public class MyAppConfig {
+			...
+		}
+--------------------------------------------------------------------------------------------------
+
+: (9) CAN YOU CONTROL LOGGING WITH SPRING BOOT ? HOW ? 																					:
+
+=> Yes, we can control logging with spring boot.
+
+	Customizing default Configuration for Logging:
+	By adding logback.xml file to the application we can override the default logging configuration providing by the Spring Boot. This file place in the classpath (src/main/resources) of the application for Spring Boot to pick the custom configuration.
+
+	Spring Boot can control the logging level
+	– Just set it in application.properties
+	• Works with most logging frameworks
+	– Java Util Logging, Logback, Log4J, Log4J2
+--------------------------------------------------------------------------------------------------
+	logging.level.org.springframework=DEBUG
+	logging.level.com.acme.your.code=INFO
+--------------------------------------------------------------------------------------------------
+
+: (10) HOW TO RELOAD MY CHANGES ON SPRING BOOT WITH OUT HAVING TO RESTART SERVER ?														:
+
+=>	Spring Boot has a Developer tools (DevTools) module which helps to improve the productivity of developers. Developers can reload changes on Spring Boot without having to restart my server. This was a most requested features for the developers. This module will be disabled in the production environment.
+
+--------------------------------------------------------------------------------------------------
+	compile('org.springframework.boot:spring-boot-devtools')
+--------------------------------------------------------------------------------------------------
+
+: (11) WHAT IS THE CONFIGURATION FILE NAME USED BY SPRING BOOT ?																		:
+
+=> The configuration file used in spring boot projects is application.properties OR application.yml file. This file is very important where we would over write all the default configurations. Normally we have to keep this file under the resources folder of the project
+
+: (12) CAN WE USE SPRING BOOT WITH APPLICATIONS WHICH ARE NOT USING SPRING ?															:
+
+=> Configuration file used in Spring boot projects is application.properties. It is very important file as it is used to override all default configurations.
+	
+: (13) WHAT DO YOU KNOW ABOUT SPRING BOOT CLI ?																							:
+
+=>	CLI stands for Command Line Interface, which is a Spring Boot software to run and test Spring Boot applications from command prompt. When you run Spring Boot applications using CLI, then it internally uses Spring Boot Starter and Spring Boot AutoConfigurate components to resolve all dependencies and execute the application. It internally contains Groovy and Grape (JAR Dependency Manager) to add Spring Boot Defaults and resolve all dependencies automatically.
+
+: (14) WHAT ARE THE DIFFERENT WAY TO GENERATE A SPRING BOOT PROJECT ? 																	:
+
+=> 1) Using Maven as demonstrated in Simple Spring Boot Tutorial in 8 steps
+
+2) Via online Spring Initializr – “http://start.spring.io/“. More info at “http://spring.io/”.
+
+3) Via Spring Boot CLI.
+
+4) Via Spring Boot IDE.
+
+: (15) WHAT ARE THE KEY COMPONENTS OF SPRING BOOT ?																						:
+
+=> Spring Boot has 4 key components.
+
+1) Spring Boot Starter: is responsible for combining a group of common or related dependencies. E.g. spring-boot-starter-actuator, spring-boot-starter-web, spring-boot-starter-data-rest, spring-boot-starter-hateoas, spring-boot-starter-jdbc, spring-boot-starter-tomcat, etc.
+
+2) Spring Boot AutoConfigurator: is responsible for simplifying the wiring up of Spring components. One of the common criticisms of Spring IO framework is that it requires lot of XML or Java based configurations. The Spring Boot AutoConfigurator component will take the burden of wiring up the Spring components. It also reduces the number of annotations. For example, @SpringBootApplication = @Configuration + @ComponentScan + @EnableAutoConfiguration.
+
+3) Spring Boot CLI: is responsible for running & testing a Spring Boot application from a command prompt. It internally uses the components “Spring Boot Starters” and “Spring Boot AutoConfigurator”. You can also run Spring Web Applications from a command prompt.
+
+4) Spring Boot Actuator: is responsible for providing production-ready features to a Spring Boot application without having to actually implement these things yourself. it exposes different types of information about the running application – health, metrics, info, env etc. This is not a replacement for a production-grade monitoring solution, but is a good starting point from a development & testing perspective.
+
+: (16) WHAT IS SPRING CLOUD ?																											:
+	
+=>	Spring Cloud is a collection of tools from Pivotal that provides solutions to some of the commonly encountered patterns	when building distributed systems.
+
+: (17) WHY SPRING CLOUD IS REQUIRED ?																									:
+
+=>	When developing distributed microservices with Spring Boot we face the following issues :
+
+	A) Complexity associated with distributed systems : This overhead includes network issues, Latency overhead, Bandwidth issues, security issues.
+	
+	B) Service Discovery : Service discovery tools manage how processes and services in a cluster can find and talk to one another. 
+	
+	It involves a directory of services, registering services in that directory, and then being able to lookup and connect to services in that directory.
+	
+	C) Redundancy : Redundancy issues in distributed systems.
+
+	D) Loadbalancing : Load balancing improves the distribution of workloads across multiple computing resources, such as computers, a computer cluster,
+
+	network links, central processing units, or disk drives.
+
+	E) Performance issues : Performance issues due to various operational overheads.
+
+	F) Deployment complexities : Requirement of Devops skills.
+	
+	[Loose coupling, autonomous services, decentralized governance, easier continuous delivery and so on]
+	
+: (18) WHAT IS MICROSERVICES ARCHITECTURE ?																								:
+
+=>	Essentially, microservice architecture is a method of developing software applications as a suite of independently deployable, small, modular services in which each service runs a unique process and communicates through a well-defined, lightweight mechanism to serve a business goal.		
+	
+	Microservices architecture is an approach to application development in which a large application is built as a suite of modular services.	
+	Each module supports a specific business goal and uses a simple, well-defined interface to communicate with other sets of services.
+	
+: (19) WHAT IS SOA [SERVICE ORIENTED ARCHITECTURE] ?																					:
+
+=>	A service-oriented architecture (SOA) is a style of software design where services are provided to the other components	by application components, through a communication protocol over a network. The basic principles of service oriented architecture are independent of vendors, products and technologies.
+
+: (20) WHAT IS ACTUATOR IN SPRING BOOT ?																								:
+
+=>	Spring boot actuator is one of the important feature in spring boot framework. Spring boot actuator helps you to access the current state of the running application in production environment. There are several metrics that has to be checked and monitored in the production environment. Even some external applications may be using those services to trigger the alert message to concerned person. Actuator module exposes set of REST endpoints that can be directly accessed as a HTTP URL to check the status.
+
+: (21) HOW TO RUN SPRING BOOT APPLICATION IN CUSTOM PORT ?																				:
+
+=>	In order to run a spring boot application on a custom port you can specify the port in application.properties/yml file.
+
+	server.port=8090
+
+: (22) WHAT IS YAML	?																													:
+
+=>	YAML is a human-readable data serialization language. It is commonly used for configuration files.
+	YAML file is much more structured and less confusing in case we want to add complex properties in the configuration file. As can be seen YAML has hierarchical configuration data.
+	
+	Alternative to .properties files
+	Java parser for YAML is called SnakeYAML
+	– Must be in the classpath
+	– Provided by spring-boot-starters
+
+	REFERENCE : http://www.javainuse.com/spring/bootyaml
+
+: (23) HOW TO IMPLEMENT SECURITY FOR SPRING BOOT APPLICATION ?																			:
+
+=>	Implementing security in Spring Boot application using following dependency :
+
+	compile('org.springframework.boot:spring-boot-starter-security')
+	
+	And have to add the Security config. It requires very little code. Config class will have to extend WebSecurityConfigurerAdapter and override its methods.
+	
+	REFERENCE : http://www.javainuse.com/spring/sprboot_sec
+	
+: (24) WHAT IS NETFLIX EUREKA ?																											:
+
+=>	Eureka is a REST based service that is primarily used in the AWS cloud for locating services for the purpose of load balancing and failover of middle-tier servers.
+
+: (25) HOW TO CONFIGURE EUREKA SERVER IN SPRING BOOT APPLICATION ?																		:
+
+=>	A)	Create a Spring Boot web application add following dependencies in build.gradle file
+		-----------------------------------------------------------------------------------------------------	
+			dependencies {
+				compile('org.springframework.cloud:spring-cloud-starter-eureka-server')
+				testCompile('org.springframework.boot:spring-boot-starter-test')
+			}
+		-----------------------------------------------------------------------------------------------------
+		
+	B)	Now @EnableEurekaServer using following annoation in @SpringBootApplication main 
+	
+		@EnableEurekaServer
+	
+	C)	Specify the port on which the eureka application will get started.
+	
+		server.port=8090			<= In application.properties file delault port is => 8761
+		
+	D)	Now Run by using this following url : http://localhost:8090/
+
+: (26) HOW REGISTER MICROSERVICES IN EUREKA SERVER ?																					:
+
+=>	A)	Create a Spring Boot web application add following dependencies in build.gradle file		
+		-------------------------------------------------------------------------------------------------------
+			dependencies {
+				compile('org.springframework.cloud:spring-cloud-starter-eureka')
+				compile('org.springframework.boot:spring-boot-starter-web')
+				testCompile('org.springframework.boot:spring-boot-starter-test')
+			}
+		-------------------------------------------------------------------------------------------------------
+		
+	B)	Now @EnableDiscoveryClient using following annoation in @SpringBootApplication main 
+			
+		@EnableDiscoveryClient
+		
+	C)	Update application.properties to specify the url, where the Eureka server is running.
+	
+		eureka.client.serviceUrl.defaultZone=http://localhost:8090/eureka
+		
+		spring.application.name=employee-producer							<= Give an application name
+		
+	E)	Now start eureka-server and employee-producer microservice. Then check Eureka Server url :	http://localhost:8090/
+	
+: (27) HOW TO COMMUNICATE TWO MICROSERVICES THROUGH EUREKA SERVER ? 																	:
+
+=> Communicate Producer microservice with consumer microservices through eureka server by following steps :
+
+	A) Add @EnableDiscoveryClient in @SpringBootApplication Application main Class.
+
+	B) Update the Consumer microservice, Create DiscoveryClient in Consumer controller class Like :
+
+		@Autowired
+		private DiscoveryClient discoveryClient;
+			
+	C)	Access resource URI through Eureka instance[Producer] Like :
+		--------------------------------------------------------------------------------------------------------
+			List<ServiceInstance> instances=discoveryClient.getInstances("employee-producer");
+			ServiceInstance serviceInstance=instances.get(0);
+			
+			String baseUrl=serviceInstance.getUri().toString();
+			
+			baseUrl=baseUrl+"/getEmployee";
+		--------------------------------------------------------------------------------------------------------
+		
+	D)	Modify the application.properties to include the eureka server url and specify application name:
+		--------------------------------------------------------------------------------------------------------
+			server.port=8091
+			eureka.client.serviceUrl.defaultZone=http://localhost:8090/eureka
+			spring.application.name=employee-consumer		
+		--------------------------------------------------------------------------------------------------------			
+	E)	Now run and access eureka-server, employee-producer, employee-consumer.
+	
+: (28) WHAT ARE THE DIFFERENT BETWEEN  @EnableDiscoveryClient AND @EnableEurekaClient ?													:
+
+=>	There are multiple implementations of "Discovery Service" (eureka, consul, zookeeper). 
+	@EnableDiscoveryClient lives in spring-cloud-commons and picks the implementation on the classpath.  
+	@EnableEurekaClient lives in spring-cloud-netflix and only works for eureka. If eureka is on your classpath, they are effectively the same.
+	
+: (29) WHAT IS LOAD BALANCING AND WHY NEDDED FOR NETFLIX RIBBON ?																		:
+
+=>	In computing, load balancing improves the distribution of workloads across multiple computing resources, such as computers, 
+	a computer cluster, network links, central processing units, or disk drives. Load balancing aims to optimize resource use, maximize throughput,	
+	minimize response time, and avoid overload of any single resource. Using multiple components with load balancing instead of a single 	
+	may increase reliability and availability through redundancy. Load balancing usually involves dedicated software or hardware, 	
+	such as a multilayer switch or a Domain Name System server process.	
+	
+: (30) HOW TO CONFIGURE ROBBON WITH EUREKA SERVER IN SPRING CLOUD ?																		:
+
+=>	A)	Add the instance id  in employee-producer's application.properties file Like :
+	------------------------------------------------------------------------------------------------------------
+		spring.application.name=employee-producer
+		eureka.instance.instanceId=${spring.application.name}:${random.value}
+		eureka.client.serviceUrl.defaultZone=http://localhost:8090/eureka
+		server.port=8081
+	------------------------------------------------------------------------------------------------------------		
+	Now we need to start the employee-producer instance twice*. port[8080 and 8081]		<= For Test to Create multiple Instance	
+		
+	B) Now update employee-consumer microservice :
+
+		Add Spring Cloud Ribbon starter dependency	
+		------------------------------------------------------------------------------------------------------
+			compile('org.springframework.cloud:spring-cloud-starter-ribbon')
+		------------------------------------------------------------------------------------------------------
+	
+		Next modify the ConsumerControllerClient code :
+		-----------------------------------------------------------------------------------------------------
+			@Autowired
+			private LoadBalancerClient loadBalancer;		<= Previously we used DiscoveryClient bean, It replace with LoadBalancerClient Like :	
+			
+			public void getEmployee() throws RestClientException, IOException 
+			{
+				ServiceInstance serviceInstance=loadBalancer.choose("employee-producer");
+				String baseUrl=serviceInstance.getUri().toString();
+				
+				baseUrl=baseUrl+"/getEmployee";
+				..................................................................
+			}
+		-----------------------------------------------------------------------------------------------------
+		Now run and access eureka-server, employee-producer, employee-consumer.
+		
+: (31) WHAT IS NETFLIX HYSTRIX ? WHY NEED FOR IT ?																						:
+
+=>	Hystrix is a latency and fault tolerance library designed to isolate points of access to remote systems, services and 3rd party libraries, 
+	stop cascading failure and enable resilience in complex distributed systems where failure is inevitable.
+	
+	Usually for systems developed using Microservices architecture, there are many microservices involved. These microservices collaborate with each other.
+	
+	1)	Suppose we have 10 microservices and dependent one to another, if failed any one then using the traditional approach we will propagate an exception. But this will still cause the whole system to crash anyways.
+	
+	This problem gets more complex as the number of microservices increase. The number of microservices can be as high as 1000. This is where hystrix comes into picture-
+	
+	We will be using two features of Hystrix :
+	
+		I)	Fallback method
+		II)	Circuit Breaker
+		
+: (32) HOW TO CONFIGURE HYSTRIX IN SPRING CLOUD MICROSERVICES ?																			:
+
+=>	A) Create a producer microservice with following dependency :
+
+		compile('org.springframework.cloud:spring-cloud-starter-hystrix')
+		
+	B) Add @EnableCircuitBreaker annoation in @SpringBootApplication main class :
+	
+			@SpringBootApplication
+			@EnableCircuitBreaker
+			@EnableDiscoveryClient	
+			
+	C) Add the fallback method in Rest services :	
+	--------------------------------------------------------------------------------------------------
+			@RequestMapping(value = "/employee", method = RequestMethod.GET)
+			@HystrixCommand(fallbackMethod = "getDataFallBack")
+			public Employee firstPage() {			
+				....................................................				
+				
+				if(emp.getName().equalsIgnoreCase("Rajib Garai"))
+					throw new RuntimeException();
+			}			
+			public Employee getDataFallBack() 
+			{
+				Employee emp = new Employee();
+				emp.setName("fallback-emp1");
+				emp.setSalary(3000);
+				return emp;
+			}
+	--------------------------------------------------------------------------------------------------
+	Now start the Eureka server, employee-producer, employee-consumer microservice. 
+	
+: (33) HOW TO CONFIGURE HYSTRIX DASHBOARD WITH TURBINE IN SPRING CLOUD ? 																:
+
+=> 	A) Create a Seperated microservices for implement Hystrix Dsahboard to access all microservice's fallback method status :
+	
+		compile('org.springframework.cloud:spring-cloud-starter-hystrix')
+		compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
+		compile('org.springframework.cloud:spring-cloud-starter-turbine')
+		
+	B) Add following Annotation in @SpringApplication main() Class
+		
+		@EnableTurbine
+		@EnableHystrixDashboard
+		
+	C) Add some external properties in rest service fallback method for all microservices. Like :	
+	---------------------------------------------------------------------------------------------------------
+		@RequestMapping(value = "/getEmployees", method = RequestMethod.GET)
+		@HystrixCommand(fallbackMethod = "getDataFallBack", commandProperties={
+				@HystrixProperty(name="circuitBreaker.sleepWindowInMillisecond", value="60000"),
+				@HystrixProperty(name="circuitBreaker.errorThresholdPercentage", value="5")})
+		public Employee firstPage() 
+		{
+			...................
+		}
+	---------------------------------------------------------------------------------------------------------
+	D) Now Update application.properties file and Run all Microservices :
+	---------------------------------------------------------------------------------------------------------
+		server.port=8093
+		eureka.client.serviceUrl.defaultZone=http://localhost:8090/eureka
+		spring.application.name=turbine.stream
+		turbine.app-config=employee-update,employee-query,employee-consumer
+		turbine.cluster-name-expression=new String("default")
+	---------------------------------------------------------------------------------------------------------
+	E) http://localhost:8093/hystrix.stream		<= Show Hystrix Stream means callback feetback info
+		
+		http://localhost:8093/hystrix			<= Open Hystrix Dashboard and Enter this URI in tab => http://localhost:8093/hystrix.stream
+
+: (34) HOW WORKS CONFIGURATION SERVER ?																									:
+
+=>	Spring-Cloud provides a centralized configuration server that microservices can use for loading up their properties. 
+	Typically microservices may want to go one of two ways:
+	
+	1)	Use Eureka as a hub and find the configuration services	
+	2)	Use Configuration services and find Eureka
+	
+	I personally prefer the Eureka first approach, in this sample Configuration server registers itself with Eureka and when microservices come up they first check with Eureka, find the Configuration service and use the service to load up their properties.
+	
+: (35) HOW TO CONFIGURE CONFIG SERVER IN SPRING CLOUD ?																					:
+
+=> A) Create a spring cloud microservice with following dependency :
+
+		compile('org.springframework.cloud:spring-cloud-config-server')
+	
+	B) Update application.properties file to access source file from github/other server URI 
+	
+		spring.cloud.config.server.git.uri=https://github.com/JackBijar/employee-microservice-resources
+		
+	C) Used @EnableConfigServer in @SpringBootApplication main class.
+	
+	D) Now Create other microservices with following dependency :
+	
+		compile('org.springframework.cloud:spring-cloud-starter-config')
+		
+	Now Run Eureka server, config-server and employee-producer/employee-consumer.
+	
+: (36) WHAT IS ZUUL ?																													:
+
+=>	Zuul is the front door(Gateway Service) for all requests from devices and web sites to the backend of the Netflix streaming application.
+	As an edge service application, Zuul is built to enable dynamic routing, monitoring, resiliency and security.
+	
+	The Zuul API Gateway is part of the Netflix OSS package. It is very lightweight and integrates well with Eureka. API Gateway is the single entry point into the microservice ecosystem from the outside world.
+		
+: (37) WHAT ARE THE MAIN FEATURES OF ZUUL ?																								:
+
+=>	Zuul features are as follows :
+	
+		1)	Provides a unified access to multiple different microservices
+		2)	Hides internal details of the microservice ecosystem
+		3)	Load balances across multiple service instances
+		4)	Allowes access to services
+		5)	Restricts access to internal only services
+		6)	Looks up services from Eureka
+		7)	Implements filters for authentication or logging purposes
+		
+: (38) HOW TO CONFIGURE ZUUL SERVER ? 																									:
+
+=> Configure Zuul API Gateway as follows :
+
+	A) Create a Spring Boot Microservice with following dependency :
+	
+		compile('org.springframework.cloud:spring-cloud-starter-zuul')
+		
+	B) Update application.properties file :
+	-------------------------------------------------------------------------------------------------
+		zuul.routes.employee-query.path=/employee-query/**
+		zuul.routes.employee-query.serviceId=employee-query  
+		zuul.routes.employee-consumer.path=/employee-consumer/**
+		zuul.routes.employee-consumer.serviceId=employee-consumer
+		
+		eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka
+		eureka.client.serviceUrl.registerWithEureka=false
+		ribbon.eureka.enabled=true 
+	-------------------------------------------------------------------------------------------------
+	Now start the Eureka server, employee-producer, employee-consumer and zuul server. 
+	
+: (39) WHAT IS FEIGN ?																													:
+
+=>  Feign is a java to http client binder inspired by Retrofit, JAXRS-2.0, and WebSocket. 
+	Feign's first goal was reducing the complexity of binding Denominator uniformly to http apis regardless of restfulness. Previous examples in the employee-consumer we consumed the REST services exposed by the employee-producer using REST Template.
+	
+		I)	For Load balancing using Ribbon.
+		II)	Getting the Service instance and then the Base URL.
+		III) Make use of the REST Template for consuming service.
+		
+	If we not use feign then we get many chances of exceptions like NullPointer and is not optimal. We will see how the call is made much easier and cleaner using Netflix Feign. If the Netflix Ribbon dependency is also in the classpath, then Feign also takes care of load balancing by default.
+	
+: (40) HOW TO CONFIGURE FEIGN CLIENT IN SPRING CLOUD MICROSERVICES 																		:
+
+=> A) Create a microservice with following dependency :
+
+		compile('org.springframework.cloud:spring-cloud-starter-feign')
+		
+	B) Crerate a Interface and write down rest service, which will handle by feign client Like :
+	---------------------------------------------------------------------------------------------
+		@FeignClient(name="employee-producer")
+		public interface RemoteCallService
+		{
+			@RequestMapping(method=RequestMethod.GET, value="/getEmployees")
+			public Employee getEmployee();
+		}
+	---------------------------------------------------------------------------------------------
+	C) Now declare @Bean Class in @SpringBootApplication main class and Call from controller Like :
+	
+		@Autowired
+		private RemoteCallService remoteCallService;
+		
+		remoteCallService.getEmployee();
+		
+	D) Now Run Eureka server, employee-producer and employee-consumer microservices.		
+	
+: (41) 	WHAT IS ACTIVEMQ IN SPRING BOOT ?																								:
+
+=>	Apache ActiveMQ is an open source message broker written in Java together with a full Java Message Service (JMS) client. 
+	It provides "Enterprise Features" which in this case means fostering the communication from more than one client or server.
+
+	Integrating Spring Boot and ActiveMQ to requires very little configuration and no boilerplate code with following dependency 
+	
+	compile('org.springframework.boot:spring-boot-starter-activemq')
+	
+	REFERENCE : http://www.javainuse.com/spring/sprboot_activemq
+	
+: (42)	WHAT IS APACHE KAFKA IN SPRING BOOT APPLICATION ?																				:
+
+=>	Apache Kafka is an open-source stream processing platform developed by the Apache Software Foundation written in Scala and Java. 
+	The project aims to provide a unified, high-throughput, low-latency platform for handling real-time data feeds.
+
+	Integrate Apache Kafka with spring boot application using following dependency :
+	
+	compile('org.springframework.kafka:spring-kafka')
+	
+	REFERENCE : http://www.javainuse.com/spring/spring-boot-apache-kafka-hello-world
+
+: (43) HOW TO IMPLEMENT PAGINATION AND SORTING WITH SPRING BOOT ?																		:
+
+=>	Using Spring Boot achieving pagination is very simple. Using the Spring Data-JPA this is achieved passing pageable org.springframework.data.domain.Pageable to the repository methods.
+
+	REFERENCE : http://www.javainuse.com/spring/SpringBootUsingPagination
+
+: (44)	WHAT IS SWAGGER ?																												:
+
+=>	Swagger is the most popular tool for designing, building and documenting RESTful APIs. It has nice integration with Spring Boot.
+
+	The goal of Swagger™ is to define a standard, language-agnostic interface to REST APIs which allows both humans and computers to discover and understand the capabilities of the service without access to source code, documentation, or through network traffic inspection.	
+	
+	springfox-swagger2
+	springfox-swagger-ui
+
+: (45)	WHAT ARE THE CHANGES TO INTEGRATE SWAGGER IN A SPRING BOOT APPLICATION ?														:
+
+=>	Configure Swagger in Spring Boot Application :
+
+	STEP-1 : Create a web application with Rest Services and add following two dependencies :
+	
+		compile('io.springfox:springfox-swagger2:2.7.0')
+		compile('io.springfox:springfox-swagger-ui:2.7.0')
+
+	STEP-2 : Now Create a SwaggerConfig Class and enable Swagger2 useing following annotation 
+		
+				@Configuration and
+				@EnableSwagger2	
+				
+	STEP-3 : Sample Configuration Class :
+	------------------------------------------------------------------------------------------------------------
+		@Configuration
+		@EnableSwagger2
+		public class SwaggerConfig 
+		{
+			@Bean
+			public Docket postsApi() 
+			{
+				return new Docket(DocumentationType.SWAGGER_2).groupName("public-api")
+						.apiInfo(apiInfo()).select().paths(postPaths()).build();
+			}
+			
+			private Predicate<String> postPaths() {
+				return or(regex("/department/getDepartments.*"), regex("/department/getDepartment.*"));
+			}
+
+			private ApiInfo apiInfo() 
+			{
+				return new ApiInfoBuilder().title("Spring Cloud Microservice")
+						.description("Spring Cloud Service with Swagger Configuration")
+						.termsOfServiceUrl("http://javainuse.com")
+						.contact("jack.bijar@gmail.com").license("Casual Critivity License")
+						.licenseUrl("jack.bijar@gmail.com").version("1.0").build();
+			}
+		}
+	--------------------------------------------------------------------------------------------------------------
+	
+	REFERENCE : http://www.javainuse.com/spring/boot_swagger
+	
+: (46) WHAT IS THE URI TO GET SWAGGER USER INTERFACE IN A SPRING BOOT APPLICATION ?														:
+
+=>	If Application port number is 8080 then URI is as followes :
+
+	http://localhost:8080/swagger-ui.html
+
+: (47)	HOW TO REGISTER MULTIPLE MICROSERVICES IN SINGLE SWAGGER USER INTERFACE ?														:
+
+=>	Configure microservices which you want to register in swagger ui by following steps :
+
+	1) Add @EnableSwagger2 annotation in @SpringBootApplication main class and add minimal no of code changes :	
+	--------------------------------------------------------------------------------------------------------
+		@Bean
+		public AlwaysSampler defaultSampler() {
+			return new AlwaysSampler();
+		}
+		
+		@Bean
+		public Docket api() throws IOException, XmlPullParserException {
+			return new Docket(DocumentationType.SWAGGER_2)  
+			  .select() 
+			  .apis(RequestHandlerSelectors.basePackage("com.spring.cloud.query.employee.controller"))
+			  .paths(PathSelectors.any())                          
+			  .build().apiInfo(apiInfo());                                           
+		}
+		
+		private ApiInfo apiInfo() 
+		{
+			return new ApiInfoBuilder().title("Spring Cloud Employee Microservices")
+					.description("Spring Cloud Employee Microservices with Swagger Configuration")
+					.termsOfServiceUrl("http://www.casualcritivity.com")
+					.contact("jack.bijar@gmail.com").license("Casual Critivity License")
+					.licenseUrl("jack.bijar@gmail.com").version("1.0").build();
+		}
+	--------------------------------------------------------------------------------------------------------
+	
+	2) You can Interest to API documentation in perticular rest services by using following annotation :
+
+	@ApiOperation(value = "View a list of available employees",response = List.class)
+	
+	3)	Now Create/Update gateway microservice :
+
+		a) Add @EnableSwagger2 annotation in @SpringBootApplication main class
+		
+		b) Create a Class and Implement SwaggerResourcesProvider then override following methods :
+		-----------------------------------------------------------------------------------------------------
+			@Component
+			@Primary
+			@EnableAutoConfiguration
+			public class SwaggerController implements SwaggerResourcesProvider
+			{
+				@Override
+				public List<SwaggerResource> get() {
+					List<SwaggerResource> resources = new ArrayList<>();
+					resources.add(swaggerResource("employee-update", "/employee-update/v2/api-docs", "2.0"));
+					resources.add(swaggerResource("employee-query", "/employee-query/v2/api-docs", "2.0"));
+					resources.add(swaggerResource("employee-consumer", "/employee-consumer/v2/api-docs", "2.0"));					
+					return resources;
+				}
+
+				private SwaggerResource swaggerResource(String name, String location, String version) {
+					SwaggerResource swaggerResource = new SwaggerResource();
+					swaggerResource.setName(name);
+					swaggerResource.setLocation(location);
+					swaggerResource.setSwaggerVersion(version);
+					return swaggerResource;
+				}
+			}
+		-----------------------------------------------------------------------------------------------------
+	4)	Upgrade application.properties file :
+		
+		zuul.routes.employee-update.path=/employee-update/**
+		zuul.routes.employee-update.serviceId=employee-update  
+
+		zuul.routes.employee-query.path=/employee-query/**
+		zuul.routes.employee-query.serviceId=employee-query  
+
+		zuul.routes.employee-consumer.path=/employee-consumer/**
+		zuul.routes.employee-consumer.serviceId=employee-consumer
+
+: (48)	WHAT IS SPRING BOOT BATCH ?																										:
+
+=>	Spring Boot Batch provides reusable functions that are essential in processing large volumes of records, including logging/tracing, transaction management, job processing statistics, job restart, skip, and resource management. It also provides more advanced technical services and features that will enable extremely high-volume and high performance batch jobs though optimization and partitioning techniques.Simple as well as complex, high-volume batch jobs can leverage the framework in a highly scalable manner to process significant volumes of information. 
+
+	REFERENCE : http://www.javainuse.com/spring/bootbatch
+
+: (49) WHAT IS FREEMARKER IN SPRING BOOT APPLICATION ?																					:
+
+=>	FreeMarker is a free Java-based Template Engine, originally focusing on dynamic web page generation with MVC software architecture. However, it is a general purpose template engine, with no dependency on servlets or HTTP or HTML, and is thus often used for generating source code, configuration files or e-mails.
+
+Spring Boot automatically configures FreeMarker when it finds the dependency in the Maven POM file OR Gradle build.gradle file.
+
+	REFERENCE : http://www.javainuse.com/spring/spring-boot-freemarker-hello-world
+
+: (50) HOW TO CONFIGURE SPRING DATA JPA IN SPRING BOOT ?																				:
+
+=>	1) Create a web application with following dependencies :
+	------------------------------------------------------------------------------------------
+		compile('org.springframework.boot:spring-boot-starter-data-jpa')
+		compile('org.springframework.boot:spring-boot-starter-web')
+		runtime('mysql:mysql-connector-java')
+	------------------------------------------------------------------------------------------
+	
+	2) Update application.properties file :
+	------------------------------------------------------------------------------------------
+		spring.datasource.driverClassName = com.mysql.jdbc.Driver
+		spring.datasource.url = jdbc:mysql://localhost:3306/db_name
+		spring.datasource.username = root
+		spring.datasource.password = root
+		spring.jpa.database-platform = org.hibernate.dialect.MySQL5Dialect
+		spring.jpa.show-sql = true
+		spring.jpa.hibernate.ddl-auto = update
+	------------------------------------------------------------------------------------------
+	
+	3) Create an Interface and extends CrudRepository Like :
+	------------------------------------------------------------------------------------------
+		public interface EmployeeRepository extends	CrudRepository<Employee, Long>
+		{
+			public Employee findByEmail(String email);
+		}
+	------------------------------------------------------------------------------------------
+	
+	4) Now Create ServiceImpl Class :	
+	------------------------------------------------------------------------------------------
+		public class EmployeeServiceImpl implements EmployeeService 
+		{
+			@Autowired
+			private EmployeeRepository employeeRepository;
+		
+			@Override
+			public Employee getEmployeeByEmail(String email)
+			{		
+				return employeeRepository.findByEmail(email);
+			}
+		}		
+	------------------------------------------------------------------------------------------
+
+: (51)	WHAT IS APACHE KAFKA ?																										:
+
+=>	Apache Kafka is a distributed publish-subscribe messaging system. It is a scalable, fault-tolerant, publish-subscribe messaging system which enables us to build distributed applications. It is an Apache Top Level project. Kafka is suitable for both offline and online message consumption.
+
+	Following dependency is used to integrate apache kafka :
+	
+		compile('org.springframework.kafka:spring-kafka')
+
+	REFERENCE : http://www.javainuse.com/spring/spring-boot-apache-kafka-hello-world
+	
+: (52) WHAT IS CONSULE IN SPRING BOOT ?																								:
+
+=>	Spring Cloud Consul provides Consul integrations for Spring Boot apps through autoconfiguration and binding to the Spring Environment and other Spring programming model idioms. With a few simple annotations you can quickly enable and configure the common patterns inside your application and build large distributed systems with Hashicorp's Consul. The patterns provided include Service Discovery, Distributed Configuration and Control Bus.
+
+: (53) WHAT ARE THE SPRING CLOUD CONSULE FEATURES ?																					:
+
+=>	Spring Cloud Consul features are as follows :
+
+		Service Discovery: instances can be registered with the Consul agent and clients can discover the instances using Spring-managed beans
+		
+		Supports Ribbon, the client side load-balancer via Spring Cloud Netflix
+		
+		Supports Zuul, a dynamic router and filter via Spring Cloud Netflix
+		
+		Distributed Configuration: using the Consul Key/Value store
+		
+		Control Bus: Distributed control events using Consul Events
+		
+: (54) WHAT IS SPRING CLOUD FOUNDRY ?																								:
+
+=>	Cloud Foundry is an open-source platform as a service (PaaS) that provides you with a choice of clouds, developer frameworks, and application services. It is open source and it is governed by the Cloud Foundry Foundation. The original Cloud Foundry was developed by VMware and currently it is managed by Pivotal, a joint venture company by GE, EMC and VMware.
+
+	Now a days Cloud Computing and Microservice have become very popular concept and almost all the organizations are investing and adapting it very fast. Currently there are only few popular cloud providers in the market and Cloud Foundry is one of them. It is a PaaS service where we can easily deploy and manage our applications and the Cloud Foundry will take care of the rest of the cloud based offerings like scalability, high availability etc.
+
+	Now since Cloud Foundry is open source product many popular organizations currently provides this platform separately and below are the list of current certified providers	:
+	
+		Pivotal Cloud Foundry
+		IBM Bluemix
+		
+: (55) WHAT IS SPRING CLOUD SLEUTH ?																								:
+
+=>	Spring Cloud Sleuth implements a distributed tracing solution for Spring Cloud, borrowing heavily from Dapper, Zipkin and HTrace. For most users Sleuth should be invisible, and all your interactions with external systems should be instrumented automatically. You can capture data simply in logs, or by sending it to a remote collector service.
+
+	Spring Cloud Sleuth adds two types of IDs to your logging :
+	
+	1) Trace ID : The span ID represents a basic unit of work, for example sending an HTTP request.
+	
+	2) Span ID : The trace ID contains a set of span IDs, forming a tree-like structure.
+
+	  The trace ID will remain the same as one microservice calls the next.
+	
+: (56) HOW TO CONFIGURE SPRING CLOUD SLEUTH ?																						:
+
+=>	A) Create a Spring Cloud Microservice with Sleuth using following dependency :
+
+		compile('org.springframework.cloud:spring-cloud-starter-sleuth')
+		
+	B) Create a Class with Logger info :
+	-----------------------------------------------------------------------------------------------
+		@RestController
+		@RequestMapping(value="/")
+		public class EmployeeProducer 
+		{
+			private static final Logger LOGGER = Logger.getLogger(EmployeeProducer.class);
+			
+			@GetMapping(value="getEmployee/{empId}")
+			public Employee getEmployee(@PathVariable("empId") long empId )
+			{
+				Employee employee = new Employee();
+				
+				LOGGER.info(employee.toString());
+				
+				employee.setEmpId(empId);
+				employee.setName("Rajib Garai");
+				employee.setMobile("9563359659");
+				
+				return employee;
+			}
+		}
+	-----------------------------------------------------------------------------------------------
+	Hit this URL to get the following output => http://localhost:8080/getEmployee/7
+	
+	2017-08-18 20:17:40.891  INFO [Spring-Cloud-Sleuth,c4cd7245c3905087,c4cd7245c3905087,false] 4808 --- [nio-8080-exec-4] c.s.c.s.controller.EmployeeProducer      : Employee [empId=7, name=Rajib Garai, mobile=9563359659]
+	
+: (57) WHAT IS ELK ?																												:
+
+=>	ELK stands for Elasticsearch, Logstash and Kibana, which was once separate, joined together to give users the ability to run log analysis on top of open sourced software that everyone can run for free.
+
+	Elasticsearch : This is the search and analysis system. It is the place where your data is finally stored, from where it is fetched, and is responsible for providing all the search and analysis results.
+
+	Logstash : Which is in the front, is responsible for giving structure to your data (like parsing unstructured logs) and sending it to Elasticsearch.
+
+	Kibana : This is allows you to build pretty graphs and dashboards to help understand the data so you don’t have to work with the raw data Elasticsearch returns.
+	
+: (58) WHAT IS ZIPKIN ?																												:
+
+=>	Zipkin is a distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in microservice architectures. 
+	It manages both the collection and lookup of this data. Zipkin's design is based on the Google Dapper paper.
+	
+: (59) HOW TO CONFIGURE ZIPKIN SERVER IN SPRING CLOUD ? 																			:
+
+=> 	A)Create a Microservice for Zipkin Server with following dependencies :
+
+		runtime('io.zipkin.java:zipkin-autoconfigure-ui')
+		compile('io.zipkin.java:zipkin-server')
+		
+	B)	Update application.properities file by following this info :
+	
+			server.port=9411
+			spring.application.name=Zipkin-Server
+			
+	C)	Then add following annotation in @SpringBootApplication Main Class :
+	
+			@EnableZipkinServer 
+	
+	D) Create Other microservices with following dependency :
+	
+		compile('org.springframework.cloud:spring-cloud-starter-zipkin')
+		
+	E)	Now Run all microservices and show Dashboard from this URI => http://localhost:9411/zipkin/
+	
+: (60)	HOW CAN YOU OVERRIED DEFAULT PROPERIES IN SPRING BOOT PROJECT ?																:
+
+=>	Spring boot provides a lot of properties which can be overridden by specifying them in application.properties.
+
+	For example: You want to specify prefix and suffix in Spring MVC applications. 
+	You can simply do it by putting below properties in application.properties.
+
+	spring.mvc.view.prefix: /WEB-INF/
+	spring.mvc.view.suffix: .jsp
+
+: (61)	WHAT IS SPRING PROFILE ? HOW DO YOU IMPLEMENT IT USING SPRING BOOT ?														:
+
+=>	Spring Profiles allows users to register beans depending on the profile(dev, test, prod etc). So when the application is running in DEVELOPMENT only certain beans can be loaded and when in PRODUCTION certain other beans can be loaded. Suppose our requirement is that the Swagger documentation be enabled only for the QA environment and disabled for all others. This can be done using Profiles. Spring Boot makes using Profiles very easy. 
+
+	REFERENCE : http://www.javainuse.com/spring/boot_swagger_profile
+	
+: (62) 																																:
+
+=>
+
+: (63) 		:
+
+=>
+
+: (64) 		:
+
+=>
+
+: (65) 		:
+
+=>
+
+: (66) 		:
+
+=>
+
+
+: (67) 		:
+
+=>
+
+: (68) 		:
+
+=>
+
+: (69) 		:
+
+=>
+
+: (70) 		:
+
+=>
+
+
+
+
+

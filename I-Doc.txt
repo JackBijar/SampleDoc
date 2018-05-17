@@ -1,0 +1,378 @@
+:																			I-Doc																:
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+:	super() in Java :
+
+=> It refer immediate parent class object.
+	
+	super can be used to refer immediate parent class instance variable.
+	super can be used to invoke immediate parent class method.
+	super() can be used to invoke immediate parent class constructor.
+	
+:	instanceof	:
+
+=>	The instanceof in java is also known as type comparison operator because it compares the instance with type. It returns either true or false. If we apply the instanceof operator with any variable that has null value, it returns false.
+
+	Simple1 s=new Simple1();  
+	System.out.println(s instanceof Simple1);	//	Output => true  
+
+:	What :
+
+=>	
+
+------------------------------------------------------------------------------------------------------------------------------------
+:	Collection Framework 																:
+
+ARRAY :
+
+=> Advatanges of Array : The main advantages of arrays is we can represent multiple values with a single variable.
+
+Student studentArray[] = new Student[1000];		<= 1) Fixed Size of Array and Memory wastage
+2) It Hold Homogeneous Data
+3) there is No underlaying datastructure thats why redemate method are not available [Like Shorting, Searching].
+
+4) It holds primitives and Object Data
+
+Object obj[] = new Object[1000];
+ 
+obj[0] = new Student();
+obj[1] = new Customer();
+
+:	When used array ?	:
+
+=> If you know the size in advance, then you must be used Array.
+
+COLLECTION :
+
+1) Growable in nature, Base on our requriment we can increase or decrease the size.
+2) Homogeneous & Heterogeneous
+3) It implements Standard Data Structure.
+
+: Disadvantage :
+
+1) It Only can hold Object.
+2) Perfomance wise Collection is not top to the markect.
+
+create a ArrayList then assign some values many times create a new arraylist and Copy those values new arraylist and old array list deleted by garbage collector.
+
+
+:	Different between Collection and Collections :
+
+Collection is an interface which can be used to represent a group of individual objects as a single entity.
+
+Collections is an utility class present in java.util package to define several utility methods (Like sorting, Searching) for Collection objects. Example :
+
+ArrayList<Integer> al = new new ArrayList<>();
+
+Collections.sort(al);
+
+:	List :
+
+=> List is the Child interface of Collection.
+
+List Interface : If we want to represent a group of individual object as a single entity where duplicates are allowed and insertion order preserved then we should go for List.
+
+implements Class :
+
+Collection -> List -> ArrayList
+Collection -> List -> LinkList
+Collection -> List -> Vector -> Stack [Legasy Class]
+
+:	Set :
+
+=> It is the Child interface of Collection.
+
+Set Interface : If we want to represent a group of individual object as a single entity where duplicates are not allowed and insertion order not preserved then we should go for Set.
+
+implements Class :
+
+Collection -> Set -> HashSet -> LinkedHashSet
+
+Collection -> Set -> SortedSet[I] -> NavigableSet[I] -> TreeSet [C]
+
+SortedSet Inteface : If we want to represent a group of individual object as a single entity where duplicates are not allowed but all the objects are inserted according to some sorted order then we should go for SortedSet.
+
+Navigable Set :
+
+
+:	Quebe 	:
+
+=> It is the Child interface of Collection.
+
+If we want to represent a group of individual objects prior processing then we should go for Quebe. follo FIFO method.
+
+Collection -> Set -> Quebe[I] -> PriorityQuebe
+Collection -> Set -> Quebe[I] -> BlockingQuebe -> LinkedBlockingQuebe
+Collection -> Set -> Quebe[I] -> BlockingQuebe -> PriorityBlockingQuebe
+
+[]
+
+:	List Vs Set :
+
+=> 
+
+:	Map :
+
+=> Map is not of the Collection :
+
+	If we want to represent a group of Obects as key value pairs then we should go for Map Interface.
+
+Map -> SortedMap [I] -> NavigableMap [I] -> TreeMap [C]
+
+
+SortedMap : f we want to represent a group of Obects as key value pairs according to some sorting order of keys then we should go for SortedMap Interface.
+
+NavigableMap :
+
+
+
+	
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+: SPRING	LOG File :
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+private static final Logger LOGGER = LoggerFactory.getLogger(AccountServiceImpl.class);
+
+:	Configure in application.properties :
+
+logging.path=logs		<= Autometically create a logs folder in project directory and create a file spring.log file.
+
+logging.level.org.org.org.springframework.aop=error		<= You can specify logger level for Spring core, web, aop etc.
+
+logging.file=logs/sb-aop.log					<= In Specifi Directory with File 
+
+logging.file.max-size=10						<= Set Max Log file Size
+
+
+Logging using logback			<= Create logback.xml file and Configure it.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+:	For Spring Development Model :
+-------------------------------------------------------------------------------------------------------------------------------------------
+spring-boot-devtools	<= is used for Development purpose. If any changes surver autometically restart.
+
+:	How to Create Custom Annotation ?	:
+
+=> You used Annotation in class, method and variable.
+
+Create a Annotation :
+------------------------------------------------------------
+@Interface SmartPhone
+{
+	String os() default "Symbian";
+	double version() default 1.0;
+}
+------------------------------------------------------------
+Use This Annotation
+------------------------------------------------------------
+@SmartPhone(os="", version=1.2)
+public class NokiaSeries
+{
+
+}
+------------------------------------------------------------
+
+: Annotation Type :
+
+1) Marker Annotation :
+
+@Interface SmartPhone
+{	
+}
+
+2) Single Value Annotation :
+
+@Interface SmartPhone
+{
+	String os() default "Symbian";
+}
+
+3) Multi value Annotation :
+
+@Interface SmartPhone
+{
+	String os() default "Symbian";
+	double version() default 1.0;
+}
+
+: Specify the Level of Annotation :
+
+@Target(ElementType.CONSTRUCTOR)
+@Target(ElementType.TYPE)			<= For Class/Interface Level
+@Target(ElementType.METHOD)
+@Target(ElementType.FIELD)
+
+
+@Retention(RetentionPolicy.RUNTIME)		<= Available Runtime 
+@Retention(RetentionPolicy.SOURCE)		<= It is available in class path source
+@Retention(RetentionPolicy.CLASS)		<= It is in .class file also
+
+
+@Inherited								<= It is also used in instance
+@Documented
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Interface SmartPhone
+{
+	String os() default "Symbian";
+	double version() default 1.0;
+}
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+:	How to used Spring Boot Profiles ? :
+
+=> Spring Boot Profiles is used to switch our application in different enviroment. 
+
+It is Used by using following way :
+
+1) Create a Spring Boot Application :
+
+2) Now Create a application-dev.properties in src/main/resources directory and configure application development enviroment configuration.
+
+3) Now Create a another file application-prod.properties in src/main/resources directory and configure application production enviroment configuration.
+
+4) Now You can active any profile dev/prod to specify this command in application.properties [parent] file like :
+
+spring.profiles.active=dev 
+spring.profiles.active=prod 
+
+================================================================================================================================================================
+
+1)
+:	How to configure spring restful web service ?						:
+
+=>
+	A) Create a Maven/Gradle Project from http://start.spring.io/ or using Eclipse Spring Boot Stater Pligun with following dependency
+	
+	<parent>  
+		<groupId>org.springframework.boot</groupId>  
+		<artifactId>spring-boot-starter-parent</artifactId>  
+		<version>2.0.0.BUILD-SNAPSHOT</version>  
+	</parent> 
+	
+	buildscript {
+		ext {
+			springBootVersion = '2.0.0.RELEASE'
+		}
+		repositories {
+			mavenCentral()
+		}
+		dependencies {
+			classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		}
+	}
+	
+	Child Dependencies : [Maven]
+	
+	<dependencies>  
+		<dependency>  
+			<groupId>org.springframework.boot</groupId>  
+			<artifactId>spring-boot-starter-web</artifactId>  
+		</dependency>  
+	</dependencies>
+	
+	dependencies {												<= In Gradle
+			compile('org.springframework.boot:spring-boot-starter-data-jpa')
+			compile('org.springframework.boot:spring-boot-starter-web')
+			compile('org.springframework.boot:spring-boot-devtools')
+			testCompile('org.springframework.boot:spring-boot-starter-test')
+		}
+		
+	
+
+	Change Java Version :
+	
+	<properties>  
+		<java.version>1.8</java.version>  
+	</properties>  
+	
+	sourceCompatibility = 1.8				<= 
+	
+	<packaging>war</packaging>  <= Maven
+	
+	apply plugin: 'war'			<= Gradle
+	
+	In Parent tag to specify Spring Boot Version to download releted to child dependencies.
+
+		
+	@SpringBootApplication 	<=	in Package org.springframework.boot.autoconfigure.SpringBootApplication
+	
+	This annotation in Package org.springframework.web.bind.annotation.*
+	
+	@RestController 		<= For Define Restful Controller
+	@RequestMapping 		<= To Specify Request URL routing information with HTTP Method and Hearde Information 
+	@RequestBody			<= Is used to binding request data with object. 
+	@ResponseBody			<= Is used to binding date and produce response
+	@PathVariable			<= Get passing value through URL.
+	@GetMapping				<= Received Http GET method
+	@PostMapping			<= Received Http POST Method
+	
+	
+	compile()				<= Load jar file in compile time
+	testCompile()			<= Load dependency in Compile time when Test is happends
+	
+	
+	application.prperties file :
+	
+	spring.social.facebook.app-id
+	spring.social.linkedin.app-id
+	
+
+2)
+:	:
+
+=>
+
+Key value formate with in Address table :
+
+address_id	user_id	 key_name 		values
+1			1			city		Kolkata
+2			1			country		India
+3			1			street		25/7/1
+4			1			pin			700090
+
+OR multple columns :
+
+
+
+
+
+
+
+XML Configure [S+H]
+
+Security Info [S+JWT+Auth 2]
+
+Hibernate Second level cache
+
+Join query in hibernate
+
+Embaded and Collection + Inherited
+
+S qury
+
+multithreding
+
+Thread life cycle
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

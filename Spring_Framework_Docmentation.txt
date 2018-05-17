@@ -1,0 +1,664 @@
+:																	:	SPRING DOCUMENTATIONS	:														:
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+:	What is xmlns ?																												
+
+=>	XML Namespaces - The xmlns Attribute. When using prefixes in XML, a namespace for the prefix must be defined. The namespace can be defined by an xmlns 
+	attribute in the start tag of an element. The namespace declaration has the following syntax. xmlns:prefix="URI".
+
+	Example : xmlns:beans="http://www.springframework.org/schema/beans"
+
+: 	Different between <context:annotation-config> and <mvc:annotation-driven />												
+
+=>	<context:annotation-config> :	It is declares support for general annotations such as @Required, @Autowired, @PostConstruct, and so on.
+
+=>	<mvc:annotation-driven />	:	It is declares explicit support for annotation-driven MVC controllers (i.e. @RequestMapping, @Controller, although support for
+									those is the default behaviour), as well as adding support for declrative validation via @Valid and message body marshalling 
+									with @RequestBody/@ResponseBody.
+									
+:	How to used @Autowired annotation in spring MVC ?																		
+
+=>	1) @Autowired annotation is used in any class, for implementation any interface.
+
+Example :
+
+			<bean id="adminService" class="com.mayabious.examsystem.service.AdminServiceImpl"></bean>
+			<bean id="adminDao" class="com.mayabious.examsystem.dao.AdminDaoImpl"></bean>
+
+	1.	In this case,  AdminServiceImpl is a implementation class of AdminService Interface.
+		Same as AdminDaoImpl is a implementation class of AdminDao Interface.
+	
+	2.	Now we can used 
+						@Autowired
+						AdminService adminService;						
+		in Controller Class and 
+		
+						@Autowired
+						AdminDao adminDao;
+		in AdminServiceImpl class.
+		
+:	What is listener in web.xml	?																							
+
+=>	SessionDestroyServlet : This servlet destroys an HTTP session. index.jsp : This is the application welcome page (the user interface), from which you can 
+	invoke SessionCreateServlet or SessionDestroyServlet . web.xml : This is the deployment descriptor, in which the servlets and listener class are declared.
+	
+:	What is @Autowired annotation ?																							
+
+=>	The @Autowired annotation provides more fine-grained control over where and how autowiring should be accomplished. The @Autowired annotation can be used 
+	to autowire bean on the setter method just like @Required annotation, constructor, a property or methods with arbitrary names and/or multiple arguments.
+		
+	Define In spring-config.xml :
+	-----------------------------------------------------------------------------------------------------------	
+		<bean id="adminService" class="com.mayabious.examsystem.service.AdminServiceImpl"></bean>
+	-----------------------------------------------------------------------------------------------------------	
+	
+	Use this service class any where Like : AdminController Class	
+	-----------------------------------------------------------------------------------------------------------	
+		import org.springframework.beans.factory.annotation.Autowired;
+		public class AdminController 
+		{
+			@Autowired
+			AdminService adminService;
+		}
+	-----------------------------------------------------------------------------------------------------------
+
+:	How to write alternative of @Autowired annotation ?																		
+
+=>	Step-1 : Create a bean id/object in spring-config.xml file and pass another object as reference LIKE :
+
+	-----------------------------------------------------------------------------------------------------------
+		<bean id="userDetailsServiceImpl" class="com.mayabious.springsecurity.service.UserDetailsServiceImpl">
+			<property name="userDao" ref="userDao" />
+		</bean>
+		OR
+		<bean id="userDao" class="com.mkyong.users.dao.UserDaoImpl">
+			<property name="sessionFactory" ref="sessionFactory" />
+		</bean>
+	-----------------------------------------------------------------------------------------------------------
+
+	Step-2 : Now Write setter() and getter() method of implemented class LIKE :
+
+	-----------------------------------------------------------------------------------------------------------
+		import com.mayabious.springsecurity.dao.UserDao;
+
+		public class UserDetailsServiceImpl implements UserDetailsService
+		{
+			private UserDao userDao;
+			
+			public UserDao getUserDao() {
+				return userDao;
+			}
+			public void setUserDao(UserDao userDao) {
+				this.userDao = userDao;
+			}
+		}
+	-----------------------------------------------------------------------------------------------------------
+	OR
+	-----------------------------------------------------------------------------------------------------------
+		import com.mayabious.springsecurity.dao.UserDao;
+		
+		public class UserDaoImpl implements UserDao 
+		{
+			private SessionFactory sessionFactory;
+			
+			public SessionFactory getSessionFactory() {
+				return sessionFactory;
+			}
+			public void setSessionFactory(SessionFactory sessionFactory) {
+				this.sessionFactory = sessionFactory;
+			}
+		}
+	-----------------------------------------------------------------------------------------------------------
+: Basic Annotation Configuration :																																
+
+=>	In Spring @Component, @Service, and @Controller. @Component are Stereotype annotations which is used for:
+
+	@Controller : 	Where your request mapping from presentation page done i.e. Presentation layer won't go to any other file it goes directly to @Controller 
+					class and check for requested path in @RequestMapping annotation which written before method calls if necessary.
+	
+	@Service : 	All business logic is here i.e. Data related calculations and all.This annotation of business layer in which our user not directly call 
+				persistence method so it will call this methods using this annotation. It will request @Repository as per user request.
+				
+	@Repository :	This is Persistence layer(Data Access Layer) of application which used to get data from database.
+					i.e. all the Database related operations are done by repository.		
+
+	@Component - Annotate your other components (for example REST resource classes) with component stereotype.
+	
+:	Are annotations better than XML for configuring Spring ?																									
+
+=>	The introduction of annotation-based configurations raised the question of whether this approach is 'better' than XML. The short answer is it depends. 
+	The long answer is that each approach has its pros and cons, and usually it is up to the developer to decide which strategy suits them better. 
+	Due to the way they are defined, annotations provide a lot of context in their declaration, leading to shorter and more concise configuration. 
+	However, XML excels at wiring up components without touching their source code or recompiling them. Some developers prefer having the wiring close to the 
+	source while others argue that annotated classes are no longer POJOs and, furthermore, that the configuration becomes decentralized and harder to control.
+
+	No matter the choice, Spring can accommodate both styles and even mix them together. It’s worth pointing out that through its JavaConfig option, 
+	Spring allows annotations to be used in a non-invasive way, without touching the target components source code and that in terms of tooling, 
+	all configuration styles are supported by the Spring Tool Suite.	
+	
+:	Spring Requried 2 Jars for JSP view :																														
+
+=>	
+	compile('javax.servlet:jstl')
+	providedRuntime('org.apache.tomcat.embed:tomcat-embed-jasper:8.0.36')
+	
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+:														SPRING CORE CONCEPT																					:
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+* Tomcat is Servlet Container : i.e Tomcat create Servlets Object which are requried to Run an Application.
+
+* Spring is a Container : It contains no of Beans/Objects, Spring Manages of these Object inside of container as well as outside of container.
+
+Object Factory create new Object of his on Configuration. Like :
+
+Object requried <= Bean Factory [Read => Spring XML Configuration and Create a Spring Bean object and send it]
+
+Object [In Main Class] <- [Create Object by] Bean Factory -> Spring XML [File]
+
+
+:	What is Bean Factory ? :
+
+=> 
+
+In XML Config :
+-----------------------------------------------------------------------------------
+	<?xml version="1.0" encoding="UTF-8" ?>
+	
+	<beans>
+		<bean id="triangle" class="com.mayabious.model.Triangle" />
+	</beans>
+-----------------------------------------------------------------------------------
+
+In Main Method : ['spring.xml' in project folder]
+-----------------------------------------------------------------------------------
+	import org.springframework.bean.factory.Beanfactory;
+
+	BeanFactory factory = new XmlBeanFactory(new FileSystemResource("spring.xml"));
+	Triangle triangle = (Triangle) factory.getBean("triangle");
+	triangle.draw();
+-----------------------------------------------------------------------------------
+	
+In Model Class :
+-----------------------------------------------------------------------------------
+class Triangle
+{
+	public void draw(){
+		System.out.println("Draw Triangle !");
+	}
+}
+-----------------------------------------------------------------------------------
+:	ApplicationContext	:
+
+=>	
+
+ApplicationContext with Property values :
+
+In XML Config :
+-----------------------------------------------------------------------------------
+	<?xml version="1.0" encoding="UTF-8" ?>
+	
+	<beans>
+		<bean id="triangle" class="com.mayabious.model.Triangle" >
+			<property name="type" value="Equilateral" />
+		</bean>
+	</beans>
+-----------------------------------------------------------------------------------	
+
+In Main Method : ["spring.xml" Copy in Class Path/Package]
+-----------------------------------------------------------------------------------
+	import org.springframework.bean.factory.Beanfactory;
+
+	ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+	Triangle triangle = (Triangle) context.getBean("triangle");
+	triangle.draw();
+-----------------------------------------------------------------------------------
+In Model Class :
+-----------------------------------------------------------------------------------
+class Triangle
+{
+	private String triangle;
+	
+	public void draw(){
+		System.out.println("Draw Triangle !"+triangle);
+	}
+	
+	/* triangle setter() getter() */
+}
+-----------------------------------------------------------------------------------	
+
+:  Constructor Injection :
+
+In XML Config :
+-----------------------------------------------------------------------------------
+	<?xml version="1.0" encoding="UTF-8" ?>
+	
+	<beans>
+	
+		<bean id="triangle" class="com.mayabious.model.Triangle" >
+			<constructor-arg value="Equilateral" />
+		</bean>
+		
+		<bean id="triangle1" class="com.mayabious.model.Triangle" >
+			<constructor-arg type="int" value="20" />
+		</bean>
+		
+		<bean id="triangle2" class="com.mayabious.model.Triangle" >
+			<constructor-arg value="Equilateral" />
+			<constructor-arg value="20" />
+		</bean>
+		
+		<bean id="triangle4" class="com.mayabious.model.Triangle" >
+			<constructor-arg index="0" value="Equilateral" />
+			<constructor-arg index="1" value="20" />
+		</bean>
+		
+	</beans>
+-----------------------------------------------------------------------------------	
+
+In Model Class :
+-----------------------------------------------------------------------------------
+class Triangle
+{
+	private String triangle;
+	private int hight;
+	
+	Triangle(String triangle)
+	{
+		this.triangle=triangle;	
+	}
+	
+	Triangle(int hight)
+	{
+		this.hight=hight;	
+	}
+	
+	Triangle(String triangle, int hight)
+	{
+		this.triangle = triangle;	
+		this.hight = hight;
+	}
+
+	public void draw() {
+		System.out.println("Draw Triangle !"+triangle);	
+	}
+}
+-----------------------------------------------------------------------------------	
+
+:	Injecting Objects	:
+
+=>
+
+Main class is same :
+
+Model Classes :
+-----------------------------------------------------------------------------------
+public class Point
+{
+	private int x;
+	private int y;
+	/* setter() getter() */
+}
+
+public class Triangle
+{
+	private Point pointA;
+	private Point pointB;
+	private Point pointC;
+	
+	/* setter() getter() */
+	
+	public void draw()
+	{
+		System.out.println("Point A : "+getPointA().getX()+" : "+getPointA().getY());
+		System.out.println("Point B : "+getPointB().getX()+" : "+getPointB().getY());
+		System.out.println("Point C : "+getPointC().getX()+" : "+getPointC().getY());
+	}
+}
+-----------------------------------------------------------------------------------
+
+In XML Config :
+-----------------------------------------------------------------------------------
+	<?xml version="1.0" encoding="UTF-8" ?>
+	
+	<beans>
+	
+		<bean id="triangle" class="com.mayabious.model.Triangle" >
+			<property name="pointA" ref="point1" />
+			<property name="pointB" ref="point2" />
+			<property name="pointC" ref="point3" />
+		</bean>
+		
+		<bean id="pointA" class="com.mayabious.model.Point" >
+			<property name="x" value="0" />
+			<property name="y" value="0" />
+		</bean>
+		
+		<bean id="pointB" class="com.mayabious.model.Point" >
+			<property name="x" value="-20" />
+			<property name="y" value="0" />
+		</bean>
+		
+		<bean id="pointC" class="com.mayabious.model.Point" >
+			<property name="x" value="20" />
+			<property name="y" value="0" />
+		</bean>	
+		
+	</beans>
+-----------------------------------------------------------------------------------	
+
+:	Inner Beans, Aliases and idref :
+
+=> 
+
+In XML Config Inner Beans :
+-----------------------------------------------------------------------------------
+	<?xml version="1.0" encoding="UTF-8" ?>
+	
+	<beans>
+	
+		<bean id="triangle" class="com.mayabious.model.Triangle" >
+		
+			<property name="pointA" ref="point1" />
+			
+			<property name="pointB">
+				<bean class="com.mayabious.model.Point" >
+					<property name="x" value="-20" />
+					<property name="y" value="0" />
+				</bean>
+			</property>
+			
+			<property name="pointC">
+				<bean id="pointC" class="com.mayabious.model.Point" >
+					<property name="x" value="20" />
+					<property name="y" value="0" />
+				</bean>
+			</property>
+			
+		</bean>
+		
+		<bean id="pointA" class="com.mayabious.model.Point" >
+			<property name="x" value="0" />
+			<property name="y" value="0" />
+		</bean>
+		
+	</beans>
+-----------------------------------------------------------------------------------	
+
+In XML Config Aliases :
+-----------------------------------------------------------------------------------	
+........
+
+<alias name="triangle" alias="triangle-alise" />
+-----------------------------------------------------------------------------------	
+
+In XML Config idref :
+-----------------------------------------------------------------------------------	
+<?xml version="1.0" encoding="UTF-8" ?>
+	
+	<beans>
+	
+		<bean id="triangle" class="com.mayabious.model.Triangle" >
+		
+			<property name="pointA">
+				<idref="point1" />
+			</property>	
+			
+		</bean>	
+		
+	</beans>
+-----------------------------------------------------------------------------------	
+
+:	Initializing Collections	:
+
+=>
+
+Model Classes :
+-----------------------------------------------------------------------------------
+public class Triangle
+{
+	private List<Point> points;
+	
+	/* setter() getter() */
+	
+	public void draw()
+	{
+		for(Point point: points)
+		{
+			System.out.println("Point A : "+point.getX()+" : "+point.getY());
+		}
+	}
+}
+-----------------------------------------------------------------------------------
+
+In XML Config :
+-----------------------------------------------------------------------------------
+	<?xml version="1.0" encoding="UTF-8" ?>
+	
+	<beans>
+	
+		<bean id="triangle" class="com.mayabious.model.Triangle" >
+			<property name="points">
+				<list>
+					<ref bean="point1" />
+					<ref bean="point2" />
+					<ref bean="point3" />
+				</list>
+			</property>
+		</bean>
+		
+		<bean id="pointA" class="com.mayabious.model.Point" >
+			<property name="x" value="0" />
+			<property name="y" value="0" />
+		</bean>
+		
+		<bean id="pointB" class="com.mayabious.model.Point" >
+			<property name="x" value="-20" />
+			<property name="y" value="0" />
+		</bean>
+		
+		<bean id="pointC" class="com.mayabious.model.Point" >
+			<property name="x" value="20" />
+			<property name="y" value="0" />
+		</bean>	
+		
+	</beans>
+-----------------------------------------------------------------------------------	
+
+In Main Method :
+-----------------------------------------------------------------------------------
+	import org.springframework.bean.factory.Beanfactory;
+
+	ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+	Triangle triangle = (Triangle) context.getBean("triangle");
+	triangle.draw();
+-----------------------------------------------------------------------------------
+
+:	Bean Autowiring		:
+
+* In case of Larger Application Avoide Autowiring to used explicit Bean creation.
+
+=> Three types of autowiring :
+
+	autowir="byName"
+	autowir="byType"
+	autowir="constructor"
+
+=> Here Matches bean id with Model Class reference. Like : In Triangle Class used Point references pointA, pointB, pointC.
+
+In XML Config :
+-----------------------------------------------------------------------------------
+	<?xml version="1.0" encoding="UTF-8" ?>
+	
+	<beans>
+	
+		<bean id="triangle" class="com.mayabious.model.Triangle" autowir="byName">
+			
+		</bean>
+		
+		<bean id="pointA" class="com.mayabious.model.Point" >
+			<property name="x" value="0" />
+			<property name="y" value="0" />
+		</bean>
+		
+		<bean id="pointB" class="com.mayabious.model.Point" >
+			<property name="x" value="-20" />
+			<property name="y" value="0" />
+		</bean>
+		
+		<bean id="pointC" class="com.mayabious.model.Point" >
+			<property name="x" value="20" />
+			<property name="y" value="0" />
+		</bean>	
+		
+	</beans>
+-----------------------------------------------------------------------------------	
+
+Model Class :
+-----------------------------------------------------------------------------------
+public class Triangle
+{
+	private Point pointA;
+	private Point pointB;
+	private Point pointC;
+	
+	/* setter() getter() */
+	
+	public void draw()
+	{
+		System.out.println("Point A : "+getPointA().getX()+" : "+getPointA().getY());
+		System.out.println("Point B : "+getPointB().getX()+" : "+getPointB().getY());
+		System.out.println("Point C : "+getPointC().getX()+" : "+getPointC().getY());
+	}
+}
+-----------------------------------------------------------------------------------
+
+:	Bean Scopes	:
+
+=>	
+
+Singletone - Only once per Spring Container.
+Prototype - New bean created with request or reference.
+
+Web-aware Context Bean Scope :
+
+Request - New Bean per servlet request
+Session - New bean per session.
+Global Session - New bean per global HTTP session (portlet context).
+
+-----------------------------------------------------------------------------------
+In XML Config :
+-----------------------------------------------------------------------------------
+	<?xml version="1.0" encoding="UTF-8" ?>
+	
+	<beans>
+	
+		<bean id="triangle" class="com.mayabious.model.Triangle" autowir="byName" scope="singletone">			
+		</bean>
+	<beans>
+	................
+-----------------------------------------------------------------------------------
+
+:	ApplicationContextAware		:
+
+=>	
+
+
+
+-----------------------------------------------------------------------------------
+
+
+
+
+
+
+:	:
+
+:	What is Spring Dependency Injection ?														:
+
+=>	
+
+:																:
+
+=>
+
+:																:
+
+=>
+
+:																:
+
+=>
+
+:																:
+
+=>
+
+:																:
+
+=>
+
+:																:
+
+=>
+
+:																:
+
+=>
+
+
+:																:
+
+=>
+
+:																:
+
+=>
+
+
+:																:
+
+=>
+
+
+:																:
+
+=>
+
+:																:
+
+=>
+:																:
+
+=>
+
+:																:
+
+=>
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+:	REFERENCE	:																																			
+
+=>	https://spring.io/docs
+
+=>	https://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/
+
+=>	http://www.tutorialspoint.com/spring/
+
+=>	http://www.javatpoint.com/spring-tutorial
+
+=>	http://www.journaldev.com/2888/spring-tutorial-spring-core-tutorial
+
+=>	http://www.java4s.com/spring/
+
+	
+	
+

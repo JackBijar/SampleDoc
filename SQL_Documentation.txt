@@ -1,0 +1,240 @@
+:																		BASIC CONCEPT OF SQL 															:
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+:	Find 2nd, 3rd Maximum Salary :																
+
+=> 	2'ND MAXIMUM :
+
+		SELECT * FROM test_db.employee main_table WHERE 2 = (SELECT COUNT(DISTINCT emp_salary) FROM test_db.employee auxillary_table WHERE auxillary_table.emp_salary >= main_table.emp_salary);
+	
+	3'RD MAXIMUM :
+	
+		SELECT * FROM test_db.employee main_table WHERE 3 = (SELECT COUNT(DISTINCT emp_salary) FROM test_db.employee auxillary_table WHERE auxillary_table.emp_salary >= main_table.emp_salary);
+		
+	2'ND MINIMUM :
+	
+		SELECT * FROM test_db.employee main_table WHERE 2 = (SELECT COUNT(DISTINCT emp_salary) FROM test_db.employee auxillary_table WHERE auxillary_table.emp_salary <= main_table.emp_salary);
+	
+	3'RD MINIMUM :
+	
+		SELECT * FROM test_db.employee main_table WHERE 3 = (SELECT COUNT(DISTINCT emp_salary) FROM test_db.employee auxillary_table WHERE auxillary_table.emp_salary <= main_table.emp_salary);
+	
+	
+:	SQL group by clause :																		
+
+=>	
+
+	SELECT country_name, SUM(population) FROM country GROUP BY country_name;
+
+	SELECT country_name, year SUM(population) FROM country GROUP BY country_name, year;		<= Which columns show, that must be include in GROUP BY. 
+	
+: If you compare with aggreate methods then used HAVING CLOUSE :								
+	
+	SELECT country_name, SUM(population) FROM country GROUP BY country_name HAVING SUM(population) > 1000;
+	
+:	What are Sub Query and Co-related Queries ?	:												
+
+=> 
+	SUB QUERY : In sub query first evaluated inner query then used output of outer query.
+	Sub query dependency on inner query.
+
+	SELECT * FROM emp_details WHERE id_fk in (SELECT id FROM emp_salary where salary > 150)
+	
+	CO-RELATED QUERY : It have Inner Query and Outer Query but Inner table used co-related reference of outer query table :
+	
+	SELECT salary FROM test_db.employee main_table WHERE 2 = (SELECT COUNT(*) FROM test_db.employee auxillary_table WHERE auxillary_table.emp_salary >= main_table.emp_salary);
+	
+	In Calculate 2nd maximum salary, Inner query used employee reference table ('main_table')
+	
+	auxillary_table.emp_salary >= main_table.emp_salary
+	
+	There is a relation between inner query and outer query.
+	
+:	Difference between UNION and UNION All	:													
+	
+=>	There are two table employee and employees_derails, but they have same no of columns but different name Like :
+
+employee(name, email, mobile, salary)
+employees_details(emp_name, emp_email, emp_mobile, emp_salary)
+
+Now How to Combine two table ?
+
+=> Uaing Union :
+
+SELECT * FROM employee UNION SELECT * FROM employees_details
+
+Now cobine of all records (name, email, mobile, salary)				<= But it remove duplicate values.
+
+SELECT * FROM employee UNION ALL SELECT * FROM employees_details	<= It Get all Duplicate values.
+
+:	Can SQL Server views be updated  ? :														
+
+=>	Views means Joins Multiple tables through inner join.
+
+	You can only update columns of they come from the same base table. If your views is using multiple base tables, you can't update multiple columns from multiple base tables.	
+	
+Example :
+
+	Customer(name, code)
+	Addres(address, phone)
+	
+	views table (name, phone)		<= If you insert only name (Customer base table) OR phone (Address base table) then save <= But Name and Phone both are not save.
+	
+:	What are triggers , inserted and deleted tables ?	:										
+
+=>	A trigger is a special kind of stored procedure that automatically executes when an event occurs in the database server. 
+	DML triggers execute when a user tries to modify data through a data manipulation language (DML) event. DML events are INSERT, UPDATE, or DELETE statements on a table or view.
+
+Example 1 :
+
+Customer(customer_id, customer_name);
+Audit(last_updated_table);
+
+Create a Trigger that execute to insert/update/delete operation on Customer table alowes inasetr dataAndTime in Audit table.
+
+CREATE TRIGGER TriggerUpdate
+	ON Customer
+	AFTER INSERT, DELETE, UPDATE
+AS
+BEGIN
+	insert into Audit(last_updated_table) values(GETDATE())
+END
+GO
+
+Example 1 :
+
+Customer(customer_id, customer_name);
+Audit(last_updated_table, old_customer_name, new_customer_name);
+
+Create a Trigger that execute to insert/update/delete operation on Customer table alowes inasetr dataAndTime, old_customer_name and new_customer_name in Audit table.
+
+CREATE TRIGGER TriggerUpdate
+	ON Customer
+	AFTER INSERT, DELETE, UPDATE
+AS
+BEGIN
+	declare @OldValue varchar(50)
+	declare @NewValue varchar(50)
+	
+	--Fetch the old values
+	select @OldValue = customer_name from deleted
+	
+	--Fetch the new values
+	select @NewValue = customer_name from inserted
+	
+	insert into Audit(last_updated_table) values(GETDATE(), @OldValue, @NewValue)
+END
+GO
+
+:	Stored procedure VS Simple SQL performance comparison :								
+
+=> Store Procedure is the best becouse First time execute the query it hit the database and store into cache memory.
+If next time execute the similar query it get data from cache memory. So it vary faster and best performance.
+
+It used centralized code it will be minimize the maintainance.
+
+Store Procedure has 3 types of Parameters :
+
+Input Paramerter		<= Use Multiple Paramerters
+Output Paramerter		<= Use Multiple Paramerters
+Return Paramerter		<= Use Single Paramerter
+
+Example : Here we used Input parameter to facth customer values and Output parameter to get current datetime and used return parameter to return no of rows.
+
+CREATE PROCEDURE SelectCustomer
+	@CustomerName varchar(20),	-- Input Paramerters
+	@CustomerId int
+	@CurrentDateAndTime datetime output -- Output Paramerters
+AS
+BEGIN
+	set @CurrentDateAndTime = GETDATE()
+	SELECT * FROM customer where customer_name=@CustomerName and customer_id=@CustomerId
+	return @@rowcount
+END
+GO
+
+
+Execute Store Procedure :
+
+	declare @DateTimeCurrent datetime
+	declare @mayrowcount int
+	exec SelectCustomer 'xyz', 123, @DateTimeCurrent output
+	print @DateTimeCurrent
+	print @mayrowcount
+	
+:	Inner join,Left join,Right join and full outer join		:								
+
+=> 
+
+country(country_id, country_name)
+
+country(1, India)
+country(2, India)
+country(4, India)
+
+state(state_id, country_id_fk, state_name)
+
+state(1, 1, Maharastra)
+state(2, 1, Punjab)
+state(3, 2, Kathmandu)
+state(4, NULL, California)
+
+:	INNER JOIN 	:																			
+
+=> Display all Matching records of two relation.
+
+SELECT * FROM country INNER JOIN state ON country.country_id = state.country_id;
+
+output_table(country_id, country_name, state, country_id_fk, state_name)
+
+output_table(1, India, 1, 1, Maharastra)
+output_table(1, India, 2, 1, Punjab)
+output_table(2, Nepal, 3, 2, Kathmandu)
+
+:	OUTER JOIN/FULL OUTER JOIN :															
+
+=> Display all Matching and Non matching records from both tables.
+
+SELECT * FROM country FULL OUTER JOIN state ON country.country_id = state.country_id;
+
+output_table(country_id, country_name, state, country_id_fk, state_name)
+
+output_table(1, India, 1, 1, Maharastra)
+output_table(1, India, 2, 1, Punjab)
+output_table(2, Nepal, 3, 2, Kathmandu)
+output_table(4, Srilanka, NULL, NULL, NULL)
+output_table(NULL, NULL, 4, NULL, California)
+
+:	LEFT JOIN :																				
+
+=> Display all the records of LEFT TABLE with common records of RIGHT TABLE.
+
+SELECT * FROM country LEFT JOIN state ON country.country_id = state.country_id;
+
+output_table(country_id, country_name, state, country_id_fk, state_name)
+
+output_table(1, India, 1, 1, Maharastra)
+output_table(1, India, 2, 1, Punjab)
+output_table(2, Nepal, 3, 2, Kathmandu)
+output_table(4, Srilanka, NULL, NULL, NULL)
+
+: RIGHT JOIN :																				
+
+=> Display all the records of RIGHT TABLE with common records of RIGHT TABLE.
+
+SELECT * FROM country RIGHT JOIN state ON country.country_id = state.country_id;
+
+output_table(country_id, country_name, state, country_id_fk, state_name)
+
+output_table(1, India, 1, 1, Maharastra)
+output_table(1, India, 2, 1, Punjab)
+output_table(2, Nepal, 3, 2, Kathmandu)
+output_table(NULL, NULL, 4, NULL, California)
+
+:	What is index and how does it make your search faster ? :								
+
+=> How does indexing so faster ?
+
+Indexes makes a search faster by creating something calles as a B-Tree structure or a Balanced Tree structure internally.
+
+

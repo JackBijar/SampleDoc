@@ -1,0 +1,160 @@
+:	MULTITHREAD IN JAVA :
+
+Methods :
+
+: (1) :	run() method																							
+Syntax : 	run();							<= run is a default method in Thread Class. 
+Example : 	
+
+--------------------------------------------------------------------------------------------------
+Thread thread1 = new Thread(() -> System.out.println("Value of I => "+i); );		<= Using Lamda
+
+Thread thread2 = new Thread(new Runnable() {
+			public void run() {
+				System.out.println("Test Msg");
+			}
+		});
+--------------------------------------------------------------------------------------------------
+
+: (2) :		start()																							
+
+Syntax 	: 	THREAD_OBJECT.start();					<= Start to execute any thread. 
+Example :	threadObj.join();							
+
+: (3) :		join()																							
+
+Syntax 	:	THREAD_OBJECT.join();					<= Used to Waite for complete Thread execution.
+Example :	threadObj.join();
+
+: (4) :		sleep()																							
+
+Syntax 	:	Thread.sleep(MILLISECONDS);				<= Used to Stop for some of seconds.
+Example :	Thread.sleep(1000);
+
+: (5) :		isAlive()																							
+
+Syntax 	:	THREAD_OBJECT.isAlive();				<= Check Thread is alive or Not
+Example :	threadObj.isAlive();
+
+: (6) :		getName()																							
+
+Syntax 	:	THREAD_OBJECT.getName();				<= Get Thread Name
+Example :	threadObj.getName();
+
+: (7) :		getId()																							
+
+Syntax 	:	THREAD_OBJECT.getId();					<= Get Thread Id
+Example :	threadObj.getId();
+
+: (8) :		setName("")																							
+
+Syntax 	:	THREAD_OBJECT.setName("THREAD_NAME");	<= Set Thread Name
+Example :	threadObj.setName("MyThread");
+
+You can also declare when Thread is created :
+---------------------------------------------------------------------------------------------------
+Thread thread2 = new Thread(()-> 
+{			
+	for(int j=0; j<10; j++ ) 
+	{
+		System.out.println("Value of J => "+j);
+		
+		try { Thread.sleep(100); } catch (InterruptedException e) { e.printStackTrace(); }
+	}
+}, "My-Second-Thread");
+---------------------------------------------------------------------------------------------------
+
+: (9) :		getPriority()																							
+
+Syntax 	:	THREAD_OBJECT.getPriority()				<= Get Thread Priority from 1-10 => 1 Means Low Priority AND 10 Means Max priority.
+Example :	threadObj.getPriority();
+
+: (10) :	setPriority()																							
+
+Syntax 	:	THREAD_OBJECT.setPriority(PRIORITY_VALUE)			<= Set Thread Priority
+Example :	threadObj.setPriority(10);
+
+You can also Set Priority Using Enum Values :
+
+	threadObj.setPriority(MIN_PRIORITY);						<= Means 1
+	threadObj.setPriority(NORM_PRIORITY);						<= Means 5
+	threadObj.setPriority(MAX_PRIORITY);						<= Means 10
+	
+: (11) :																								
+
+Thread.currentThread.getId();									<= Get Current Thread Name/Id/Priority etc
+Thread.currentThread.getName();	
+Thread.currentThread.getPriority();
+
+: (12) :	Sychromized																							
+
+		If we declared a method as Sychromized then this method can access one thread at a time. 
+		
+Example :
+---------------------------------------------------------------------------------------------------
+package com.mayabious.threadapp;
+
+public class ThreadJoinSynchronized 
+{
+	private static int count = 0;
+	
+	public static synchronized void incCount() 
+	{
+		count++;
+	}
+	
+	public static void main(String[] args) {		
+						
+		Thread thread1 = new Thread(() -> {			
+			
+			for(int i=0; i<1000; i++)
+			{
+				incCount();
+			}
+		});
+		
+		Thread thread2 = new Thread(() -> {
+			
+			for(int j=0; j<1000; j++)
+			{
+				incCount();
+			}			
+		});
+		
+		thread1.start();
+		thread2.start();
+		
+		try 
+		{
+			thread1.join();
+			thread2.join();
+		} 
+		catch (InterruptedException e) 
+		{			
+			e.printStackTrace();
+		}
+		
+		System.out.println("Count : "+count);
+	}
+}
+
+---------------------------------------------------------------------------------------------------
+
+: (13) :	wait() vs sleep() in Java ?															
+
+wait() method belongs to Object Class.
+If one Thread is wait then other Thread will be notify using notify();
+
+
+sleep() method is belongs to Thread Class.
+sleep() method used for wait sometime that will be maintion when sleep() method is called.
+
+thread1.sleep(1000);
+
+: (14) :																								
+
+: (15) :																								
+	
+	
+
+	
