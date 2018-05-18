@@ -1,0 +1,384 @@
+:													Collection Framework																	:
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+:	What is Collection ?																		
+
+=>	Collection is a Group of Objects which can contain Homogeneous and Heterogeneous data without size limitation. It may be unique or duplicate objects.
+
+	Homogeneous : Collection of Similar Objects. Like -> A big container Lorry - Collection of Objects.
+	Heterogeneous : Collection of diffrent types of Objects. Like : Your college bag -> Books, Pens, etc
+
+	Technical Definition :
+	
+		Collection is a Container Object. It is used for storing homogeneous and heterogeneous, unique and duplicate objects 
+		without size limitation and further it is used for sending all objects at a time from one class method to another class method 
+		as method arguments and return type with single name accross multiple layers of the project as shown below digram.
+		
+:	What is Container Object ?								
+
+=>	A Object is called Container Object if it contain multiple Objects. 
+	
+:	Why we are use Collection ?																	
+
+=>	
+
+:	When we are use Collection ?																
+
+=>	
+
+:	Different ways to store values in Java Application inside JVM Pros & Cons of each approch ?	
+
+=>	4th different ways to store data in JVM :
+
+	1) Using Variable	<= Can Store Only One value, Reading Problem and Sending problem i.e can't send multiple values .
+	2) using Class		<= Can Store multiple fixed value and different types. 
+	3) Using Array		<= Can Store Multiple fixed under of value and same types.
+	4) Using Collection	<= Can Store Multiple objects same and different types with out fixed limitation.
+
+:	Terminology used in Collection Programming												
+
+=>	Many terminology are used in Collection Programming Like :
+
+	1) Element 				:=> Single Object in a Collection is known as Element. Example : List/Set Collection : list.add("a"); 
+	
+	2) Entry 				:=> Single (Key, Value) Pare in a Collection is konow as Entry. Example : Map Collection : map.put("a", 2);
+
+	
+	3) Homogeneous 	Object 	:=> Same Class Objects is known as Homogeneous. Example : "a", "b" same objects in String Class.
+	
+	4) Heterogeneous Object :=> Different Class Objects is known as Heterogeneous. Example : "a", 45 different objects in String Class and Integer Class.
+	
+	5) Unique Objects 		:=> Two objects of Same || different class with different reference && different data.
+		
+	6) Duplicate Object 	:=> Two Objects of Same Class  with Same reference || same data.
+
+	
+	7) Collection of Objects :=> Contain multiple Objects in a Collection Object.
+		
+	8) Collection of Collections :=> Contain multiple Collection Objects in a Single Collection Object.
+		
+	9) Collection of Maps 	:=> Contain multiple Map Objects in a Collection Object.
+	
+	
+	10) Capacity 			:=> Total Nos of Object are store in a Collection is known as Capacity. It return an Integer value.
+	
+							Example : Collection Declare for 10th Elements so Capacity is 10. But it Insert Only 6th elements then Size is 6.
+	
+	11) Size 				:=> Nos of Object are store in a Collection is Known as Size. It return an Integer value.
+	
+	12) Default/Initial Capacity :=> The First/initial Capacity, Which is decalre when collection is first time created.
+	
+	13) Incremental Capacity :=> Howmuch it has grow/incremented, i.e. known as incremental Capacity. If cross the initial Capacity Then it autometicaly increase total size *2 OR *2/2 that is know as incremental Capacity.
+	
+	14) Load Factor 		:=> It is the measurement of when the collection should grow.
+	
+							Maximum load factor of Collection is 100% But In case of Map it 75% That means :
+							
+							When initial capacity is 75% full in case of map then it automaticaly inicrease the capacity. In Case of Other Collection Class it increase after complete 100%. i.e Capacity == Size
+		
+	
+:	Array in Collection												
+
+=>	Array is in-build in Java language(Complier/JVM): That means it Not requried to define explicitly.
+
+	Basic Array Declartion in Java :
+	
+		int[] iarr = new int[10];
+		
+		float[] farr = new float[10];
+		
+		double[] darr = new double[10];
+		
+		String[] sarr = new String[10];
+		
+		Student[] stuarr = new Student[10];
+		
+	Collection is Not in-build in language(Complier/JVM) 
+	It is a class/interface : It is an API and define the class explicitly, which API provide by Sun Microsystem.
+	
+	
+:	Array's Problem solved by Collection :						
+
+=>	There are 4 Problems using array :
+
+	1) Type Problem					<= Array is Store Similar types of Objects/Homogeneous Objects OR Sub-Class of Object. Example :
+	
+	Person Class have Two Child Class Employee and Student Then we can store like this : [Doesn't occer any error]
+
+		Person[] person = new Person[5];
+		
+		person[0] = new Person();
+		person[0] = new Employee();
+		person[0] = new Student();
+		
+	In Case of Primitve Datatype :
+	
+	int[] iarr = new int[7];
+	
+	iarr[0] = 5;
+	iarr[1] = 78;
+	iarr[2] = 'a';
+	iarr[3] = 5.2;	<= Compile Time error Occer. NumberFormatException
+	iarr[4] = 5l;	<= Compile Time error Occer. NumberFormatException
+	iarr[5] = true; <= Incompatible type exception
+		
+	2) Size Problem				<= We can't define Array Size at Run time.
+	
+	3) Storing Order Problem	<= Array is Store data in insertion order. And allow us to retrieving as random order. It is not follow to developed by using algorithm or Data structure.
+	
+	4) Operations Problem		<= Not Possible [Array have no inbuild methods] : Sorting, Searching, removing, replacing etc. 
+
+:	What is Auto Boxing ?						
+
+=>	Primitive types to corresponding wrapper class object.
+
+	Autoboxing is the automatic conversion that the Java compiler makes between the primitive types and their corresponding object wrapper classes. 
+
+	For example, converting an int to an Integer, a double to a Double, and so on. If the conversion goes the other way, this is called unboxing.
+
+:	Custom Collections 						
+
+=>	Diffrent Operations performed on Collection object :
+
+	[Set, List, Map, Queue are Use for this operations]
+	
+	1) Adding Object		<= Adding means add object in a collection's last position. 
+	2) Counting Objects		<= get nos of Objects 
+	3) Searching Object		<= Find Object
+	4) Retrieving Object	<= Get Object from Collection and stored into local variable.
+	5) Removing Object		<= Remove Object reference from Collection
+	
+	[List is Use for this operations] <= Collection should be index wise i.e. List
+	
+	6) Replacing Object		<= Replace any existing Object in a collection.
+	7) Inserting Object		<= Inserting means insert object in any position of a Collection.
+	
+	Set
+	List
+	Map
+	Queue
+
+:	Create a Custome Collection using Array						
+
+=>	
+------------------------------------------------------------------------------------------------
+package com.collections.framework;
+
+public class CustomCollection 
+{
+	private static Object[] obj = new Object[3];
+	
+	private static int elementIndex = 0;
+		
+	public static void addObject(Object object)
+	{
+		if(elementIndex == obj.length)
+		{
+			incrementArraySize();
+		}
+		
+		obj[elementIndex] = object;
+		
+		elementIndex++;
+	}
+	
+	public static void incrementArraySize()
+	{
+		int arrayCapacity = elementIndex*2;
+		
+		Object[] newArray = new Object[arrayCapacity];
+		
+		for(int i=0; i<obj.length; i++)
+		{
+			newArray[i] = obj[i];
+		}
+		
+		System.out.println("Before Increase Array Size : "+obj.length);
+		
+		obj = newArray;
+		
+		System.out.println("After Increase Array Size : "+obj.length);
+	}
+	
+	public static void printValues()
+	{
+		for(int i=0; i<obj.length; i++)
+		{
+			if(obj[i] != null)
+				System.out.println(obj[i]+" <= CLASS NAME : "+obj[i].getClass());
+		}
+	}
+}
+
+public class TestClass 
+{
+	public static void main(String[] args) 
+	{
+		System.out.println(": In Custom Collection Class :");
+		
+		CustomCollection.addObject(2);
+		CustomCollection.addObject(5.7);
+		CustomCollection.addObject('C');
+		CustomCollection.addObject("Rajib");
+		CustomCollection.addObject(845.0f); 
+		CustomCollection.addObject(845215478);
+		CustomCollection.addObject(584521747l);
+		
+		CustomCollection.printValues();
+	}
+}
+------------------------------------------------------------------------------------------------
+:	ArrayIndexOutOfBoundsException  						
+
+=>	This Example Check by JVM at Runtime.
+
+:	Java Collection Flow						
+
+=>	
+	[Java 1.0]----------------------=> [Java 1.2] ----------------------------------------------=>[Java 1.4]-------
+	
+	A) Vector : [Stack]	<= It Store data as Array Format
+	
+		1) Non Synchronize Object 	=> ArrayList
+		2) Follow Insert Order		=> LinkedList
+		3) Duplicat Not allow		=> HashSet				=> Cna't maintain insertion Order	=> LinkedHashSet
+		4) Sorting Order 			=> TreeSet
+	
+	
+	B) HashTable : [Properties] <= It Store data as Table Format with (Key, Value) Pare.
+	
+		1) Non Synchronize Object 	=> HashMap				=> Cna't maintain insertion Order	=> LinkedHashMap
+		2) Sorting order 			=> TreeMap
+		
+	i) Enumeration :		<= It is used to Get element from Vector and HashTable
+	
+		1) Method name is Large 	=> Iterator => ListIterator
+		2) Can't remove element 	=> 
+	
+	
+	C) ----------=>[Java 1.5]---=> Quebe : Special Higherarchi Qube 
+	
+					java.util.concurrent <= Package
+						
+					i) AutoBoxing and AutoUnBoxing	
+					ii) Generics
+					
+					forEach Loop
+
+				=>[Java 1.6]---=>					
+
+					1) NavigableSet
+					2) NavigableMap
+					
+				=>[Java 1.7]---=>
+					
+					1) TypeInterface
+					
+				=>[Java 1.8]---=>
+				
+					1) Funcational Interface
+					2) Lambda Expression
+					3) Method Reference
+					4) Stream API
+					
+				
+					
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+:							
+
+=>	
+
+=====================================================================================================================================
+In Spring Framework :
+
+:	@Autowired Types :				
+
+=>	We can declare Autowired by Using :
+
+Example :
+ <beans>
+	<bean id="employee" class="com.spring.emp.Employee" autowire="byName">	
+	</bean>
+</beans>
+	
+	1) autowire="no"
+	2) autowire="byName"
+	3) autowire="byType"
+	4) autowire="constructor"
+	
+:	Spring Bean Scope :
+
+=>	
+	singletone 		<= Default
+	prototype
+	request
+	session
+	global-session
