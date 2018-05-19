@@ -123,5 +123,36 @@ otherwise the program will give a compilation error.
 
 52) How to print all map key and value ?
 
-53) 
+53) What is Singleton ? Write down a Singleton architecture/Class ?
+
+54) How to write a Singleton Class with out first time not load in memeory (JVM Class memory) when it requeried then create the object.
+
+55) What are the different between Collection with Set ?
+
+56) What is the different between Collection vs Collections ?
+
+57) Write down Spring Cloud architecture and workflow ?
+
+58) What are the different between Web Server and Application Server ?
+
+59) Can I deploy Enterprise application Webserver ? If deploye what happend ?
+
+60) Give some examples of Webserver and Application Server.
+
+61) What are the different between Tomcat Server and Apache Server ?
+
+=> Apache is a server, And Tomcat is a Container.
+
+	Apache Takes The request from user, And handover to Tomcat. And Tomcat handover the request to suitable programs.
+	Programs process the request and provide a response and request back to Tomcat, Then Tomcat handover request and response object to Apache server and Finally Apache give a response to user.
+
+62) How can I deploy virtual instance in AWS ?
+
+63) How can I configure a AWS instance to deploye any Spring boot Application ?
+
+64) 
+
+65) 
+
+
  
