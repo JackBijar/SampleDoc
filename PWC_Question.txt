@@ -1,0 +1,29 @@
+1) What is Actuator ?
+
+2) What are the differnce between Rest Service vs SOAP Service ?
+
+3) What are the difference between Controller vs RestController ?
+
+4) What is JDK, JVM, JRE ?
+
+5) Why JAVA Platform independent ?
+
+6) What is Microservice ?
+
+7) What are the different between ZUUL API Gateway vs ZOOPIKER API GATEWAY ?
+
+8) What are the different between Session and Cookies ?
+
+9) What is HttpSession ?
+
+10) What are the different between pass values through HTTP Header and HTTP Body ?
+
+11) Is Tomocat which types of Server ?
+
+12) What are the advantages of Spring Boot ?
+
+13) How to Circuit Braker in Spring Cloud ?
+
+14) 
+
+15) 
