@@ -135,6 +135,8 @@ otherwise the program will give a compilation error.
 
 58) What are the different between Web Server and Application Server ?
 
+
+
 59) Can I deploy Enterprise application Webserver ? If deploye what happend ?
 
 60) Give some examples of Webserver and Application Server.
@@ -150,9 +152,41 @@ otherwise the program will give a compilation error.
 
 63) How can I configure a AWS instance to deploye any Spring boot Application ?
 
-64) 
+64) What is Actuator ?
 
-65) 
+65) What are the difference between Controller vs RestController ?
+
+66) What is JDK, JVM, JRE ?
+
+67) Why JAVA Platform independent ?
+
+68) What is Microservice ?
+
+69) What are the different between ZUUL API Gateway vs ZOOPIKER API GATEWAY ?
+
+70) What are the different between Session and Cookies ?
+
+71) What is HttpSession ?
+
+72) What are the different between pass values through HTTP Header and HTTP Body ?
+
+73) Is Tomocat which types of Server ?
+
+74) What are the advantages of Spring Boot ?
+
+75) How to Circuit Braker in Spring Cloud ?
+
+76) 
+
+77)
+
+78)
+
+79)
+
+80)
+
+
 
 
  
