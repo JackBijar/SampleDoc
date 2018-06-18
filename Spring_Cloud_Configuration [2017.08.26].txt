@@ -1,0 +1,2286 @@
+:																SPRING CLOUD																	:
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+:	WHAT IS SPRING CLOUD ?																				
+	
+=>	Spring Cloud is a collection of tools from Pivotal that provides solutions to some of the commonly encountered patterns
+
+	when building distributed systems.
+	
+:	WHY SPRING CLOUD IS REQUIRED ?																		
+
+=>	When developing distributed microservices with Spring Boot we face the following issues :
+
+	A) Complexity associated with distributed systems : This overhead includes network issues, Latency overhead, Bandwidth issues, security issues.
+	
+	B) Service Discovery : Service discovery tools manage how processes and services in a cluster can find and talk to one another. 
+	
+	It involves a directory of services, registering services in that directory, and then being able to lookup and connect to services in that directory.
+	
+	C) Redundancy : Redundancy issues in distributed systems.
+
+	D) Loadbalancing : Load balancing improves the distribution of workloads across multiple computing resources, such as computers, a computer cluster,
+
+	network links, central processing units, or disk drives.
+
+	E) Performance issues : Performance issues due to various operational overheads.
+
+	F) Deployment complexities : Requirement of Devops skills.
+	
+	[Loose coupling, autonomous services, decentralized governance, easier continuous delivery and so on]
+	
+:	WHAT IS NETFLIX EUREKA ?																			
+
+=>	Eureka is a REST (Representational State Transfer) based service that is primarily used in the AWS cloud for locating services
+
+	for the purpose of load balancing and failover of middle-tier servers.
+	
+	At Netflix, Eureka is used for the following purposes apart from playing a critical part in mid-tier load balancing.
+
+		For aiding Netflix Asgard - an open source service which makes cloud deployments easier, in
+
+			Fast rollback of versions in case of problems avoiding the re-launch of 100's of instances which could take a long time.
+			
+			In rolling pushes, for avoiding propagation of a new version to all instances in case of problems.
+			
+		For our cassandra deployments to take instances out of traffic for maintenance.
+
+		For our memcached caching services to identify the list of nodes in the ring.
+
+		For carrying other additional application specific metadata about services for various other reasons
+		
+		
+		Netflix Component Name						 Functionality
+		----------------------						---------------
+				Eureka								Service Registration and Discovery
+				
+				Ribbon								Dynamic Routing and Load Balancer
+				
+				Hystrix								Circuit Breaker
+				
+				Zuul								Edge/Gateway Server
+				
+		
+:	WHAT IS MICROSERVICES ARCHITECTURE ?																			
+
+=>	Essentially, microservice architecture is a method of developing software applications as a suite of independently deployable, small, modular services 
+
+	in which each service runs a unique process and communicates through a well-defined, lightweight mechanism to serve a business goal.		
+	
+	Microservices architecture is an approach to application development in which a large application is built as a suite of modular services. 
+	
+	Each module supports a specific business goal and uses a simple, well-defined interface to communicate with other sets of services.
+	
+:	WHAT IS SOA [SERVICE ORIENTED ARCHITECTURE] ?																	
+
+=>	A service-oriented architecture (SOA) is a style of software design where services are provided to the other components
+
+	by application components, through a communication protocol over a network. The basic principles of service oriented architecture are 
+	
+	independent of vendors, products and technologies.
+
+
+:	WHAT IS LOAD BALANCING AND WHY NEDDED FOR NETFLIX RIBBON ?														
+
+=>	In computing, load balancing improves the distribution of workloads across multiple computing resources, such as computers, 
+
+	a computer cluster, network links, central processing units, or disk drives. Load balancing aims to optimize resource use, maximize throughput,
+	
+	minimize response time, and avoid overload of any single resource. Using multiple components with load balancing instead of a single 
+	
+	may increase reliability and availability through redundancy. Load balancing usually involves dedicated software or hardware, 
+	
+	such as a multilayer switch or a Domain Name System server process.
+	
+	
+:	WHAT IS NETFLIX HYSTRIX ? NEED FOR IT ?																			
+
+=>	Hystrix is a latency and fault tolerance library designed to isolate points of access to remote systems, services and 3rd party libraries, 
+
+	stop cascading failure and enable resilience in complex distributed systems where failure is inevitable.
+
+	Usually for systems developed using Microservices architecture, there are many microservices involved. These microservices collaborate with each other.
+	
+	Suppose if you have 9 microservices and there are depends once to others parallely and failed last one, 
+	
+	then using the traditional approach we will propagate an exception. But this will still cause the whole system to crash anyways.
+	
+	This problem gets more complex as the number of microservices increase. The number of microservices can be as high as 1000.
+	
+	We will be using two features of Hystrix :
+		
+		A) Fallback method
+		B) Circuit Breaker
+		
+		Netflix’s Hystrix library provides an implementation of the Circuit Breaker pattern: when we apply a circuit breaker to a method, 
+		
+		Hystrix watches for failing calls to that method, and if failures build up to a threshold, Hystrix opens the circuit so that subsequent
+		
+		calls automatically fail. While the circuit is open, Hystrix redirects calls to the method, and they’re passed on to our specified fallback method.
+
+:	WHAT IS SERVICE DISCOVERY ?																						
+
+=>	Service discovery is the automatic detection of devices and services offered by these devices on a computer network. 
+
+	A service discovery protocol (SDP) is a network protocol that helps accomplish service discovery. DNS Service Discovery (DNS-SD), 
+	
+	a component of Zero Configuration Networking.
+	
+:	WHAT IS NETFLIX ZUUL ?																							
+		
+=>	Zuul is the front door for all requests from devices and web sites to the backend of the Netflix streaming application. 
+
+	As an edge service application, Zuul is built to enable dynamic routing, monitoring, resiliency and security.
+	
+:	LIST OF SPRING CLOUD TOPICS :
+
+=>	Following List of topics in Spring Cloud :
+
+	A) Spring Cloud Config :
+	
+	Centralized external configuration management backed by a git repository. The configuration resources map directly to Spring `Environment` but could be used by non-Spring applications if desired.
+
+	B) Spring Cloud Netflix :
+	
+	Integration with various Netflix OSS components (Eureka, Hystrix, Zuul, Archaius, etc.).
+
+	C) Spring Cloud Bus :
+	
+	An event bus for linking services and service instances together with distributed messaging. Useful for propagating state changes across a cluster (e.g. config change events).
+
+	D) Spring Cloud for Cloud Foundry :
+	
+	Integrates your application with Pivotal Cloudfoundry. Provides a service discovery implementation and also makes it easy to implement SSO and OAuth2 protected resources, and also to create a Cloudfoundry service broker.
+
+	E) Spring Cloud Cloud Foundry Service Broker :
+	
+	Provides a starting point for building a service broker that manages a Cloud Foundry managed service.
+
+	F) Spring Cloud Cluster :
+	
+	Leadership election and common stateful patterns with an abstraction and implementation for Zookeeper, Redis, Hazelcast, Consul.
+
+	G) Spring Cloud Consul :
+	
+	Service discovery and configuration management with Hashicorp Consul.
+
+	H) Spring Cloud Security :
+	
+	Provides support for load-balanced OAuth2 rest client and authentication header relays in a Zuul proxy.
+
+	I) Spring Cloud Sleuth :
+	
+	Distributed tracing for Spring Cloud applications, compatible with Zipkin, HTrace and log-based (e.g. ELK) tracing.
+
+	J) Spring Cloud Data Flow :
+	
+	A cloud-native orchestration service for composable microservice applications on modern runtimes. Easy-to-use DSL, drag-and-drop GUI, and REST-APIs together simplifies the overall orchestration of microservice based data pipelines.
+
+	I) Spring Cloud Stream :
+	
+	A lightweight event-driven microservices framework to quickly build applications that can connect to external systems. Simple declarative model to send and receive messages using Apache Kafka or RabbitMQ between Spring Boot apps.
+
+	J) Spring Cloud Stream App Starters :
+	
+	Spring Cloud Stream App Starters are Spring Boot based Spring Integration applications that provide integration with external systems.
+
+	K) Spring Cloud Task :
+	
+	A short-lived microservices framework to quickly build applications that perform finite amounts of data processing. Simple declarative for adding both functional and non-functional features to Spring Boot apps.
+
+	L) Spring Cloud Task App Starters :
+	
+	Spring Cloud Task App Starters are Spring Boot applications that may be any process including Spring Batch jobs that do not run forever, and they end/stop after a finite period of data processing.
+
+	M) Spring Cloud Zookeeper :
+	
+	Service discovery and configuration management with Apache Zookeeper.
+
+	N) Spring Cloud for Amazon Web Services :
+	
+	Easy integration with hosted Amazon Web Services. It offers a convenient way to interact with AWS provided services using well-known Spring idioms and APIs, such as the messaging or caching API. Developers can build their application around the hosted services without having to care about infrastructure or maintenance.
+
+	O) Spring Cloud Connectors :
+	
+	Makes it easy for PaaS applications in a variety of platforms to connect to backend services like databases and message brokers (the project formerly known as "Spring Cloud").
+
+	P) Spring Cloud Starters :
+	
+	Spring Boot-style starter projects to ease dependency management for consumers of Spring Cloud. (Discontinued as a project and merged with the other projects after Angel.SR2.)
+
+	Q) Spring Cloud CLI :
+	
+	Spring Boot CLI plugin for creating Spring Cloud component applications quickly in Groovy
+
+	R) Spring Cloud Contract :
+	
+	Spring Cloud Contract is an umbrella project holding solutions that help users in successfully implementing the Consumer Driven Contracts approach.
+	
+	
+:	WHAT ARE THE DIFFERENT BETWEEN  @EnableDiscoveryClient AND @EnableEurekaClient ?															:
+
+=>	There are multiple implementations of "Discovery Service" (eureka, consul, zookeeper). 
+	@EnableDiscoveryClient lives in spring-cloud-commons and picks the implementation on the classpath.  
+	@EnableEurekaClient lives in spring-cloud-netflix and only works for eureka. If eureka is on your classpath, they are effectively the same.
+	
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+REFERENCE LINKS :
+
+	http://projects.spring.io/spring-cloud/
+	
+	https://dzone.com/articles/learning-spring-cloud-writing
+	
+	https://smartbear.com/learn/api-design/what-are-microservices/
+	
+	http://www.javaworld.com/article/2927920/cloud-computing/build-self-healing-distributed-systems-with-spring-cloud.html
+	
+==============================================================================================================================================================
+:																SPRING CLOUD PROJECT DOCUMENTATION 															:
+																	
+																	
+PROJECT URL :	https://github.com/kbastani/spring-cloud-microservice-example
+
+Download From Here and building through Eclipse OR CLI
+
+
+:	Docker Uses 			:
+
+	Each service is built and deployed using Docker. End-to-end integration testing can be done on a developer's machine using Docker compose.	
+
+:	Polyglot Persistence	:
+																	
+	Microservices in the project use their own database, while integrating with the data from other services through REST or a message bus.
+
+		Neo4j (graph)
+		MongoDB (document)
+		MySQL (relational)								
+																	
+:	Service discovery		:
+
+	This project contains two discovery services, one on Netflix Eureka, and the other uses Consul from Hashicorp. 
+	
+	Having multiple discovery services provides the opportunity to use one (Consul) as a DNS provider for the cluster, and the other (Eureka) as a proxy-based API gateway.
+																	
+:	API gateway				:
+
+	Each microservice will coordinate with Eureka to retrieve API routes for the entire cluster. Using this strategy each microservice in a cluster can be load balanced and exposed through one API gateway. Each service will automatically discover and route API requests to the service that owns the route. This proxying technique is equally helpful when developing user interfaces, as the full API of the platform is available through its own host as a proxy.
+	
+:	Microservices			:
+
+	In this projece have 4 Microservices :
+
+		1)	Configure Service
+		2)	Discovery Service
+		3)	Recommendation Service
+		4)	Movice Service
+		
+	1)	Configure Service :
+	
+		The configuration service is a vital component of any microservices architecture.
+		
+		The configuration service is essential because it handles the configurations for all of the services through a simple point-to-point service call to retrieve those configurations. The advantages of this are multi-purpose.
+		
+		we have a staging environment and a production environment, configurations for those environments will be different. A configuration service might have a dedicated Git repository for the configurations of that environment. 
+		
+-----------------------------------------------------------------------------------ANNOTATION----------------------------------------------
+		
+Basic Annotation :
+
+1) Spring Cloud Netflix enables the deployment of embedded Eureka servers :
+
+	Dependency :	spring-cloud-starter-eureka-server
+	
+	Annotation : 	@EnableEurekaServer
+
+2)	Service discovery :	[Zookeeper]
+	
+	Dependency : 	spring-cloud-starter-eurekad	
+	
+	Annotation :	@EnableDiscoveryClient
+	
+3)	Ribbon :
+
+	Dependency :	spring-cloud-starter-ribbon
+	
+	Annotation :	@LoadBalanced
+	
+4)	Hystrix	:
+
+	Dependency :	spring-cloud-starter-hystrix
+	
+	Annotation :	@EnableCircuitBreaker
+	
+					@HystrixCommand		<=	EX : @HystrixCommand(fallbackMethod = "getProducerFallback")
+					
+5)	@RefreshScope	<= Use for Refresh Configuration.
+
+6)	@EnableEurekaClient	<= Register into Eureka Server
+
+7)	@EnableWebMvc		<= Spring MVC auto configuration is disable.
+
+8)	AutoConfigure Spring Cloud :
+
+	Annotation : @EnableAutoConfiguration
+
+	Dependency : spring-cloud-starter-config
+
+9)	@EnableConfigServer			<= This Annoation is used in @SpringBootApplication Class to Configure 
+	
+	
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+:															BOOTSTRAP.YML																					:
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SAMPLE :
+--------------------------------------------------------------------------------------------------------
+spring:
+  application:
+    name: sample-pong
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        serviceId: SAMPLE-CONFIG
+
+eureka:
+  instance:
+    nonSecurePort: ${server.port:8082}
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.host:localhost}:${eureka.port:8761}/eureka/
+	  
+--------------------------------------------
+spring:
+  application:
+    name: sample-config
+  profiles:
+    active: native
+
+eureka:
+  instance:
+    nonSecurePort: ${server.port:8888}
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.host:localhost}:${eureka.port:8761}/eureka/
+------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------
+
+eureka.client.serviceUrl					=>	Use to specified the server location of Eureka.
+
+spring.cloud.config.discovery.enabled		=>	If set to "true" to specify that the configuration server is discovered via the specified Eureka server. 
+
+											=>	This means that the Eureka and the Configuration server have to be completely up before trying to bring up the actual services.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Ribbon	:	A client side load balancing solution which can use Eureka to find service instances.
+
+Feign	:	Which provides a declarative way to invoke a service call. It internally uses Ribbon.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+:															APPLICATION.YML																					:
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SAMPLE :
+-------------------------------------------------------------------------------------------------------------
+samplepong:
+  ribbon:
+    DeploymentContextBasedVipAddresses: sample-pong
+    NIWSServerListClassName: com.netflix.niws.loadbalancer.DiscoveryEnabledNIWSServerList
+    ReadTimeout: 5000
+    MaxAutoRetries: 2
+	
+-----------------------------------------------
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+------------------------------------------------
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: classpath:/config
+
+server:
+  port: 8888
+-------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+:	WHAT IS CONFIGURATION SERVER ?																				
+
+=>	
+
+:	HOW WORKS CONFIGURATION SERVER ?																			
+
+=>	Spring-Cloud provides a centralized configuration server that microservices can use for loading up their properties. 
+	Typically microservices may want to go one of two ways:
+	
+	1)	Use Eureka as a hub and find the configuration services
+	
+	2)	Use Configuration services and find Eureka
+	
+	I personally prefer the Eureka first approach, in this sample Configuration server registers itself with Eureka and 
+	
+	when microservices come up they first check with Eureka, find the Configuration service and use the service to load up their properties.
+	
+:	
+
+=>	
+
+
+========================================================================================================================================================
+
+:	HOW TO CONFIGURE A SPRING CLOUD PROJECT ?																	:
+
+=>	Spring Cloud Netflix provides Netflix OSS integrations for Spring Boot apps through autoconfiguration and binding to the Spring Environment and 
+	other Spring programming model idioms. With a few simple annotations you can quickly enable and configure the common patterns inside your application and build large distributed systems with battle-tested Netflix components. 
+	
+	The patterns provided include 
+
+	Service Discovery (Eureka), 
+	Circuit Breaker (Hystrix), 
+	Intelligent Routing (Zuul) and 
+	Client Side Load Balancing (Ribbon).
+
+
+:	Microservice Registration and Discovery with Spring cloud using Netflix Eureka	[SIMPLE] 						[STEP-1]					:
+
+	In this application we create spring boot microservices named as 
+	
+	1)	employee-producer [Web Application] and
+	
+	2)	employee-consumer [Client Application]
+
+	As the name suggests employee-producer will be exposing REST APIs which will be consumed by the employee-consumer.
+	
+	1)	Develop employee-producer  :
+	
+		A)	Create a Spring Boot Microservice Web Application.
+		
+		B)	Create a Employee Model Class.
+		
+		C)	Now create a @RestController name TestController.
+		
+		D) @SpringBootApplication Main() Class.
+		
+		Now Run it and Test it from Browser.
+		
+	2)	Develop employee-consumer :
+	
+		A)	Create a Spring Boot Microservice Client Application. [Add web Dependency]
+		
+		B)	Create a ConsumerControllerClient Class	: 
+		
+			Define the controller to consume the service exposed by employee-producer above using the RESTTemplate.
+			
+		C)	Now call getEmployee() from ConsumerControllerClient through @SpringBootApplication Main() Class. 
+		
+		D)	Change Server Port No in application.properties file => server.port=8091
+		
+	Now first Run employee-producer and then Run employee-consumer and see the output in console.
+	
+	
+
+:	Microservice Registration and Discovery with Spring cloud using Netflix Eureka									[STEP-2]							:
+	
+	1)	Develop the eureka-server Service :
+	
+		A)	Create a Spring Boot Microservice application [JAR] with add following @Annoation 
+		
+			Add Following Dependency in build.gradle file :
+			-----------------------------------------------------------------------------------------------------	
+				ext {
+					springCloudVersion = 'Dalston.SR1'
+				}
+				
+				dependencies {
+					compile('org.springframework.cloud:spring-cloud-starter-eureka-server')
+					testCompile('org.springframework.boot:spring-boot-starter-test')
+				}
+				
+				dependencyManagement {
+					imports {
+						mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+					}
+			-----------------------------------------------------------------------------------------------------
+			
+		B)	Now Define the Spring Boot class with annotations 
+		
+			@SpringBootApplication and 
+			@EnableEurekaServer
+		
+		C)	Specify the port on which the eureka application will get started.
+		
+			server.port=8090			<= In application.properties file
+			
+		D)	Now Run by using this following url :
+
+			http://localhost:8090/
+				
+	2)	Next we modify the employee-producer module to register to the Eureka server.
+	
+		A)	Add the Spring cloud dependencies. Like :
+		
+			-------------------------------------------------------------------------------------------------------
+				ext {
+					springCloudVersion = 'Dalston.SR1'
+				}	
+				
+				dependencies {
+					compile('org.springframework.cloud:spring-cloud-starter-eureka')
+					compile('org.springframework.boot:spring-boot-starter-web')
+					testCompile('org.springframework.boot:spring-boot-starter-test')
+				}
+				
+				dependencyManagement {
+					imports {
+						mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+					}
+			-------------------------------------------------------------------------------------------------------
+			
+		B)	Next define the Spring Boot class with annotations 
+		
+			@SpringBootApplication and
+			@EnableDiscoveryClient
+			
+		C)	In the application.properties specify the url on which the Eureka server is up and running.
+		
+			eureka.client.serviceUrl.defaultZone=http://localhost:8090/eureka
+			
+		D)	To change registered application name to create in resources a file named 
+		
+			bootstrap.properties
+			
+			spring.application.name=employee-producer
+			
+		E)	Now start eureka-server and employee-producer. Then go to Eureka Server url :
+
+			http://localhost:8090/
+
+	3)	Modify the employee-consumer service :
+	
+		A)	Add the Spring cloud dependencies. Like :
+	
+			-------------------------------------------------------------------------------------------------------
+				ext {
+					springCloudVersion = 'Dalston.SR1'
+				}	
+				
+				dependencies {
+					compile('org.springframework.cloud:spring-cloud-starter-eureka')
+					compile('org.springframework.boot:spring-boot-starter-web')
+					testCompile('org.springframework.boot:spring-boot-starter-test')
+				}
+				
+				dependencyManagement {
+					imports {
+						mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+					}
+			-------------------------------------------------------------------------------------------------------
+			
+		B)	Modfy the ConsumerControllerClient class to autowire the DiscoveryClient dependency.
+
+				@Autowired
+				private DiscoveryClient discoveryClient;
+				
+						AND
+			
+			@EnableDiscoveryClient Add in @SpringBootApplication Application Class.
+			
+		C)	Change to add some code like :
+
+			--------------------------------------------------------------------------------------------------------
+				List<ServiceInstance> instances=discoveryClient.getInstances("employee-producer");
+				ServiceInstance serviceInstance=instances.get(0);
+				
+				String baseUrl=serviceInstance.getUri().toString();
+				
+				baseUrl=baseUrl+"/employee";
+			--------------------------------------------------------------------------------------------------------
+			
+		D)	Modify the application.properties to include the eureka server url :
+		
+				server.port=8091
+				eureka.client.serviceUrl.defaultZone=http://localhost:8090/eureka
+			
+		E)	Add the bootstrap.properties as follows :
+		
+				spring.application.name=employee-consumer
+				
+		F)	Run this as java application. We can see the the employee-producer is successfully consumed.
+		
+		So the producer and client are successfully registered with Eureka Server.
+		
+				
+:	Spring Cloud- Netflix Eureka with Ribbon 																		[STEP-3]				:
+
+Q)	What is Load Balancing ? Need for Netflix Ribbon ?
+	
+=>	In computing, load balancing improves the distribution of workloads across multiple computing resources, such as computers, 
+	a computer cluster, network links, central processing units, or disk drives. Load balancing aims to optimize resource use, maximize throughput, minimize response time, and avoid overload of any single resource. Using multiple components with load balancing instead of a single component may increase reliability and availability through redundancy. Load balancing usually involves dedicated software or hardware, such as a multilayer switch or a Domain Name System server process.
+	
+	In previous posts we developed two services employee-producer and employee-consumer. Suppose other modules are also calling and consuming employee-producer module services. So the load at employee-producer is high. To deal with this we this we deploy multiple instances of employee-producer. Suppose two in this case. Now we will have to use a Load Balancer to route any incoming requests to either one of these two services.
+
+	
+	1)	Now Code changes for employee-producer	:
+	
+		A)	Add the instance id  in the application.properties file. Like :
+	
+				spring.application.name=employee-producer
+				eureka.instance.instanceId=${spring.application.name}:${random.value}
+				
+		B)	Now we need to start the employee-producer instance twice*. 
+		
+			So start the employee-producer instance the first time. It will start on the default port 8080.
+			
+			Next in application.properties add the port as 8081 and start the employee-producer again.* Like :
+			
+			eureka.client.serviceUrl.defaultZone=http://localhost:8090/eureka
+			server.port=8081
+	
+	2)	Code changes for employee-consumer module :
+	
+		A)	Add Spring Cloud Ribbon starter dependency	Like :
+		
+		------------------------------------------------------------------------------------------------------
+			compile('org.springframework.cloud:spring-cloud-starter-ribbon')
+		------------------------------------------------------------------------------------------------------
+		
+		B)	Next modify the ConsumerControllerClient code :
+		
+		Previously we were autowiring an DiscoveryClient bean, replace it with LoadBalancerClient Like :
+		
+		@Autowired
+		private LoadBalancerClient loadBalancer;
+		
+		-----------------------------------------------------------------------------------------------------
+			public void getEmployee() throws RestClientException, IOException {
+			
+				ServiceInstance serviceInstance=loadBalancer.choose("employee-producer");
+				
+				System.out.println(serviceInstance.getUri());
+				
+				String baseUrl=serviceInstance.getUri().toString();
+				
+				........................................................................
+			
+			}
+		-----------------------------------------------------------------------------------------------------
+		
+		C)	The load balancer will now call either of instances of employee-producer service depending on its internal algorithm to perform load balancing. 
+			
+			Start the employee-consumer module.
+	
+:	Spring Cloud Netflix Eureka with Ribbon and Hystrix 															[STEP-4-A]				:
+
+Q)	What is Netflix Hystrix ? Need for it ?
+
+=>	Hystrix is a latency and fault tolerance library designed to isolate points of access to remote systems, services and 3rd party libraries, 
+	stop cascading 	failure and enable resilience in complex distributed systems where failure is inevitable.
+	
+	Usually for systems developed using Microservices architecture, there are many microservices involved. These microservices collaborate with each other.
+	
+	1)	Suppose we have 10 microservices and dependent one to another, if failed any one then using the traditional approach we will propagate an exception. But this will still cause the whole system to crash anyways.
+	
+	This problem gets more complex as the number of microservices increase. The number of microservices can be as high as 1000. This is where hystrix comes into picture-
+	
+	We will be using two features of Hystrix :
+	
+		I)	Fallback method
+		II)	Circuit Breaker	
+		
+	Now suppose due to some reason the employee-producer exposed service throws an exception. In this case using Hystrix we define a fallback method. This fallback method should have the same return type as the exposed service. In case of exception in the exposed service the fallback method will return some value.	
+	
+	A)	Add employee-producer to include the spring cloud Hystrix starter dependency :
+	
+		--------------------------------------------------------------------------------------------------
+			dependencies {
+				compile('org.springframework.cloud:spring-cloud-starter-hystrix')
+				compile('org.springframework.cloud:spring-cloud-starter-ribbon')
+				compile('org.springframework.boot:spring-boot-starter-web')
+				testCompile('org.springframework.boot:spring-boot-starter-test')
+			}
+		--------------------------------------------------------------------------------------------------
+		
+	B)	Next modify the SpringBootHelloWorldApplication code to add the EnableHystrix syntax :
+	
+			@SpringBootApplication
+			@EnableCircuitBreaker
+			@EnableDiscoveryClient
+	
+	C)	Now modify the TestController to add the fallback method :
+	
+		--------------------------------------------------------------------------------------------------
+			@RequestMapping(value = "/employee", method = RequestMethod.GET)
+			@HystrixCommand(fallbackMethod = "getDataFallBack")
+			public Employee firstPage() {
+			
+				....................................................				
+				
+				if(emp.getName().equalsIgnoreCase("Rajib Garai"))
+					throw new RuntimeException();
+			}
+			
+			public Employee getDataFallBack() 
+			{
+				Employee emp = new Employee();
+				emp.setName("fallback-emp1");
+				emp.setDesignation("fallback-manager");
+				emp.setEmpId("fallback-1");
+				emp.setSalary(3000);
+
+				return emp;
+			}
+		--------------------------------------------------------------------------------------------------
+		
+		D)	Next start the Eureka server, employee-producer, employee-consumer modules. 
+		
+			When we start the employee-consumer, the service exposed by the employee-producer gets called.
+			
+			In the employee-consumer console we will see that the Employee object created in the fallback method of TestController class of employee-producer.
+			
+	
+:	Spring Cloud Circuit Breaker using Hystrix																		[STEP-4-B]						:
+
+Q)	What is the Netflix Hystrix Circuit Breaker Feature ? Need for it ?
+	
+=>	Due to some reason the employee-producer exposed service throws an exception. In this case using Hystrix we defined a fallback method. 
+	In case of exception in the exposed service the fallback method returned some default value.
+	
+	I have a method firstPage method() in employee-producer.
+	
+	If the exceptions keep on occuring in the firstPage method() then the Hystrix circuit will break and the employee consumer will skip the firtsPage method all together and directly call the fallback method.
+	
+	The purpose of circuit breaker is to give time to the first page method or other methods that the firstpage method might be calling and is causing the exception to recover. It might happen that on less load the issue causing the exceptions have better chance of recovering.
+	
+	
+	1)	The employee-producer had the following firstpage method annotated with the hystrix annotation.	[Nothing Change] Like :
+	
+		---------------------------------------------------------------------------------------------------
+			@RequestMapping(value = "/employee", method = RequestMethod.GET)
+			@HystrixCommand(fallbackMethod = "getDataFallBack")
+			public Employee firstPage() 
+			{
+				System.out.println("Inside firstPage");
+				
+				Employee emp = new Employee();
+				
+				..........................................
+				
+				if(emp.getName().equalsIgnoreCase("emp1"))
+					throw new RuntimeException();
+						
+			}
+		----------------------------------------------------------------------------------------------------
+	
+	2)	Previously using employee-consumer we were calling the employee producer only once. 
+		
+		Now using for loop we will call it multiple times and check if the circuit trips and the fallback method gets called directly.		
+		
+		Add Code[Loop] in SpringBootHelloWorldApplication	:
+		
+		---------------------------------------------------------------------------------------------------
+			public static void main(String[] args) throws RestClientException, IOException 
+			{
+				ApplicationContext ctx = SpringApplication.run(
+						SpringBootHelloWorldApplication.class, args);
+				
+				ConsumerControllerClient consumerControllerClient=ctx.getBean(ConsumerControllerClient.class);
+				System.out.println(consumerControllerClient);
+				
+				for(int i=0;i<100;i++)		
+					consumerControllerClient.getEmployee();
+			}
+	
+			@Bean
+			public  ConsumerControllerClient  consumerControllerClient()
+			{
+				return  new ConsumerControllerClient();
+			}
+		---------------------------------------------------------------------------------------------------
+		
+	3)	Now Start the following Spring Boot Applications
+		
+			eureka-server
+			employee-producer
+			employee-consumer
+			
+	4)	We can see that after some exceptions the fallback method getting called directly and the hystrix annotated method skipped. 
+		So the hystrix circuit is open.
+		
+
+	
+:	CONFIGURATION ZUUL WITH EUREKA 	:																		[STEP-5]										
+-------------------------------------------------------------------------------------------------------------------------------																									
+
+:	WHAT IS ZUUL ?																				:
+
+=>	Zuul is the front door(Gateway Service) for all requests from devices and web sites to the backend of the Netflix streaming application.
+	As an edge service application, Zuul is built to enable dynamic routing, monitoring, resiliency and security.
+	
+	The Zuul API Gateway is part of the Netflix OSS package. It is very lightweight and integrates well with Eureka. API Gateway is the single entry point into the microservice ecosystem from the outside world.
+		
+:	WHAT ARE THE MAIN FEATURES OF ZUUL ?														:
+
+=>	Zuul features are as follows :
+	
+		1)	Provides a unified access to multiple different microservices
+		2)	Hides internal details of the microservice ecosystem
+		3)	Load balances across multiple service instances
+		4)	Allowes access to services
+		5)	Restricts access to internal only services
+		6)	Looks up services from Eureka
+		7)	Implements filters for authentication or logging purposes
+
+	
+	CONFIGURE :
+	
+		1)	Create a New Web Application Gateway-Server 
+		
+		2)	Add Dependency in build.gradle
+		------------------------------------------------------------------------------------------------------
+			ext {
+				springCloudVersion = 'Dalston.SR2'
+			}
+
+			dependencies {
+				compile('org.springframework.cloud:spring-cloud-starter-zuul')
+				compile('org.springframework.boot:spring-boot-starter-web')
+				testCompile('org.springframework.boot:spring-boot-starter-test')
+			}
+
+			dependencyManagement {
+				imports {
+					mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+				}
+			}
+		-----------------------------------------------------------------------------------------------------
+		
+		3)	Add a New File application.yml and Register other micro services :		
+		-----------------------------------------------------------------------------------------------------
+			zuul:
+			  routes:
+				employee-producer:
+				  path: /**
+				  url: http://localhost:8081
+				employee-consumer:
+				  path: /**
+				  url:  http://localhost:8091				  
+
+			ribbon:
+			  eureka:
+				enabled: true				
+
+			eureka:
+			  client:
+				serviceUrl:
+				  defaultZone: http://localhost:8090
+				registerWithEureka: false			
+				  
+			server:
+			  port: 7777
+		-----------------------------------------------------------------------------------------------------
+		
+		4)	Add a New File bootstrap.yml and Set application name :		
+		-----------------------------------------------------------------------------------------------------
+			spring:
+				application:
+					name: gateway-server
+		-----------------------------------------------------------------------------------------------------
+		
+		5)	Now Start Gateway-Server first and then Eureka-Server, after that others services.		
+		
+	
+	REFERENCES :
+		
+		https://exampledriven.wordpress.com/2016/07/06/spring-cloud-zuul-example/
+		
+		https://piotrminkowski.wordpress.com/2017/02/05/part-1-creating-microservice-using-spring-cloud-eureka-and-zuul/
+		
+		https://blog.heroku.com/using_netflix_zuul_to_proxy_your_microservices
+		
+		
+:	Spring Cloud with Feign Client 																					[STEP-6]				:
+--------------------------------------------------------------------------------------------------------------------------------------
+
+Q)	What is Feign ? How it Configure with Spring cloud ? 
+
+=>	Feign is a declarative web service client. It makes writing web service clients easier. To use Feign create an interface and annotate it. 
+	It has pluggable annotation support including Feign annotations and JAX-RS annotations. Feign also supports pluggable encoders and decoders. Spring Cloud adds support for Spring MVC annotations and for using the same HttpMessageConverters used by default in Spring Web. Spring Cloud integrates Ribbon and Eureka to provide a load balanced http client when using Feign.
+	
+	
+:	What is the Netflix Feign Client? Need for it ?
+
+=>	Feign is a java to http client binder inspired by Retrofit, JAXRS-2.0, and WebSocket. 
+	Feign's first goal was reducing the complexity of binding Denominator uniformly to http apis regardless of restfulness. Previous examples in the employee-consumer we consumed the REST services exposed by the employee-producer using REST Template.
+
+	
+		I)	For Load balancing using Ribbon.
+		II)	Getting the Service instance and then the Base URL.
+		III) Make use of the REST Template for consuming service.
+		
+		 If we not use feign then we get many chances of exceptions like NullPointer and is not optimal. We will see how the call is made much easier and cleaner using Netflix Feign. If the Netflix Ribbon dependency is also in the classpath, then Feign also takes care of load balancing by default.
+	
+	
+	1)	Change in employee-consumer microservice :
+	
+		A) Add Dependency :
+		
+		------------------------------------------------------------------------------------------------------------------------
+			ext {
+				springCloudVersion = 'Dalston.SR2'
+				}
+
+				dependencies {
+					compile('org.springframework.boot:spring-boot-starter-web')
+					compile('org.springframework.cloud:spring-cloud-starter-feign')
+					compile('org.springframework.cloud:spring-cloud-starter-eureka')
+					testCompile('org.springframework.boot:spring-boot-starter-test')
+				}
+
+				dependencyManagement {
+					imports {
+						mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+					}
+				}
+		------------------------------------------------------------------------------------------------------------------------
+
+		B)	Add annotation in Application Main() class :
+		
+		-------------------------------------------------------------------------------------------
+			@SpringBootApplication
+			@EnableDiscoveryClient
+			@EnableFeignClients
+			public class FeignClientApplication 
+			{
+				public static void main(String[] args) 
+				{
+					ApplicationContext ctx = SpringApplication.run(EmployeeConsumerApplication.class, args);		
+
+					ConsumerControllerClient consumerControllerClient = ctx.getBean(ConsumerControllerClient.class);
+					
+					System.out.println("Consumer Controller Client Instance => "+consumerControllerClient);
+					
+					try 
+					{
+						for(int i=0;i<100;i++)
+							consumerControllerClient.getEmployee();
+					} 
+					catch (RestClientException e) 
+					{
+						e.printStackTrace();
+					}
+					catch (IOException e) 
+					{
+						e.printStackTrace();
+					}
+				}
+				
+				@Bean
+				public  ConsumerControllerClient  consumerControllerClient()
+				{
+					return new ConsumerControllerClient();
+				}
+			}
+		-------------------------------------------------------------------------------------------
+		
+		B)	Create an Interface in employee-consumer microservice Like :
+
+		---------------------------------------------------------------------------------------------------------------------	
+			@FeignClient(name="employee-producer")
+			public interface RemoteCallService
+			{
+				@RequestMapping(method=RequestMethod.GET, value="/getEmployees")
+				public Employee getEmployee();
+			}
+		----------------------------------------------------------------------------------------------------------------------
+		
+		C) Change in employee-producer Microservice
+		
+		------------------------------------------------------------------------------------------------------------------------			
+			@Autowired
+			private RemoteCallService loadBalancer;
+			
+			public void getEmployee() throws RestClientException, IOException 
+			{
+				System.out.println("In Get Employee Method");
+				try 
+				{
+					Employee emp = loadBalancer.getEmployee();
+					
+					System.out.println("Employee Info => "+emp.toString());
+				} 
+				catch (Exception ex) 
+				{
+					System.out.println(ex);
+					ex.printStackTrace();
+				}
+			}
+		-----------------------------------------------------------------------------------------------------------------------
+		
+		D) Run This Application.
+		
+			Eureka-Server
+			Employee-Producer
+			Employee-Consumer		
+		
+---------------------------------------------------------------------------------------------------------------------------------------------------	
+
+:	What is Spring Cloud Config Server ?																		[STEP-7]			:
+
+=>	Configure Server support version controll file syste Like : Git, SVN etc.
+
+	It is use to handle Server Configuration file System.
+
+:	How to integrate Spring Cloud Config Server ?																[STEP-7-A]	:
+	
+=>	Create a Configuration Server Using following Steps :
+
+	1)	Create a Spring Cloud Project with using following Dependency :
+	
+	----------------------------------------------------------------------------------------------------------
+		dependencies {
+			compile('org.springframework.cloud:spring-cloud-config-server')
+			testCompile('org.springframework.boot:spring-boot-starter-test')
+		}
+	----------------------------------------------------------------------------------------------------------
+	
+	2) Now we create a folder 'config' in resource folder.
+	
+	3)	We create 2 sample Properties file Like :
+
+		a)	db.properties AND 
+		--------------------------------------------------------
+			db.name=spring-cloud
+			db.pass=root
+		--------------------------------------------------------
+		
+		b)	rabbitmq.properties
+		--------------------------------------------------------
+			server.url=http://localhost:9000
+			user=root
+			password=root
+		--------------------------------------------------------
+		
+	4)	Now Change port no in application.properties file Like : 
+	
+		server.port=8888
+	
+	5)	Spring Cloud Config server by default load Git URL If you change then config following steps :
+	
+		spring.profiles.active=native
+		
+	6) Now Go to SpringApplication Main class and Add Following Annotation :
+	
+		@EnableConfigServer
+		
+	7)	Now Start this application and Go to Following URL :
+	
+		http://localhost:8080/db/default		=> To Show Default db Properties
+		
+		http://localhost:8080/rabbitmq/default	=> To show rabbitmq properties
+		http://localhost:8080/rabbitmq-default.json	=> Show Only Properties file values with JSON formate.
+		
+		
+	:	If Properties File have any others folder 													[STEP-7-B]				:
+		
+	8)	Create a folder to another name Like :
+	
+		properties
+		
+	9) Create 2 files name :
+	
+		a)	twilio.properties
+		------------------------------------------------------
+			twilio.sid=125478889653221
+			twilio.number=+149563254217
+		------------------------------------------------------
+		
+		b)	qbo.properties		
+		------------------------------------------------------
+			qbo.authkey=5844FDE1254LKU
+			qbo.secret=5584572JBBB
+		------------------------------------------------------
+		
+	10)	Now update application.properties by following this code :
+	
+			spring.cloud.config.server.native.search-locations=classpath:/properties
+			
+		* You can also add multiple files by using ','	operator. Like :
+		
+			spring.cloud.config.server.native.search-locations=classpath:/properties, classpath:/database
+	
+	11)
+	*	If Same properties file are available in more folders then last folder's file is highest prioprity.
+	
+	12)	Now Restar your application and Hit following URL :
+	
+		http://localhost:8080/qbo/default	=> To show properties/qbo.properties file values 
+		
+		http://localhost:8080/qbo-default.json	=> In JSON formate
+	
+	13)	
+	
+	*	If You interent to replace properties file values by last one properties file values by using this code [Update application.properties file] :
+		spring.cloud.config.server.overrides.foo=myapp
+	
+	Try by using following URL :
+	
+		http://localhost:8080/qbo-prpoperties.json
+		
+		http://localhost:8080/properties/default
+		
+	14)	
+	*	You cal also test "Spring Cloud Server Config" using Vault Server :
+	
+	--------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	Vault server : The Vault server is the only piece of the Vault architecture that interacts with the data storage and backends. 
+	All operations done via the Vault CLI interact with the server over a TLS connection.
+	
+	Example : https://www.youtube.com/watch?v=C6coAVlLFec&list=UUGcr7btthyfXgSPI7T5jCOw&index=14
+	--------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	
+:	Setup Spring Cloud Config Server and get values from Git Repo	:									[STEP-7-C]			
+
+=> 1) Create a Spring boot application
+
+	2) Delete application.properties file and create a application.yml file
+	
+	3) Write down following code in application.yml file
+	------------------------------------------------------------------------------------------------
+		server:
+		  port: 8888
+		  
+		spring:
+		  cloud:
+			config:
+			  server:
+				git:
+				  uri: https://github.com/springdeveloper123/spring-cloud-config-server-db
+				  #username:
+				  #password:
+	-------------------------------------------------------------------------------------------------
+				  
+	4) This Git URI is a public repository, so username and password is not mandatory.
+	
+	5) Now Run this application and test by following URI :
+	
+		http://localhost:8888/application/default
+		
+	6) Add following code in application.yml for serching all folder which start with 'app'
+	-------------------------------------------------------------------------------------------------
+		......................................
+			#username:
+			#password:
+			search-paths:
+            - app*
+	-------------------------------------------------------------------------------------------------
+	7) Now Restart and application and test by following URI :
+	
+		http://localhost:8888/app1db/default
+		
+	8) After running this application, this properties files are store in localy. If we hit same URI to access this data from local file. Check by change local file Data :
+	
+		C:/Users/MW-RAJIB/AppData/Local/Temp/config-repo-2692586598987182103/application.properties
+		
+	9) Get current data for all time from git repository to update following code in application.yml file :
+	------------------------------------------------------------------------------------------------
+		#username:
+		#password:
+		search-paths:
+			- app*            
+		force-pull: true
+	------------------------------------------------------------------------------------------------
+	
+	10) Add Multiple URI :
+	------------------------------------------------------------------------------------------------
+		#username:
+		#password:
+		search-paths:
+			- app*            
+		force-pull: true
+		repos:
+			jndi:
+			pattern:
+				- "*/jndi"
+			uri: https://github.com/springdeveloper123/spring-cloud-config-server-db-jndi
+			search-paths:
+				- app*
+	------------------------------------------------------------------------------------------------
+	
+	11) Now Run this URI to access this data :
+	
+		http://localhost:8888/app1db/jndi
+
+:	Setup a Spring Cloud Config Client application to access properties 									[STEP-7-D]		:		
+
+=>	1) Create a Spring Cloud web application with following dependency :
+	---------------------------------------------------------------------------
+		dependencies {
+			compile('org.springframework.cloud:spring-cloud-starter-config')
+			compile('org.springframework.boot:spring-boot-starter-web')
+			testCompile('org.springframework.boot:spring-boot-starter-test')
+		}
+	---------------------------------------------------------------------------
+	
+	2)	Create a Controller Class to access properties from Spring Cloud Config Server. Like :
+	---------------------------------------------------------------------------
+		@RestController
+		public class DatabaseController 
+		{
+			@Value("${driverClassName}")
+			String driverClassName;
+			
+			@Value("${url}")
+			String url;
+			
+			@Value("${username}")
+			String username;
+			
+			@Value("${password}")
+			String password;
+			
+			@RequestMapping(value="/getDatabaseCredential", method=RequestMethod.GET)
+			public String getDatabaseCredential()
+			{
+				Map<String, String> databaseCredential = new HashMap();
+				
+				databaseCredential.put("driverClassName", driverClassName);
+				databaseCredential.put("url", url);
+				databaseCredential.put("username", username);
+				databaseCredential.put("password", password);
+				
+				return databaseCredential.toString();
+			}
+		}
+	---------------------------------------------------------------------------
+	
+	3)	Now Open properties file and change following code :
+	---------------------------------------------------------------------------
+		server.port=8080
+		spring.application.name=app1db
+		spring.profiles.active=default
+		spring.cloud.config.uri=localhost:8888
+	---------------------------------------------------------------------------
+	
+	Specify Server port : 8080
+	Specify profiles file name which you want to access	=> spring.application.name=app1db
+	Specify access mode for profiles file => spring.profiles.active=default
+	Specify Config server URI to access profiles file => spring.cloud.config.uri=localhost:8888
+	
+	4)	Now Start Spring-Cloud-Config-Server-Git and then Start Spring-Cloud-Config-Client
+	
+	5)	Hit by this following URI =>	http://localhost:8888/app1db/default
+	
+	6) Add Another annotation in RestController class 'DatabaseController' to avoid to access from cash :
+	
+		@RefreshScop
+		
+	7)
+	
+	=======?????????????==========
+	
+	
+
+:	How to config Spring security in Spring Cloud config Server and access for Spring Cloud Config Clint 		[STEP-7-E]		:
+
+=>	Follow the Configure Spring Security for Spring Cloud Config Client :
+
+	1)	Create a Spring-Cloud-Config-Server-Git application 
+
+	2)	Add following dependency in Spring cloud config server
+	---------------------------------------------------------------------------
+		dependencies {
+			compile('org.springframework.boot:spring-boot-starter-security')
+			compile('org.springframework.cloud:spring-cloud-config-server')
+			testCompile('org.springframework.boot:spring-boot-starter-test')
+		}
+	---------------------------------------------------------------------------
+
+	3)	Update in application.yml file by following this code
+	---------------------------------------------------------------------------
+		security:
+		  basic:
+			enabled: true
+			
+		  user:
+			name: root
+			password: root
+	---------------------------------------------------------------------------
+	Setup Your username and password.
+
+	4)	Create Spring-Cloud-Config-Client web appplication and update following configuration
+
+	5)	Create a bootstrap.properties file and add following code :
+	---------------------------------------------------------------------------
+		server.port=8080
+		spring.application.name=app1db
+
+		spring.cloud.config.username=root
+		spring.cloud.config.password=root
+	---------------------------------------------------------------------------
+	Setup Spring-Cloud-Config-Server-Git Your username and password.
+
+	6)	Now Run Spring-Cloud-Config-Server-Git application and then Spring-Cloud-Config-Client application.
+
+			http://localhost:8080/getDatabaseCredential
+			
+
+:	How to Configure Hystrix Dashboard in spring cloud microservices :								[STEP-8-A]	
+
+=>	Configure Hystrix Dashboard by following this Steps :
+
+	1)	Add Dependency in Employee-Producer microservice's build.gradle file. Like :
+	---------------------------------------------------------------------------------------------------------
+		dependencies {
+			compile('org.springframework.boot:spring-boot-starter-actuator')
+			compile('org.springframework.cloud:spring-cloud-starter-eureka')	
+			compile('org.springframework.cloud:spring-cloud-starter-hystrix')
+			compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
+			compile('org.springframework.boot:spring-boot-starter-web')
+			testCompile('org.springframework.boot:spring-boot-starter-test')
+		}
+	---------------------------------------------------------------------------------------------------------
+	
+	2)	Add some external properties in fallback method. Like :	
+	---------------------------------------------------------------------------------------------------------
+		@RequestMapping(value = "/getEmployees", method = RequestMethod.GET)
+		@HystrixCommand(fallbackMethod = "getDataFallBack", commandProperties={
+				@HystrixProperty(name="circuitBreaker.sleepWindowInMillisecond", value="60000"),
+				@HystrixProperty(name="circuitBreaker.errorThresholdPercentage", value="5")})
+		public Employee firstPage() 
+		{
+			...................
+		}
+	---------------------------------------------------------------------------------------------------------
+	
+	3)	Add following Annotation in @SpringApplication main() Calss
+	
+		@EnableHystrixDashboard
+		
+	4)	Now Start following Microservices :
+		
+			Eureka-Server
+			Employee-Producer
+			Employee-Consumer
+			
+	5)	Now Hit this URL to show the actual Result :
+		
+		http://localhost:8081/hystrix.stream		<= Show Hystrix Stream means callback feetback info
+		
+		http://localhost:8081/hystrix				<= Open Hystrix Dashboard and Enter following URI in the URI tab => http://localhost:8081/hystrix.stream
+		
+	6)	Now Generate Matrix by execute nos of fallback methods.
+	
+	
+:	How to Configure or Register multiple Spring Cloud Microservices in a single Hystrix Dashboard using Hystrix Turbine concept :
+
+																							: [STEP-8-B]
+
+=>	Follow following steps :
+
+	1)	Create a Similar type of Employee-Producer microservices Like : Department-Producer
+	
+	2)	Now Create a New Project Hystrix with add Turbine dependencies. Like :
+	-------------------------------------------------------------------------------------------------
+		dependencies {
+			compile('org.springframework.boot:spring-boot-starter-actuator')
+			compile('org.springframework.cloud:spring-cloud-starter-eureka')
+			compile('org.springframework.cloud:spring-cloud-starter-hystrix')
+			compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
+			compile('org.springframework.cloud:spring-cloud-starter-turbine')
+			compile('org.springframework.boot:spring-boot-starter-web')
+			testCompile('org.springframework.boot:spring-boot-starter-test')
+		}
+	-------------------------------------------------------------------------------------------------
+	
+	3)	Add following Annotation in @SpringBootApplication main() class :
+	
+			@EnableTurbine
+			@EnableHystrixDashboard
+			
+	4)	Update application.properties file by using following this code :
+	-------------------------------------------------------------------------------------------------
+		server.port=8092
+		spring.application.name=turbine.stream
+
+		eureka.client.serviceUrl.defaultZone=http://localhost:8090/eureka
+
+		turbine.app-config=employee-producer,department-producer
+
+		turbine.cluster-name-expression=new String("default")
+	-------------------------------------------------------------------------------------------------
+	
+	5)	Now Start following application Step by Step :
+	
+		1) Start	=>	Eureka-Server	=> http://localhost:8090/
+		
+		2) Start	=>	Employee-Producer	=>	http://localhost:8080/getEmpStartingSalary
+											=>	http://localhost:8080/getEmployees
+											
+											=>	http://localhost:8080/hystrix.stream
+											=> 	http://localhost:8080/hystrix
+											
+											
+		3)	Start	=>	Department-Producer	=>	http://localhost:8081/getDepartments
+											
+											=>	http://localhost:8081/hystrix.stream
+											=> 	http://localhost:8081/hystrix
+											
+		4)	Start	=>	Employee-Consumer	=>
+		
+		5)	Start 	=>	Hystrix-Turbine		=>	http://localhost:8092/turbine.stream
+											=>	http://localhost:8092/hystrix/	
+											
+	6)	Now Show all Producer Project [i.e used @EnableCircuitBreaker and @EnableHystrixDashboard] with fallback method in Hystrix Dashboard.
+
+------------------------------------------------------------------------------------------------------------------------------
+	
+:	Reference :
+	
+		https://exampledriven.wordpress.com/2016/07/05/spring-cloud-hystrix-example/	
+		
+	
+----------------------------------------------------------------------------------------------------------------------------------------------------
+:	WHAT IS SWAGGER ?																			:
+
+=>	Swagger is the most popular tool for designing, building and documenting RESTful APIs. It has nice integration with Spring Boot.
+
+	The goal of Swagger™ is to define a standard, language-agnostic interface to REST APIs which allows both humans and computers to discover and understand the capabilities of the service without access to source code, documentation, or through network traffic inspection.	
+	
+	springfox-swagger2
+	springfox-swagger-ui
+	
+	Swagger configuration for single Spring Boot service is pretty simple. The level of complexity is greater if you want to create one documentation for several separated microservices. Such documentation should be available on API gateway.
+	
+	Swagger is widely used for visualizing APIs, and with Swagger UI it provides online sandbox for frontend developers.
+	
+	Architecture :
+	
+	SWAGGER UI	=>	ZUUL GETWAY	=>	RIBBON	=>	EUREKA SERVER	=>	MICROSERVICES
+	
+:	WHY USE SWAGGER	?																		:
+
+=>	Swagger is a specification for documenting REST API. It specifies the format (URL, method, and representation) to describe REST web services. 
+	They started developing the framework in early 2010—being released, is currently also used by Wordnik's APIs, which powers both internal and external API clients.
+
+	
+	First, we should configure Swagger on every microservice. To enable it we have to declare @EnableSwagger2 on the main class. 
+	
+	API documentation will be automatically generated from source code by Swagger library during application startup. 
+	
+	The process is controlled by Docket @Bean which is also declared in the main class. API version is read from pom.xml file using MavenXpp3Reader. 
+	
+	We also set some other properties like title, author and description using apiInfo method. 
+	By default, Swagger generates documentation for all REST services including those created by Spring Boot.
+	We would like to limit documentation only to our @RestController.
+		
+:	SWIGGER CONFIGURATION :																			[STEP-1]
+	
+		1)	Create a Simple Spring Boot Web application.
+		
+		2)	Add Dependency as follows :		
+		--------------------------------------------------------------------------------------------------
+			dependencies {
+				compile('org.springframework.boot:spring-boot-starter-web')
+				compile('io.springfox:springfox-swagger2:2.7.0')
+				compile('io.springfox:springfox-swagger-ui:2.7.0')
+				testCompile('org.springframework.boot:spring-boot-starter-test')
+			}
+		--------------------------------------------------------------------------------------------------
+		
+		3)	Create a @RestController and Two simple Rest Service 
+		
+		4)	Now enable the Swagger2 we use the annotation in SwaggerConfig Class
+		
+				@Configuration and
+				@EnableSwagger2		
+		5)	
+			A Docket bean is defined and using its select() method we get an instance of ApiSelectorBuilder. ApiSelectorBuilder we configure the endpoints 	exposed by Swagger.
+		
+			After the Docket bean is defined, its select() method returns an instance of ApiSelectorBuilder, which provides a way to control the endpoints exposed by Swagger.
+			
+			Using the RequestHandlerSelectors and PathSelectors we configure the predicates for selection of RequestHandl :
+			
+		6) Now Create Swagger Config Class Like :
+		
+		------------------------------------------------------------------------------------
+			package com.spring.cloud.swagger.config;
+
+			import org.springframework.context.annotation.Bean;
+			import org.springframework.context.annotation.Configuration;
+
+			import com.google.common.base.Predicate;
+
+			import static com.google.common.base.Predicates.or;
+
+			import springfox.documentation.builders.ApiInfoBuilder;
+			import springfox.documentation.service.ApiInfo;
+			import springfox.documentation.spi.DocumentationType;
+			import springfox.documentation.spring.web.plugins.Docket;
+			import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+			import static springfox.documentation.builders.PathSelectors.regex;
+
+			@Configuration
+			@EnableSwagger2
+			public class SwaggerConfig 
+			{
+				@Bean
+				public Docket postsApi() 
+				{
+					return new Docket(DocumentationType.SWAGGER_2).groupName("public-api")
+							.apiInfo(apiInfo()).select().paths(postPaths()).build();
+				}
+				
+				private Predicate<String> postPaths() {
+					return or(regex("/department/getDepartments.*"), regex("/department/getDepartment.*"));
+				}
+
+				private ApiInfo apiInfo() 
+				{
+					return new ApiInfoBuilder().title("Spring Cloud Microservice")
+							.description("Spring Cloud Service with Swagger Configuration")
+							.termsOfServiceUrl("http://javainuse.com")
+							.contact("rajibgarai90@hotmail.com").license("Casual Critivity License")
+							.licenseUrl("rajibgarai90@hotmail.com").version("1.0").build();
+				}
+			}
+
+		-------------------------------------------------------------------------------------
+	
+		7)	Now Run Your application in default 8080 port :
+		
+			http://localhost:8080/department/getDepartments		<=	Check Your Rest Controller
+			
+			http://localhost:8080/swagger-ui.html				<=	Check Rest Documentation with action in Swagger UI.
+			
+
+:	Understanding various Swagger annotations	:													[STEP-2]
+		
+=>	There are list of annotation used to developed api documentation and integration in Swagger :
+
+	@ApiOperation	: This annotation is used to describe the exposed REST API. It describes an operation or typically a HTTP method against a specific path.
+	
+	Changes in Controller Class [Like : DepartmentController, EmployeeController ]
+	
+	Example :	Replace @RequestMapping = @ApiOperation
+	-----------------------------------------------------------------------------------------------------
+		@ApiOperation(value = "getDepartments", notes="Get All Departments",nickname = "getDepartments")
+		@RequestMapping(method = RequestMethod.GET, value = "/department/getDepartments")
+		public List<Department> getDepartments() 
+		{
+			....................................
+		}
+	-----------------------------------------------------------------------------------------------------
+	
+	@ApiResponses	: This annotation is used to describe the expected responses for the REST API. The @ApiResponse describes a concrete possible response. It cannot be used directly on the method and needs to be included in the array value of @ApiResponses (whether there's one response or more).
+	
+	Example :
+	-----------------------------------------------------------------------------------------------------
+		@ApiOperation(value = "getDepartments", notes="Get All Departments", nickname = "getDepartments")
+		@ApiResponses(value = {
+				@ApiResponse(code = 500, message = "Server error"),
+				@ApiResponse(code = 404, message = "Service not found"),
+				@ApiResponse(code = 200, message = "Successful retrieval",
+		        response = Department.class, responseContainer = "List") })
+		@RequestMapping(method = RequestMethod.GET, value = "/department/getDepartments")
+		public List<Department> getDepartments() 
+		{
+			...................................
+		}
+	-----------------------------------------------------------------------------------------------------
+	
+	If the user has default response messages which are to be applied to all the REST APIs then these can be specified when defining the Docket bean. Hence these will not need to be applied at the method level. Like :
+	
+	Example :	Update SwaggerConfig Class :
+	-----------------------------------------------------------------------------------------------------
+		@Bean
+		public Docket postsApi() 
+		{
+			Docket docket = new Docket(DocumentationType.SWAGGER_2).groupName("public-api")
+					.apiInfo(apiInfo()).select().paths(postPaths()).build();
+			
+			docket.globalResponseMessage(RequestMethod.GET, ImmutableList.of(new ResponseMessageBuilder()
+					 .code(400)
+					 .message("Bad Request")
+					 .responseModel(new ModelRef("Error")).build(),new ResponseMessageBuilder()
+					 .code(500)
+					 .message("Internal Server Error")
+					 .responseModel(new ModelRef("Error")).build()));
+			
+			return docket;
+		}
+	-----------------------------------------------------------------------------------------------------
+	
+	@ApiParam	: This annotation is used to describe the exposed REST API.
+	
+	Example : Replace @PathVariable = @ApiParam
+	-----------------------------------------------------------------------------------------------------
+		@ApiOperation(value = "getDepartment", notes="Get Department info by deptId", nickname = "getDepartment")
+		@RequestMapping(value = "/department/getDepartment/{deptId}", method = RequestMethod.GET)
+		public Department getDepartment(@ApiParam(value = "deptId",
+	        required = true, defaultValue = "111") long deptId) 
+		{
+				...................................
+		}
+	-----------------------------------------------------------------------------------------------------
+	
+	@ApiModel	:	The @ApiModel allows you to manipulate the meta data of a model from a simple description or name change to a definition of polymorphism. We have used it to create a response class Hello with default values.
+	
+	@ApiModelProperty	: The @ApiModelProperty allows controlling Swagger-specific definitions such as allowed values, and additional notes. It also offers additional filtering properties in case you want to hide the property in certain scenarios.
+	
+	Example :
+	---------------------------------------------------------------------------------------------------------
+		@ApiModel
+		public class Department implements Serializable
+		{
+			private static final long serialVersionUID = -57849104029649950L;
+
+			private long deptId;	
+			private String deptName;
+			
+			@ApiModelProperty(position = 1, required = true, value = "1")
+			public long getDeptId() 
+			{
+				return deptId;
+			}
+		}
+	---------------------------------------------------------------------------------------------------------	
+	
+:	Spring Boot Profiles	:																		[STEP-3]
+
+	Spring Profiles allows users to register beans depending on the profile(dev, test, prod etc). So when the application is running in DEVELOPMENT only certain beans can be loaded and when in PRODUCTION certain other beans can be loaded. Suppose our requirement is that the Swagger documentation be enabled only for the QA environment and disabled for all others. This can be done using Profiles. Spring Boot makes using Profiles very easy. 
+
+		1) Open application.properties file. Then add this following code :
+		
+			spring.profiles.active=swagger-disabled-for-qa
+		
+		2) Now Open SwaggerConfig class and add following annotation :
+		
+			@Profile("swagger-enabled-for-qa")
+	
+		3) Now Start Your application 				<= Does not get any result using this URL 
+		
+			http://localhost:8080/swagger-ui.html/
+			
+		4)	Now Change application.properties file 
+			
+			spring.profiles.active=swagger-disabled-for-qa
+			
+		5) Then Restart server and check this following URL 
+		
+			http://localhost:8080/swagger-ui.html/
+			
+:	How to Register Multiple Microservice in a Single Swagger UI ?											[STEP-4]		:
+
+=>	https://github.com/piomin/sample-spring-microservices-advanced
+
+	https://piotrminkowski.wordpress.com/tag/swagger2/
+	
+	Swagger Dashboard is Run by using this URL =>	http://localhost:8761/
+	
+			
+:	REFERENCE LINK :
+-------------------------------------------------------------------------------------------------------------------------------
+	http://www.javainuse.com/spring/boot_swagger	
+	
+	https://piotrminkowski.wordpress.com/tag/swagger/						<= Step-1
+	
+	http://www.javainuse.com/spring/boot_swagger_annotations				<= Step-2
+	
+	http://www.javainuse.com/spring/boot_swagger_profile					<= Step-3
+	
+--------------------------------------------------------------------------------------------------------------------------------
+
+:																CONFIGURE CONSUL FOR MICROSERVICES							[STEP-10]	
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+:	What is Consul in Spring Boot?																													
+
+=>	Spring Cloud Consul provides Consul integrations for Spring Boot apps through autoconfiguration and binding to the Spring Environment and other Spring programming model idioms. With a few simple annotations you can quickly enable and configure the common patterns inside your application and build large distributed systems with Hashicorp's Consul. The patterns provided include Service Discovery, Distributed Configuration and Control Bus.
+
+:	What are the Spring Cloud Consul features ?																										
+
+=>	Spring Cloud Consul features are as follows :
+
+		Service Discovery: instances can be registered with the Consul agent and clients can discover the instances using Spring-managed beans
+		
+		Supports Ribbon, the client side load-balancer via Spring Cloud Netflix
+		
+		Supports Zuul, a dynamic router and filter via Spring Cloud Netflix
+		
+		Distributed Configuration: using the Consul Key/Value store
+		
+		Control Bus: Distributed control events using Consul Events
+
+
+:	How to configure Consule for Spring Boot ?																										
+
+=>	Configure Spring Cloud Consul for Microservices by following this Steps :
+
+	1)	Download Consul from => https://www.consul.io/downloads.html
+	
+	2)	Open commend prompt and Now Check your IP address by using this commend 'ipconfig'
+
+	3)	Extrect downloaded consul zip file and goto this directory in commend prompt.
+	
+	4)	Execute this commend to Start Consul server : [Check bind IP address]
+	
+		consul agent -server -bootstrap-expect=1 -data-dir=consul-data -ui -bind=192.168.1.155
+		
+	5)	Open Consul User Interface by using this URL	=>	http://localhost:8500/ui 
+	
+	So we have configured consul in our local machine and consul agent is running successfully. Now we need to create clients and test the service registry and discovery part :
+	
+	=> Student-Service <=
+	
+	6)	Now We create a Spring boot Microservice 'Student-Service' and add this following dependencies :
+	
+	--------------------------------------------------------------------------------------------------------
+		dependencies {
+			compile('org.springframework.boot:spring-boot-starter-actuator')
+			compile('org.springframework.cloud:spring-cloud-starter-consul-discovery')
+			compile('org.springframework.boot:spring-boot-starter-jersey')
+			compile('org.springframework.boot:spring-boot-starter-web')
+			testCompile('org.springframework.boot:spring-boot-starter-test')
+		}
+	--------------------------------------------------------------------------------------------------------
+	
+	7)	Add following annotation in @SpringBootApplication main() class
+	
+		@EnableDiscoveryClient
+		
+	8)	Add some configuration in application.properties file Like :
+	
+	--------------------------------------------------------------------------------------------------------
+		server.port=8098
+		spring.application.name=school-service
+		management.security.enabled=false
+	--------------------------------------------------------------------------------------------------------
+	
+	9)	Now Create a Controller Class and Create some Rest Service.
+	
+	10)	Now Run 'Student-Service' microservice application and check Consul Dashboard => 
+	
+		http://localhost:9098/getStudentDetailsForSchool/abcschool
+		http://localhost:9098/getStudentDetailsForSchool/xyzschool
+		
+		http://localhost:8500/ui 
+	
+	=> School-Service <=
+	
+	11)	Now Create another Microservice name 'School-Service' and add following dependencies :
+	
+	---------------------------------------------------------------------------------------------------------
+		dependencies {
+			compile('org.springframework.boot:spring-boot-starter-actuator')
+			compile('org.springframework.cloud:spring-cloud-starter-consul-discovery')
+			compile('org.springframework.boot:spring-boot-starter-jersey')
+			compile('org.springframework.boot:spring-boot-starter-web')
+			testCompile('org.springframework.boot:spring-boot-starter-test')
+		}
+	---------------------------------------------------------------------------------------------------------
+	
+	12)	Add following annotation in @SpringBootApplication main() class
+	
+		@EnableDiscoveryClient
+		
+	13) Add some configuration in application.properties file Like :
+	
+	--------------------------------------------------------------------------------------------------------
+		server.port=8098
+		spring.application.name=school-service
+		management.security.enabled=false
+	--------------------------------------------------------------------------------------------------------
+	
+	14)	Now Create a Controller Class and Service Class which is call 'Student-Service' Rest Controller using RestTemplate [of Hard Coded URL].
+	
+	15)	Now Run 'School-Service' microservice application and check Consul Dashboard => 
+	
+		http://localhost:8098/getSchoolDetails/abcschool
+	
+		http://localhost:8500/ui 		
+		
+		
+:	REFERENCE :
+
+	=>	http://howtodoinjava.com/spring/spring-cloud/consul-service-registration-discovery/
+	
+--------------------------------------------------------------------------------------------------------------------------------------------------	
+
+:	What is Spring Cloud Foundry ?																										:
+
+=>	Cloud Foundry is an open-source platform as a service (PaaS) that provides you with a choice of clouds, developer frameworks, and application services. It is open source and it is governed by the Cloud Foundry Foundation. The original Cloud Foundry was developed by VMware and currently it is managed by Pivotal, a joint venture company by GE, EMC and VMware.
+
+	Now a days Cloud Computing and Microservice have become very popular concept and almost all the organizations are investing and adapting it very fast. Currently there are only few popular cloud providers in the market and Cloud Foundry is one of them. It is a PaaS service where we can easily deploy and manage our applications and the Cloud Foundry will take care of the rest of the cloud based offerings like scalability, high availability etc.
+
+	Now since Cloud Foundry is open source product many popular organizations currently provides this platform separately and below are the list of current certified providers	:
+	
+		Pivotal Cloud Foundry
+		IBM Bluemix
+
+:	How to setup Spring Pivotal Cloud Foundry ?																		[ STEP-11 ]					:
+
+=>	The cloud foundry works very well from command prompt and cloud foundry has provided one command line tool called cf which does almost all the activities for us. So to make this tool (cf command) available in local workstation, first we need to install and configure the Cloud Foundry Command line (CLI) interface.
+
+	Setup Spring Cloud Foundry using following Steps :
+
+	1)	Download and Install Cloud Foundry [for Windows-64 link] from => 
+	https://s3-us-west-1.amazonaws.com/cf-cli-releases/releases/v6.29.0/cf-cli-installer_6.29.0_winx64.zip
+
+	2)	After complete installation 
+	
+	3)	Verify the installation by opening a terminal window and type cf
+	
+	4)	Now proceed with Pivotal Web service account sign up and development of a sample application and push to cloud foundry.
+	
+	5)	Now we need to create one account in pivotal in order to deploy our application in Pivotal Cloud Foundry Platform. Go to This Link to SingUp
+	
+		https://account.run.pivotal.io/z/uaa/sign-up
+		
+	6)	After registered veryfy your account to using email address and mobile no.
+	
+	7)	After Successfull Registration, Sing In your account it provided a Cloud Foundry dashboard.
+	
+	8)	Now Create a Simple Spring Cloud Microservice and Build this application to produce jar/war.
+	
+	9) Then Upload/Push following jar/war file using this following steps :
+	
+		cf login -a api.run.pivotal.io
+		
+		=> Enter this commend in comment prompt to login Your Cloud Foundry account using
+		
+			UserName : jack...@gmail.com
+			Password : .....
+		
+	10)	After Successfully Login Upload/Push following jar/war file using this commend :
+	
+		C:\Users\MW-RAJIB\Desktop\cf-cli-installer_6.29.0_winx64>cf push Spring-Pivotal-Cloud-Foundry -p C:\Users\MW-RAJIB\Desktop\Spring-Pivotal-Cloud-Foundry\build\li
+		bs\Spring-Pivotal-Cloud-Foundry-1.0.jar
+
+	11)	After complete successfully upload Open Spring Cloud Foundry dashboard and Show this current project. 
+
+	12)	Now Test it using Rout link Like :
+	
+		https://spring-pivotal-cloud-foundry.cfapps.io/hello?name=Rajib
+		
+	13)	Now Logout Spring Cloud Foundry following this commend from Comment prompt :
+	
+		cf logout	
+
+
+:	REFERENCE	:
+
+=>	http://howtodoinjava.com/spring/spring-cloud/pivotal-cloud-foundry-spring-boot-example/
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+:	INTEGRATE SPRING SECURITH WITH AOUTH2 AND JWT																	[STEP-12]		:
+	
+=>	https://www.toptal.com/java/rest-security-with-jwt-spring-security-and-java
+
+	https://github.com/szerhusenBC/jwt-spring-security-demo
+
+	https://www.youtube.com/watch?v=mD3vmgksvz8
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+:	What is Spring Cloud Sleuth ?																					[STEP-13]		:	
+
+=>	Spring Cloud Sleuth implements a distributed tracing solution for Spring Cloud, borrowing heavily from Dapper, Zipkin and HTrace. For most users Sleuth should be invisible, and all your interactions with external systems should be instrumented automatically. You can capture data simply in logs, or by sending it to a remote collector service.
+
+	Spring Cloud Sleuth adds two types of IDs to your logging :
+	
+	1) Trace ID : The span ID represents a basic unit of work, for example sending an HTTP request.
+	
+	2) Span ID : The trace ID contains a set of span IDs, forming a tree-like structure.
+
+	  The trace ID will remain the same as one microservice calls the next.
+
+:	How to Configure Spring Cloud Sleuth ?																					:		
+
+=>	Configure Spring Sleuth by using following steps :
+
+	1)		
+	
+	-------------------------------------------------------------------------------------------------
+		dependencies {
+			compile('org.springframework.cloud:spring-cloud-starter-sleuth')
+			compile('org.springframework.boot:spring-boot-starter-web')
+			testCompile('org.springframework.boot:spring-boot-starter-test')
+		}
+	-------------------------------------------------------------------------------------------------
+	
+	2)	Now write a Controller Class and use Logger info by using following this code.
+
+	-------------------------------------------------------------------------------------------------
+		@RestController
+		@RequestMapping(value="/")
+		public class EmployeeProducer 
+		{
+			private static final Logger LOGGER = Logger.getLogger(EmployeeProducer.class);
+			
+			@GetMapping(value="getEmployee/{empId}")
+			public Employee getEmployee(@PathVariable("empId") long empId )
+			{
+				Employee employee = new Employee();
+				
+				LOGGER.info(employee.toString());
+				
+				employee.setEmpId(empId);
+				employee.setName("Rajib Garai");
+				employee.setMobile("9563359659");
+				
+				return employee;
+			}
+		}
+	-------------------------------------------------------------------------------------------------	
+	
+	3)	Create a Bean Class 'Employee'.
+	
+	4)	Set Application Name 'Spring-Cloud-Sleuth' by update application.properities file.
+	
+		spring.application.name=Spring-Cloud-Sleuth
+	
+	5)	Now Run this application and Hit this URL => http://localhost:8080/getEmployee/7
+	
+	6)	And show console to get following output :
+	
+		2017-08-18 20:17:40.891  INFO [Spring-Cloud-Sleuth,c4cd7245c3905087,c4cd7245c3905087,false] 4808 --- [nio-8080-exec-4] c.s.c.s.controller.EmployeeProducer      : Employee [empId=7, name=Rajib Garai, mobile=9563359659]
+		
+-----------------------------------------------------------------------------------------------------------------------------------------------------		
+
+:	What is Zipkin	?																								[STEP-14]				:
+
+=>	Zipkin is a distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in microservice architectures. 
+	It manages both the collection and lookup of this data. Zipkin's design is based on the Google Dapper paper.
+	
+:	How to configure Zipkin for Spring Cloud Microservices ?																			:
+
+=>	Configure Zipkin Distributed tracing System	by using following configuration :
+
+	1)	Create following Three Microservice to integrate Spring Cloud Zipkin :
+	
+			Zipkin-Service
+			Zipkin-Client
+			Zipkin-Server
+			
+	2)	Create Zipkin-Server :
+	
+		A)	Create a Microservice for Zipkin Server with following dependencies :	
+		----------------------------------------------------------------------------------
+			dependencies {
+				compile('org.springframework.boot:spring-boot-starter')
+				runtime('io.zipkin.java:zipkin-autoconfigure-ui')
+				compile('io.zipkin.java:zipkin-server')	
+				testCompile('org.springframework.boot:spring-boot-starter-test')
+			}
+		----------------------------------------------------------------------------------
+		
+		B)	Update application.properities file by following this info :
+		
+				server.port=9411
+				spring.application.name=Zipkin-Server
+				
+		C)	Then add following annotation in @SpringBootApplication Main Class :
+		
+				@EnableZipkinServer 
+				
+		D)	Now Run and show Dashboard Using this URI => http://localhost:9411/zipkin/
+		
+	3)	Create Zipkin-Service : 
+	
+			A)	Create a Microservice with following dependencies :	
+			-------------------------------------------------------------------------------
+				dependencies {
+					compile('org.springframework.cloud:spring-cloud-starter-zipkin')
+					compile('org.springframework.boot:spring-boot-starter-web')
+					testCompile('org.springframework.boot:spring-boot-starter-test')
+				}
+			-------------------------------------------------------------------------------
+			
+			B)	Create a Employee-Producer Microservice with Some Rest Services.
+			
+			C)	Update application.properities file using following this code :
+			-------------------------------------------------------------------------------			
+					spring.application.name=Zipkin-Service					
+					#----------------------------------------FOR SLEUTH DISTRIBUTED TRACING					
+					spring.sleuth.sampler.percentage=1.0
+			-------------------------------------------------------------------------------		
+					
+			D)	Add Following Code in @SpringBootApplication Main Class for Sleuth distributed tracing :
+			--------------------------------------------------------------------------------
+				@Bean
+				public Sampler sampler()
+				{
+					return new AlwaysSampler();
+				}	
+			--------------------------------------------------------------------------------
+			
+			E)	Now Run This application using this Sample URI =>	http://localhost:8080/server/hi
+			
+	4)	Create Zipkin-Client	:
+	
+			A)	Create a Microservice with following dependencies :	
+				-------------------------------------------------------------------------------
+					dependencies {
+						compile('org.springframework.cloud:spring-cloud-starter-zipkin')
+						compile('org.springframework.boot:spring-boot-starter-web')
+						testCompile('org.springframework.boot:spring-boot-starter-test')
+					}
+				-------------------------------------------------------------------------------
+				
+			B)	Create a Employee-Consumer with some Rest Service to access Employee-Producer Application :
+			
+			C)	Update application.properities file using following this code :
+			-------------------------------------------------------------------------------			
+					spring.application.name=Zipkin-Client
+					server.port=8081
+					#----------------------------------------FOR SLEUTH DISTRIBUTED TRACING					
+					spring.sleuth.sampler.percentage=1.0
+			-------------------------------------------------------------------------------	
+					
+			D)	Add Following Code in @SpringBootApplication Main Class for Sleuth distributed tracing :
+			--------------------------------------------------------------------------------
+				@Bean
+				public Sampler sampler()
+				{
+					return new AlwaysSampler();
+				}	
+			--------------------------------------------------------------------------------
+			
+			E)	Now Run this application By using following URI =>	http://localhost:8081/client/getMsg
+
+	5)	Now Open Zipkin Dashboard and Click Microservice Dropdown list => Select any Rest Service OR All => Then click on Find Traces Button
+
+	6)	Show all Traces info about Seperate Microservices.
+			
+----------------------------------------------------------------------------------------------------------------------------------------------	
+
+:	How to include Multiple project in a single project ?													[STEP-15]					:
+
+=>	Using following steps to include multiple project into a single project :
+
+		1)	Create a Spring Gradle/Spring Boot Project with out any dependencies.
+		
+		2)	Now Update build.gradle file replace by following this code :
+		----------------------------------------------------------------------------------
+			subprojects {
+				apply plugin: 'java'
+
+				repositories {
+					mavenCentral()
+				}
+			}
+		----------------------------------------------------------------------------------	
+
+		3)	Now delete unnecessary project file/directory from created project directory Like :
+		
+				src/main/java
+				src/main/resource
+				src/test/java
+				
+		
+		4)	Now Create a settings.gradle file and add this following this code :		
+		----------------------------------------------------------------------------------
+			include 'Zipkin-Client'
+			include 'Zipkin-Server'
+			include 'Zipkin-Service'
+		----------------------------------------------------------------------------------
+		Here include project name, Which project you interest to include in a single project.
+		
+		5)	Then Copy those project into created new project directory.
+		
+		6)	Now Right click on Main Project => Select  Gradle(STS) => Refresh All
+																   => Tasks Quick Luncher	
+																   => Enter Gradle Commends [clean build]
+																   
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+:	What is ELK ?																									[STEP-16]			:
+
+=>	ELK stands for Elasticsearch, Logstash and Kibana, which was once separate, joined together to give users the ability to run log analysis on top of open sourced software that everyone can run for free.
+
+	Elasticsearch : This is the search and analysis system. It is the place where your data is finally stored, from where it is fetched, and is responsible for providing all the search and analysis results.
+
+	Logstash : Which is in the front, is responsible for giving structure to your data (like parsing unstructured logs) and sending it to Elasticsearch.
+
+	Kibana : This is allows you to build pretty graphs and dashboards to help understand the data so you don’t have to work with the raw data Elasticsearch returns.
+
+:	How to Configure Spring Cloud Microservice with ELK ?																				:
+
+=>	Configure Spring Cloud Microservice with ELK  using following Steps :
+
+	A) Configure Elasticsearch :
+	
+		1)	Download Elasticsearch zip file from =>  https://www.elastic.co/downloads/elasticsearch
+		
+		2)	Extract it to a directory.
+		
+		3)	Run it (bin/elasticsearch or bin/elasticsearch.bat on Windows)
+		
+		4)	Now hit this URI If following JSON is available then installation is successfully 
+		
+		=> http://localhost:9200
+		---------------------------------------------------------------------------------------------------------------
+			{
+			  "status" : 200,
+			  "name" : "Tartarus",
+			  "cluster_name" : "elasticsearch",
+			  "version" : {
+				"number" : "1.7.1",
+				"build_hash" : "b88f43fc40b0bcd7f173a1f9ee2e97816de80b19",
+				"build_timestamp" : "2015-07-29T09:54:16Z",
+				"build_snapshot" : false,
+				"lucene_version" : "4.10.4"
+			  },
+			  "tagline" : "You Know, for Search"
+			}
+		---------------------------------------------------------------------------------------------------------------
+	
+	B)	Configure Kibana :
+	
+		1)	Download Kibana Zip file from  => https://www.elastic.co/downloads/kibana
+		
+		2)	Extract the Zip file.
+		
+		3)	Now Open config/kibana.yml in an editor
+		
+		4)	Set elasticsearch.url to point at your Elasticsearch instance
+		
+		5)	Run bin/kibana (or bin\kibana.bat on Windows)
+		
+		6)	Now Point your browser at and Show Kibana Dashboard 
+		
+		=>	http://localhost:5601
+		
+	C)	Configure Logstash :
+	
+		1)	Download Logstash Zip file from =>	https://www.elastic.co/downloads/logstash
+
+		2)	Prepare a logstash.conf config file 
+		
+			Help from =>	https://www.elastic.co/guide/en/logstash/current/configuration.html
+		
+		3)	
+		
+	D)	Configure Spring Boot's Log File	:
+	
+	
+		MORE INFO => ?? 
+		
+		http://knes1.github.io/blog/2015/2015-08-16-manage-spring-boot-logs-with-elasticsearch-kibana-and-logstash.html
+
+
+
+
+
+
+:	REFERENCE 	:
+
+		http://knes1.github.io/blog/2015/2015-08-16-manage-spring-boot-logs-with-elasticsearch-kibana-and-logstash.html
+		
+		http://knes1.github.io/blog/2015/2015-08-16-manage-spring-boot-logs-with-elasticsearch-kibana-and-logstash.html
+		
+		https://piotrminkowski.wordpress.com/2017/04/05/part-2-creating-microservices-monitoring-with-spring-cloud-sleuth-elk-and-zipkin/
+		
+		https://dzone.com/articles/monitoring-microservices-with-spring-cloud-sleuth
+	
+	
+	
+	
+	
+		
+		https://logz.io/learn/docker-monitoring-elk-stack/
+	
+	
+-------------------------------------------------------------------------------------------------------------------------------
+:	WHAT IS APACHE KARAF ?																:
+		
+=>	Apache Karaf is a small OSGi based runtime which provides a lightweight container onto which various components and applications can be deployed.
+
+	Apache Karaf can be runned as standalone container and provides some enterprise ready features like shell console, remote access, hot deployment, dynamic configuration. It can be the perfect solution for microservices.		
+	
+	Apache Kafka is an open-source stream processing platform developed by the Apache Software Foundation written in Scala and Java. The project aims to provide a unified, high-throughput, low-latency platform for handling real-time data feeds.
+
+	The Advantages of using Apache Kafka are as follows : 
+	
+:	High Throughput :	
+	The design of Kafka enables the platform to process messages at very fast speed. The processing rates in Kafka can exceed beyond 100k/seconds. The data is processed in a partitioned and ordered fashion.
+	
+:	Scalability :		
+	The scalability can be achieved in Kafka at various levels. Multiple producers can write to the same topic. Topics can be partitioned. Consumers can be grouped to consume individual partitions.
+	
+:	Fault Tolerance :	
+	Kafka is a distributed architecture which means there are several nodes running together to serve the cluster. Topics inside Kafka are replicated. Users can choose the number of replicas for each topic to be safe in case of a node failure. Node failure in cluster won’t impact. Integration with Zookeeper provides producers and consumers accurate information about the cluster. Internally each topic has its own leader which takes care of the writes. Failure of node ensures new leader election.
+	
+:	Durability :	
+	Kafka offers data durability as well. The message written in Kafka can be persisted. The persistence can be configured. This ensures re-processing, if required, can be performed.
+		
+		
+	CONFIGURATION :
+	
+		A)	Download Kafka from this site =>	https://kafka.apache.org/downloads
+		
+		B)	Extract downloaded file.
+
+		This Kafka installation comes with an inbuilt zookeeper. Zookeeper is mainly used to track status of nodes present in Kafka cluster and also to keep track of Kafka topics, messages, etc.
+		
+		C)	Open Commend pormpt and Go to installation location and start the Zookeeper by following this commend :
+		
+			.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+		
+		D)	Open a new command prompt and start the Apache Kafka  by following this commend :
+		
+			.\bin\windows\kafka-server-start.bat .\config\server.properties
+			
+		E)	Open a new command prompt and create a topic with name javainuse-topic, that has only one partition & one replica :
+		
+			.\bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic javainuse-topic
+				
+		F)	Next Open a new command prompt and create a producer to send message to the above created javainuse-topic and send a message - Hello World Javainuse to it
+		
+			.\bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic javainuse-topic
+			Hello World
+			
+		G)	
+		
+		https://piotrminkowski.wordpress.com/tag/apache-karaf/
+		
+		
+		=====================?????===============
+		
+		
+---------------------------------------------------------------------------------------------------------------------------------------------------
+:	REFERENCE	:																				
+		
+https://piotrminkowski.wordpress.com/2017/02/05/part-1-creating-microservice-using-spring-cloud-eureka-and-zuul/	
+
+https://bushkarl.gitbooks.io/spring-cloud/content/spring_cloud_netflix/declarative_rest_client_feign.html
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+1)	Swagger UI with Multiple Microservices
+2)	Spring Cloud Config Server - All[7-A - 7-E]
+3)	Spring Security  
+
+
+
+
+
