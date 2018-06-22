@@ -1,0 +1,25 @@
+https://www.sourceallies.com/2009/12/building-multi-criteria-search-queries-in-hibernate/
+
+@PostMapping(value = "/search")
+	public Employee firstPage(@RequestBody List<SearchField> searchFieldList) 
+	{		
+		for(SearchField searchField : searchFieldList)
+		{
+			System.out.println(searchField.getKey()+" <===> "+searchField.getValue());
+		}
+		
+		Employee emp = new Employee();
+		emp.setName("Rajib Garai");
+		emp.setDesignation("Developer");
+		emp.setId(74);
+		emp.setSalary(20000);
+		
+		return emp;
+	}
+
+public class SearchField 
+{
+	private String key;
+	
+	private String value;
+}
