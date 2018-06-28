@@ -123,70 +123,53 @@ otherwise the program will give a compilation error.
 
 52) How to print all map key and value ?
 
-53) What is Singleton ? Write down a Singleton architecture/Class ?
+53) Different between Collection and Set ?
 
-54) How to write a Singleton Class with out first time not load in memeory (JVM Class memory) when it requeried then create the object.
+54) What is Singletone Class ? How it is configure ?
 
-55) What are the different between Collection with Set ?
+55) How to write Singleton Class to avoid class load time ?
 
-56) What is the different between Collection vs Collections ?
+56) How to work spring cloud architecture ?
 
-57) Write down Spring Cloud architecture and workflow ?
+57) What is Serializable ?
 
-58) What are the different between Web Server and Application Server ?
+58) What is Static ?
 
+59) What do you know about Primary Key, Unique Key, Foreign Key ?
 
+60) With out Primary Key we Can Create any Table ?
 
-59) Can I deploy Enterprise application Webserver ? If deploye what happend ?
+62) What is DI ? Give an Example ?
 
-60) Give some examples of Webserver and Application Server.
+63) What is IOC ? How to implement in Spring ?
 
-61) What are the different between Tomcat Server and Apache Server ?
+64) How Can I get Duplicate value from a Table ?
 
-=> Apache is a server, And Tomcat is a Container.
+65) What dou you know about RDMS ?
 
-	Apache Takes The request from user, And handover to Tomcat. And Tomcat handover the request to suitable programs.
-	Programs process the request and provide a response and request back to Tomcat, Then Tomcat handover request and response object to Apache server and Finally Apache give a response to user.
+66) What are the advantages of Hibernate ?
 
-62) How can I deploy virtual instance in AWS ?
+67) How many types of Databases ?	=> Relational Database, Document oriented database/ No SQL Database, Graph Database ?
 
-63) How can I configure a AWS instance to deploye any Spring boot Application ?
+68) What do you know about JVM, JDK and JRE ?
 
-64) What is Actuator ?
+69) What do you know about platform independent ?
 
-65) What are the difference between Controller vs RestController ?
+70) Is JVM Platform independent ? Why ?
 
-66) What is JDK, JVM, JRE ?
+72) Is this possible to run Java Program with out Installing JDK ?
 
-67) Why JAVA Platform independent ?
+73) How can run Applate Program with out install JDK in our machine ?
 
-68) What is Microservice ?
+74) What is the different between TreeSet vs LinkedHashMap ?
 
-69) What are the different between ZUUL API Gateway vs ZOOPIKER API GATEWAY ?
+75) What are the different between Web Server vs Application Server ? Give Some Example of two types os Server ?
 
-70) What are the different between Session and Cookies ?
+76) What happend if we deploy a Enterprise application in Web Server ?
 
-71) What is HttpSession ?
+77) What are the different between Tomcat Ser vs Apache Server ?
 
-72) What are the different between pass values through HTTP Header and HTTP Body ?
+80) How to implement Corn Job Concept using Multithreding concept ?
 
-73) Is Tomocat which types of Server ?
-
-74) What are the advantages of Spring Boot ?
-
-75) How to Circuit Braker in Spring Cloud ?
-
-76) 
-
-77)
-
-78)
-
-79)
-
-80)
-
-
-
-
+81) 
  
